@@ -1,0 +1,156 @@
+{
+ "schema_version": "page/0.1",
+ "page_id": "home",
+ "pattern": "hero-features-cta",
+ "sections": [
+  {
+   "id": "header",
+   "type": "header",
+   "component": "registry:site-header",
+   "layout": {
+    "variant": "inline"
+   },
+   "slots": {
+    "logo": {
+     "kind": "image",
+     "asset": "A1"
+    }
+   }
+  },
+  {
+   "id": "hero",
+   "type": "hero",
+   "component": "registry:hero-centered",
+   "layout": {
+    "variant": "stack",
+    "align": "center"
+   },
+   "slots": {
+    "heading": {
+     "kind": "text",
+     "max_chars": 20
+    },
+    "body": {
+     "kind": "text",
+     "max_chars": 60
+    },
+    "image": {
+     "kind": "image",
+     "asset": "A2"
+    }
+   },
+   "actions": [
+    {
+     "id": "signup",
+     "label": "免费试用",
+     "primary": true,
+     "target": {
+      "url": "https://app.example.com/signup"
+     }
+    },
+    {
+     "id": "demo",
+     "label": "预约演示",
+     "target": {
+      "page": "demo"
+     }
+    }
+   ],
+   "motion": [
+    {
+     "category": "Scroll Reveal",
+     "tier": "Standard",
+     "target": "image"
+    }
+   ]
+  },
+  {
+   "id": "logos",
+   "type": "logos",
+   "component": "registry:logo-cloud",
+   "layout": {
+    "variant": "inline"
+   },
+   "slots": {
+    "items": {
+     "kind": "list",
+     "count": 6
+    }
+   }
+  },
+  {
+   "id": "features",
+   "type": "features",
+   "component": "registry:feature-grid",
+   "layout": {
+    "variant": "grid-3",
+    "mobile": "stack"
+   },
+   "slots": {
+    "items": {
+     "kind": "list",
+     "count": 6
+    }
+   },
+   "motion": [
+    {
+     "category": "Stagger List",
+     "tier": "Standard"
+    }
+   ]
+  },
+  {
+   "id": "proof",
+   "type": "testimonials",
+   "component": "registry:testimonial-carousel",
+   "layout": {
+    "variant": "carousel"
+   },
+   "slots": {
+    "items": {
+     "kind": "list",
+     "asset": "A3",
+     "count": 3
+    }
+   }
+  },
+  {
+   "id": "cta",
+   "type": "cta",
+   "component": "registry:cta-band",
+   "layout": {
+    "variant": "stack",
+    "align": "center"
+   },
+   "slots": {
+    "heading": {
+     "kind": "text"
+    }
+   },
+   "actions": [
+    {
+     "id": "pricing",
+     "label": "看价格",
+     "primary": true,
+     "target": {
+      "page": "pricing"
+     }
+    }
+   ]
+  },
+  {
+   "id": "footer",
+   "type": "footer",
+   "component": "registry:site-footer",
+   "layout": {
+    "variant": "grid-4",
+    "mobile": "stack"
+   },
+   "slots": {
+    "links": {
+     "kind": "list"
+    }
+   }
+  }
+ ]
+}

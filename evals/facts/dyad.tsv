@@ -1,0 +1,14 @@
+# 读码笔记 · Dyad 中引用的代码事实（只读 src/pro 以外的部分）
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	lines=897	文件行数
+/home/claude/repos/dyad-sh_dyad	src/ipc/utils/dyad_tag_parser.ts	lines=250	文件行数
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	export async function processFullResponseActions(	回复完成后整批处理
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	No actions from this response were applied	整批预检失败则全部不执行
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	assertNotProjectRootPath(appPath, filePath)	禁止删项目根目录
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	LLMs like to rename and then edit the same file	固定执行顺序的理由
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	await gitCommit({	每次回复一次提交
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	commitHash: commitHash	提交号记在消息上
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	No actual git changes detected after staging	内容没变就不提交
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	storeDbTimestampAtCurrentVersion	数据库随版本打时间点
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	<dyad-output type="error"	错误追加回对话
+/home/claude/repos/dyad-sh_dyad	src/ipc/processors/response_processor.ts	we already attempt to do a <dyad-write> tag to fix it	局部替换失败靠整文件重写兜底
+/home/claude/repos/dyad-sh_dyad	src/ipc/utils/dyad_tag_parser.ts	contentLines[0]?.startsWith("```")	同样要剥代码围栏

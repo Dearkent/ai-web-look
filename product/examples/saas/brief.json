@@ -1,0 +1,117 @@
+{
+ "schema_version": "brief/0.1",
+ "id": "tally-saas",
+ "original_request": "我们做了一个团队记账的 SaaS，要一个官网让人注册试用，大客户可以预约演示",
+ "site_name": "Tally",
+ "locales": [
+  "zh-CN",
+  "en"
+ ],
+ "product_type": {
+  "value": "SaaS (General)",
+  "source": "user",
+  "confidence": "high",
+  "kb_trace": {
+   "rule": "products.csv: SaaS (General)",
+   "resolved": [
+    "style:glassmorphism",
+    "style:flat-design",
+    "landing:hero-features-cta"
+   ],
+   "unresolved": []
+  }
+ },
+ "goals": [
+  {
+   "id": "G1",
+   "kind": "signup",
+   "priority": "P0",
+   "description": "访客注册免费试用",
+   "source": "user"
+  },
+  {
+   "id": "G2",
+   "kind": "leads",
+   "priority": "P1",
+   "description": "大客户预约产品演示",
+   "source": "user"
+  }
+ ],
+ "audience": {
+  "primary": "中小团队的财务和老板",
+  "devices": [
+   "desktop",
+   "mobile"
+  ],
+  "source": "inferred"
+ },
+ "brand": {
+  "name": "Tally",
+  "colors": [
+   "#2563EB"
+  ],
+  "logo_asset": "A1"
+ },
+ "style_preference": {
+  "style_ids": [
+   "flat-design",
+   "glassmorphism"
+  ],
+  "landing_pattern": "hero-features-cta",
+  "motion_tier": "Standard",
+  "color_mode": "light",
+  "source": "kb",
+  "confidence": "high"
+ },
+ "content_assets": [
+  {
+   "id": "A1",
+   "kind": "logo",
+   "provided": true
+  },
+  {
+   "id": "A2",
+   "kind": "photo",
+   "description": "产品截图",
+   "provided": true
+  },
+  {
+   "id": "A3",
+   "kind": "testimonial",
+   "description": "客户评价",
+   "provided": false
+  }
+ ],
+ "features": [
+  {
+   "id": "F1",
+   "kind": "contact_form",
+   "priority": "P1",
+   "note": "预约演示表单"
+  },
+  {
+   "id": "F2",
+   "kind": "multilingual",
+   "priority": "P1",
+   "source": "user"
+  },
+  {
+   "id": "F3",
+   "kind": "faq",
+   "priority": "P2",
+   "source": "default"
+  }
+ ],
+ "open_questions": [
+  {
+   "id": "Q1",
+   "question": "注册是跳到产品后台，还是先在官网填表？",
+   "why": "决定注册按钮的去向",
+   "affects": [
+    "site.pages"
+   ],
+   "default_if_unanswered": "跳到产品后台的注册页（外链）",
+   "blocking": false
+  }
+ ]
+}

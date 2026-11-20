@@ -1,0 +1,687 @@
+[
+ {
+  "source": "T03",
+  "target": "L010",
+  "kind": "产出"
+ },
+ {
+  "source": "T03",
+  "target": "L011",
+  "kind": "产出"
+ },
+ {
+  "source": "T04",
+  "target": "L012",
+  "kind": "产出"
+ },
+ {
+  "source": "T04",
+  "target": "P001",
+  "kind": "产出"
+ },
+ {
+  "source": "T04",
+  "target": "P002",
+  "kind": "产出"
+ },
+ {
+  "source": "T04",
+  "target": "P003",
+  "kind": "产出"
+ },
+ {
+  "source": "T05",
+  "target": "P004",
+  "kind": "产出"
+ },
+ {
+  "source": "T05",
+  "target": "P005",
+  "kind": "产出"
+ },
+ {
+  "source": "T05",
+  "target": "P006",
+  "kind": "产出"
+ },
+ {
+  "source": "T05",
+  "target": "P002",
+  "kind": "产出"
+ },
+ {
+  "source": "T06",
+  "target": "P007",
+  "kind": "产出"
+ },
+ {
+  "source": "T06",
+  "target": "P008",
+  "kind": "产出"
+ },
+ {
+  "source": "T06",
+  "target": "P009",
+  "kind": "产出"
+ },
+ {
+  "source": "T06",
+  "target": "L013",
+  "kind": "产出"
+ },
+ {
+  "source": "T07",
+  "target": "P010",
+  "kind": "产出"
+ },
+ {
+  "source": "T07",
+  "target": "P011",
+  "kind": "产出"
+ },
+ {
+  "source": "T07",
+  "target": "P012",
+  "kind": "产出"
+ },
+ {
+  "source": "T07",
+  "target": "P013",
+  "kind": "产出"
+ },
+ {
+  "source": "T07",
+  "target": "L014",
+  "kind": "产出"
+ },
+ {
+  "source": "T07",
+  "target": "L010",
+  "kind": "产出"
+ },
+ {
+  "source": "T14",
+  "target": "L015",
+  "kind": "产出"
+ },
+ {
+  "source": "T03",
+  "target": "L001",
+  "kind": "用上"
+ },
+ {
+  "source": "T03",
+  "target": "L004",
+  "kind": "用上"
+ },
+ {
+  "source": "T03",
+  "target": "L005",
+  "kind": "用上"
+ },
+ {
+  "source": "T03",
+  "target": "L011",
+  "kind": "用上"
+ },
+ {
+  "source": "T03",
+  "target": "L010",
+  "kind": "用上"
+ },
+ {
+  "source": "T04",
+  "target": "L006",
+  "kind": "用上"
+ },
+ {
+  "source": "T04",
+  "target": "L012",
+  "kind": "用上"
+ },
+ {
+  "source": "T05",
+  "target": "P001",
+  "kind": "用上"
+ },
+ {
+  "source": "T05",
+  "target": "P002",
+  "kind": "用上"
+ },
+ {
+  "source": "T05",
+  "target": "L012",
+  "kind": "用上"
+ },
+ {
+  "source": "T06",
+  "target": "L012",
+  "kind": "用上"
+ },
+ {
+  "source": "T06",
+  "target": "L013",
+  "kind": "用上"
+ },
+ {
+  "source": "T06",
+  "target": "L002",
+  "kind": "用上"
+ },
+ {
+  "source": "T06",
+  "target": "P006",
+  "kind": "用上"
+ },
+ {
+  "source": "T07",
+  "target": "L012",
+  "kind": "用上"
+ },
+ {
+  "source": "T07",
+  "target": "L014",
+  "kind": "用上"
+ },
+ {
+  "source": "T07",
+  "target": "L010",
+  "kind": "用上"
+ },
+ {
+  "source": "T07",
+  "target": "L002",
+  "kind": "用上"
+ },
+ {
+  "source": "T21",
+  "target": "P004",
+  "kind": "用上"
+ },
+ {
+  "source": "T21",
+  "target": "P016",
+  "kind": "用上"
+ },
+ {
+  "source": "T21",
+  "target": "P006",
+  "kind": "用上"
+ },
+ {
+  "source": "T21",
+  "target": "P005",
+  "kind": "用上"
+ },
+ {
+  "source": "T25",
+  "target": "L015",
+  "kind": "用上"
+ },
+ {
+  "source": "T25",
+  "target": "L016",
+  "kind": "用上"
+ },
+ {
+  "source": "T25",
+  "target": "L017",
+  "kind": "用上"
+ },
+ {
+  "source": "T25",
+  "target": "P014",
+  "kind": "用上"
+ },
+ {
+  "source": "T25",
+  "target": "P006",
+  "kind": "用上"
+ },
+ {
+  "source": "T25",
+  "target": "P016",
+  "kind": "用上"
+ },
+ {
+  "source": "T30",
+  "target": "P014",
+  "kind": "用上"
+ },
+ {
+  "source": "T30",
+  "target": "P015",
+  "kind": "用上"
+ },
+ {
+  "source": "T30",
+  "target": "L015",
+  "kind": "用上"
+ },
+ {
+  "source": "T30",
+  "target": "L017",
+  "kind": "用上"
+ },
+ {
+  "source": "T30",
+  "target": "P017",
+  "kind": "用上"
+ },
+ {
+  "source": "T30",
+  "target": "P018",
+  "kind": "用上"
+ },
+ {
+  "source": "T40",
+  "target": "L015",
+  "kind": "用上"
+ },
+ {
+  "source": "T40",
+  "target": "L017",
+  "kind": "用上"
+ },
+ {
+  "source": "T40",
+  "target": "L018",
+  "kind": "用上"
+ },
+ {
+  "source": "T40",
+  "target": "P016",
+  "kind": "用上"
+ },
+ {
+  "source": "T40",
+  "target": "P021",
+  "kind": "用上"
+ },
+ {
+  "source": "T42",
+  "target": "L018",
+  "kind": "用上"
+ },
+ {
+  "source": "D01",
+  "target": "L001",
+  "kind": "教训"
+ },
+ {
+  "source": "D02",
+  "target": "L002",
+  "kind": "教训"
+ },
+ {
+  "source": "D03",
+  "target": "L003",
+  "kind": "教训"
+ },
+ {
+  "source": "D04",
+  "target": "L009",
+  "kind": "教训"
+ },
+ {
+  "source": "D05",
+  "target": "L008",
+  "kind": "教训"
+ },
+ {
+  "source": "D06",
+  "target": "L010",
+  "kind": "教训"
+ },
+ {
+  "source": "D07",
+  "target": "L011",
+  "kind": "教训"
+ },
+ {
+  "source": "D09",
+  "target": "L015",
+  "kind": "教训"
+ },
+ {
+  "source": "D11",
+  "target": "L016",
+  "kind": "教训"
+ },
+ {
+  "source": "D12",
+  "target": "L017",
+  "kind": "教训"
+ },
+ {
+  "source": "D13",
+  "target": "L018",
+  "kind": "教训"
+ },
+ {
+  "source": "D14",
+  "target": "L019",
+  "kind": "教训"
+ },
+ {
+  "source": "D15",
+  "target": "L020",
+  "kind": "教训"
+ },
+ {
+  "source": "D16",
+  "target": "L022",
+  "kind": "教训"
+ },
+ {
+  "source": "D17",
+  "target": "L017",
+  "kind": "教训"
+ },
+ {
+  "source": "D19",
+  "target": "P026",
+  "kind": "教训"
+ },
+ {
+  "source": "D20",
+  "target": "L015",
+  "kind": "教训"
+ },
+ {
+  "source": "D23",
+  "target": "P030",
+  "kind": "教训"
+ },
+ {
+  "source": "D25",
+  "target": "L025",
+  "kind": "教训"
+ },
+ {
+  "source": "D27",
+  "target": "L025",
+  "kind": "教训"
+ },
+ {
+  "source": "D29",
+  "target": "P032",
+  "kind": "教训"
+ },
+ {
+  "source": "E01",
+  "target": "L001",
+  "kind": "验证"
+ },
+ {
+  "source": "E02",
+  "target": "L001",
+  "kind": "验证"
+ },
+ {
+  "source": "E03",
+  "target": "L008",
+  "kind": "验证"
+ },
+ {
+  "source": "E04",
+  "target": "L002",
+  "kind": "验证"
+ },
+ {
+  "source": "E05",
+  "target": "L002",
+  "kind": "验证"
+ },
+ {
+  "source": "E06",
+  "target": "L004",
+  "kind": "验证"
+ },
+ {
+  "source": "E07",
+  "target": "L006",
+  "kind": "验证"
+ },
+ {
+  "source": "E08",
+  "target": "L010",
+  "kind": "验证"
+ },
+ {
+  "source": "E09",
+  "target": "L001",
+  "kind": "验证"
+ },
+ {
+  "source": "E10",
+  "target": "L011",
+  "kind": "验证"
+ },
+ {
+  "source": "E11",
+  "target": "L012",
+  "kind": "验证"
+ },
+ {
+  "source": "E12",
+  "target": "L012",
+  "kind": "验证"
+ },
+ {
+  "source": "E13",
+  "target": "L013",
+  "kind": "验证"
+ },
+ {
+  "source": "E14",
+  "target": "L012",
+  "kind": "验证"
+ },
+ {
+  "source": "E15",
+  "target": "L002",
+  "kind": "验证"
+ },
+ {
+  "source": "E16",
+  "target": "L014",
+  "kind": "验证"
+ },
+ {
+  "source": "E17",
+  "target": "L014",
+  "kind": "验证"
+ },
+ {
+  "source": "E18",
+  "target": "L002",
+  "kind": "验证"
+ },
+ {
+  "source": "E19",
+  "target": "P014",
+  "kind": "验证"
+ },
+ {
+  "source": "E20",
+  "target": "L015",
+  "kind": "验证"
+ },
+ {
+  "source": "E21",
+  "target": "L012",
+  "kind": "验证"
+ },
+ {
+  "source": "E22",
+  "target": "P015",
+  "kind": "验证"
+ },
+ {
+  "source": "E23",
+  "target": "P015",
+  "kind": "验证"
+ },
+ {
+  "source": "E24",
+  "target": "P016",
+  "kind": "验证"
+ },
+ {
+  "source": "E25",
+  "target": "P016",
+  "kind": "验证"
+ },
+ {
+  "source": "E26",
+  "target": "L012",
+  "kind": "验证"
+ },
+ {
+  "source": "E27",
+  "target": "L016",
+  "kind": "验证"
+ },
+ {
+  "source": "E28",
+  "target": "L016",
+  "kind": "验证"
+ },
+ {
+  "source": "E29",
+  "target": "L016",
+  "kind": "验证"
+ },
+ {
+  "source": "E30",
+  "target": "P005",
+  "kind": "验证"
+ },
+ {
+  "source": "E31",
+  "target": "P004",
+  "kind": "验证"
+ },
+ {
+  "source": "E32",
+  "target": "P017",
+  "kind": "验证"
+ },
+ {
+  "source": "E33",
+  "target": "P018",
+  "kind": "验证"
+ },
+ {
+  "source": "E34",
+  "target": "P018",
+  "kind": "验证"
+ },
+ {
+  "source": "E35",
+  "target": "P019",
+  "kind": "验证"
+ },
+ {
+  "source": "E36",
+  "target": "P019",
+  "kind": "验证"
+ },
+ {
+  "source": "E37",
+  "target": "P018",
+  "kind": "验证"
+ },
+ {
+  "source": "E38",
+  "target": "L015",
+  "kind": "验证"
+ },
+ {
+  "source": "E39",
+  "target": "P020",
+  "kind": "验证"
+ },
+ {
+  "source": "E40",
+  "target": "P021",
+  "kind": "验证"
+ },
+ {
+  "source": "E41",
+  "target": "L019",
+  "kind": "验证"
+ },
+ {
+  "source": "E42",
+  "target": "P022",
+  "kind": "验证"
+ },
+ {
+  "source": "E43",
+  "target": "L018",
+  "kind": "验证"
+ },
+ {
+  "source": "E44",
+  "target": "P024",
+  "kind": "验证"
+ },
+ {
+  "source": "E45",
+  "target": "P023",
+  "kind": "验证"
+ },
+ {
+  "source": "E46",
+  "target": "L022",
+  "kind": "验证"
+ },
+ {
+  "source": "E47",
+  "target": "L021",
+  "kind": "验证"
+ },
+ {
+  "source": "E48",
+  "target": "P025",
+  "kind": "验证"
+ },
+ {
+  "source": "E49",
+  "target": "P026",
+  "kind": "验证"
+ },
+ {
+  "source": "E50",
+  "target": "P027",
+  "kind": "验证"
+ },
+ {
+  "source": "E51",
+  "target": "P028",
+  "kind": "验证"
+ },
+ {
+  "source": "E52",
+  "target": "P029",
+  "kind": "验证"
+ },
+ {
+  "source": "E53",
+  "target": "P030",
+  "kind": "验证"
+ },
+ {
+  "source": "E54",
+  "target": "L025",
+  "kind": "验证"
+ },
+ {
+  "source": "E55",
+  "target": "P031",
+  "kind": "验证"
+ }
+]

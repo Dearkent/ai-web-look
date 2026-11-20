@@ -1,0 +1,14 @@
+# 读码笔记 · bolt.diy 中引用的代码事实
+/home/claude/repos/bolt.diy	app/lib/runtime/message-parser.ts	lines=434	文件行数
+/home/claude/repos/bolt.diy	app/lib/runtime/action-runner.ts	lines=823	文件行数
+/home/claude/repos/bolt.diy	app/lib/runtime/message-parser.ts	state.position = i;	按消息记住解析位置
+/home/claude/repos/bolt.diy	app/lib/runtime/message-parser.ts	onActionStream	文件动作流式更新
+/home/claude/repos/bolt.diy	app/lib/runtime/message-parser.ts	cleanoutMarkdownSyntax(content)	剥掉代码围栏
+/home/claude/repos/bolt.diy	app/lib/runtime/message-parser.ts	replace(/&lt;/g, '<')	还原转义的尖括号
+/home/claude/repos/bolt.diy	app/lib/runtime/message-parser.ts	took down the whole React tree	缺路径曾导致界面崩溃
+/home/claude/repos/bolt.diy	app/lib/runtime/message-parser.ts	<bolt-quick-actions>	下一步按钮
+/home/claude/repos/bolt.diy	app/lib/runtime/action-runner.ts	'pending' | 'running' | 'complete' | 'aborted' | 'failed'	五种状态
+/home/claude/repos/bolt.diy	app/lib/runtime/action-runner.ts	modifiedCommand: `rm -f	rm 自动加 -f
+/home/claude/repos/bolt.diy	app/lib/runtime/action-runner.ts	mkdir -p ${targetDir} && cd	cd 前先建目录
+/home/claude/repos/bolt.diy	app/lib/runtime/enhanced-message-parser.ts	UNSUPPORTED_TOOL_CALL_NOTICE	模型不走协议时提示换模型
+/home/claude/repos/bolt.diy	app/lib/runtime/message-parser.ts	throw new Error(`Invalid Supabase operation	解析中途抛异常

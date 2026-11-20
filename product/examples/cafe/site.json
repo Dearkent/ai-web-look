@@ -1,0 +1,277 @@
+{
+ "schema_version": "site/0.1",
+ "id": "cafe-lane-site",
+ "brief_id": "cafe-lane",
+ "default_locale": "zh-CN",
+ "style": {
+  "style_id": "soft-ui-evolution",
+  "secondary_style_ids": [
+   "vibrant-and-block-based"
+  ],
+  "motion_tier": "Subtle",
+  "color_mode": "light",
+  "design_md": "design/DESIGN.md",
+  "tokens": "design/tokens.json"
+ },
+ "pages": [
+  {
+   "id": "home",
+   "title": "首页",
+   "path": "/",
+   "parent": null,
+   "kind": "home",
+   "pattern": "hero-centric-design",
+   "serves_goals": [
+    "G1",
+    "G2"
+   ],
+   "wireframe": "pages/home.json",
+   "nav": {
+    "header": true,
+    "footer": true,
+    "order": 0,
+    "label": "首页"
+   },
+   "seo": {
+    "title": "巷口咖啡 · 午休也能坐下来",
+    "description": "写字楼旁的安静咖啡馆，在线预约座位。"
+   }
+  },
+  {
+   "id": "menu",
+   "title": "菜单",
+   "path": "/menu",
+   "parent": "home",
+   "kind": "listing",
+   "serves_goals": [
+    "G2"
+   ],
+   "wireframe": "pages/menu.json",
+   "nav": {
+    "header": true,
+    "footer": true,
+    "order": 1
+   },
+   "data": [
+    "menu-item"
+   ]
+  },
+  {
+   "id": "booking",
+   "title": "预约座位",
+   "path": "/booking",
+   "parent": "home",
+   "kind": "form",
+   "serves_goals": [
+    "G1"
+   ],
+   "implements_features": [
+    "F1"
+   ],
+   "wireframe": "pages/booking.json",
+   "nav": {
+    "header": true,
+    "footer": false,
+    "order": 2
+   },
+   "data": [
+    "reservation"
+   ]
+  },
+  {
+   "id": "visit",
+   "title": "到店",
+   "path": "/visit",
+   "parent": "home",
+   "kind": "contact",
+   "implements_features": [
+    "F2"
+   ],
+   "wireframe": "pages/visit.json",
+   "nav": {
+    "header": true,
+    "footer": true,
+    "order": 3
+   }
+  },
+  {
+   "id": "booked",
+   "title": "预约成功",
+   "path": "/booking/done",
+   "parent": "booking",
+   "kind": "thanks",
+   "wireframe": "pages/booked.json",
+   "nav": {
+    "header": false,
+    "footer": false
+   },
+   "seo": {
+    "index": false
+   }
+  }
+ ],
+ "flows": [
+  {
+   "id": "FL1",
+   "goal": "G1",
+   "steps": [
+    "home",
+    "booking",
+    "booked"
+   ],
+   "max_clicks": 3
+  },
+  {
+   "id": "FL2",
+   "goal": "G2",
+   "steps": [
+    "home",
+    "menu"
+   ]
+  }
+ ],
+ "data_entities": [
+  {
+   "id": "menu-item",
+   "editable_by_owner": true,
+   "fields": [
+    {
+     "name": "name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "name": "price",
+     "type": "money",
+     "required": true
+    },
+    {
+     "name": "category",
+     "type": "enum"
+    },
+    {
+     "name": "photo",
+     "type": "image"
+    }
+   ]
+  },
+  {
+   "id": "reservation",
+   "editable_by_owner": false,
+   "fields": [
+    {
+     "name": "date",
+     "type": "date",
+     "required": true
+    },
+    {
+     "name": "slot",
+     "type": "enum",
+     "required": true
+    },
+    {
+     "name": "party_size",
+     "type": "number",
+     "required": true
+    },
+    {
+     "name": "phone",
+     "type": "phone",
+     "required": true
+    }
+   ]
+  }
+ ],
+ "work_plan": [
+  {
+   "id": "W1",
+   "agent": "design-director",
+   "produces": "design/DESIGN.md"
+  },
+  {
+   "id": "W2",
+   "agent": "design-director",
+   "produces": "design/tokens.json",
+   "depends_on": [
+    "W1"
+   ]
+  },
+  {
+   "id": "W3",
+   "agent": "layout",
+   "produces": "pages/home.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W4",
+   "agent": "layout",
+   "produces": "pages/menu.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W5",
+   "agent": "layout",
+   "produces": "pages/booking.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W6",
+   "agent": "layout",
+   "produces": "pages/visit.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W7",
+   "agent": "layout",
+   "produces": "pages/booked.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W8",
+   "agent": "content",
+   "produces": "content/zh-CN.json",
+   "depends_on": [
+    "W3",
+    "W4",
+    "W5",
+    "W6",
+    "W7"
+   ]
+  },
+  {
+   "id": "W9",
+   "agent": "engineer",
+   "produces": "src/",
+   "depends_on": [
+    "W8"
+   ]
+  },
+  {
+   "id": "W10",
+   "agent": "motion",
+   "produces": "src/motion",
+   "depends_on": [
+    "W9"
+   ]
+  },
+  {
+   "id": "W11",
+   "agent": "reviewer",
+   "produces": "review/report.json",
+   "depends_on": [
+    "W10"
+   ]
+  }
+ ],
+ "base_url": "https://cafe.example.com"
+}

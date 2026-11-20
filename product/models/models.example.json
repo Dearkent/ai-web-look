@@ -1,0 +1,70 @@
+{
+ "_填写说明": [
+  "把这个文件复制成 ~/.aisite/models.json（Windows 是 C:\\Users\\你的用户名\\.aisite\\models.json），只填你有的那家，其它留空。",
+  "填好以后在工作台“模型”页点“测试连接”；也可以完全不填，工作台照样能用（规则版）。",
+  "roles 里每个用途选一家和一个模型名；不想用模型的用途留空即可。模型名以服务商控制台为准，也可以在工作台点“获取模型列表”。",
+  "这个文件里有密钥，不要发给别人、不要传到网上。工作台保存时会自动把权限设成只有你能读。",
+  "不想写文件也可以用环境变量：AISITE_KEY_ANTHROPIC、AISITE_KEY_OPENAI、AISITE_KEY_GEMINI、AISITE_KEY_DEEPSEEK……（AISITE_KEY_ + 服务商代号大写）"
+ ],
+ "providers": {
+  "anthropic": {
+   "_说明": "Anthropic（Claude）：密钥在这里申请 https://console.anthropic.com/",
+   "key": ""
+  },
+  "openai": {
+   "_说明": "OpenAI：密钥在这里申请 https://platform.openai.com/api-keys",
+   "key": ""
+  },
+  "gemini": {
+   "_说明": "Google Gemini：密钥在这里申请 https://aistudio.google.com/apikey",
+   "key": ""
+  },
+  "deepseek": {
+   "_说明": "DeepSeek（深度求索）：密钥在这里申请 https://platform.deepseek.com/api_keys",
+   "key": ""
+  },
+  "qwen": {
+   "_说明": "通义千问（阿里云百炼·北京）：密钥在这里申请 https://bailian.console.aliyun.com/",
+   "key": ""
+  },
+  "moonshot": {
+   "_说明": "Kimi（月之暗面）：密钥在这里申请 https://platform.moonshot.cn/console/api-keys",
+   "key": ""
+  },
+  "zhipu": {
+   "_说明": "智谱 GLM：密钥在这里申请 https://bigmodel.cn/usercenter/proj-mgmt/apikeys",
+   "key": ""
+  },
+  "doubao": {
+   "_说明": "豆包（火山方舟）：密钥在这里申请 https://console.volcengine.com/ark",
+   "key": ""
+  },
+  "openrouter": {
+   "_说明": "OpenRouter（多家模型聚合）：密钥在这里申请 https://openrouter.ai/keys",
+   "key": ""
+  },
+  "ollama": {
+   "_说明": "本机 Ollama，不需要密钥"
+  },
+  "custom": {
+   "_说明": "自定义：任何 OpenAI 兼容接口。填接口地址（https:// 开头）和密钥。例如以后的 Meta Muse（Meta Model API 目前只对美国开发者公开预览）、xAI、你自己的公用接口",
+   "key": "",
+   "base_url": ""
+  }
+ },
+ "roles": {
+  "understand": {
+   "_说明": "理解需求。例：{\"provider\": \"anthropic\", \"model\": \"claude-haiku-5-5\"}"
+  },
+  "copy": {
+   "_说明": "写文案。例：{\"provider\": \"anthropic\", \"model\": \"claude-sonnet-5-5\"}"
+  },
+  "fix": {
+   "_说明": "修复（实验功能），一般留空"
+  }
+ },
+ "limits": {
+  "max_calls_per_session": 12,
+  "timeout": 60
+ }
+}

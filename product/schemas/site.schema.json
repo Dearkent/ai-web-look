@@ -1,0 +1,372 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://aisite.local/schemas/site.schema.json",
+ "title": "网站结构 site/0.1",
+ "description": "信息架构 Agent 的产出，也是整个站点的唯一事实来源：路由、导航、面包屑、sitemap.xml 都从这里生成。页面是节点、跳转是边（与 xyflow 同构，可直接画成站点地图）。work_plan 说明每份产出由哪个 Agent 负责。",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "schema_version",
+  "id",
+  "brief_id",
+  "default_locale",
+  "style",
+  "pages",
+  "flows",
+  "work_plan"
+ ],
+ "properties": {
+  "schema_version": {
+   "const": "site/0.1"
+  },
+  "id": {
+   "$ref": "#/$defs/slug"
+  },
+  "brief_id": {
+   "$ref": "#/$defs/slug"
+  },
+  "default_locale": {
+   "type": "string",
+   "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+  },
+  "locales": {
+   "type": "array",
+   "items": {
+    "type": "string",
+    "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+   },
+   "uniqueItems": true
+  },
+  "style": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "style_id",
+    "motion_tier",
+    "design_md",
+    "tokens"
+   ],
+   "description": "总规范层。页面只能在 page.style_overrides 里做局部覆盖，不能改这里（经验 P013）",
+   "properties": {
+    "style_id": {
+     "$ref": "vocab.schema.json#/$defs/styleId"
+    },
+    "secondary_style_ids": {
+     "type": "array",
+     "items": {
+      "$ref": "vocab.schema.json#/$defs/styleId"
+     },
+     "maxItems": 2
+    },
+    "motion_tier": {
+     "$ref": "vocab.schema.json#/$defs/motionTier"
+    },
+    "color_mode": {
+     "enum": [
+      "light",
+      "dark",
+      "both"
+     ]
+    },
+    "design_md": {
+     "type": "string",
+     "pattern": "^design/[A-Za-z0-9_./-]+\\.md$"
+    },
+    "tokens": {
+     "type": "string",
+     "pattern": "^design/[A-Za-z0-9_./-]+\\.json$",
+     "description": "DTCG 2025.10 格式的令牌文件"
+    }
+   }
+  },
+  "pages": {
+   "type": "array",
+   "minItems": 1,
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "title",
+     "path",
+     "parent",
+     "kind",
+     "wireframe",
+     "nav"
+    ],
+    "properties": {
+     "id": {
+      "$ref": "#/$defs/pageId"
+     },
+     "title": {
+      "type": "string",
+      "minLength": 1
+     },
+     "path": {
+      "type": "string",
+      "pattern": "^/([a-z0-9-]+(/[a-z0-9-]+)*)?$"
+     },
+     "parent": {
+      "oneOf": [
+       {
+        "$ref": "#/$defs/pageId"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "kind": {
+      "enum": [
+       "home",
+       "landing",
+       "listing",
+       "detail",
+       "form",
+       "about",
+       "contact",
+       "legal",
+       "blog_index",
+       "blog_post",
+       "thanks",
+       "error"
+      ]
+     },
+     "pattern": {
+      "$ref": "vocab.schema.json#/$defs/landingPatternId"
+     },
+     "purpose": {
+      "type": "string"
+     },
+     "serves_goals": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "pattern": "^G[0-9]+$"
+      },
+      "uniqueItems": true
+     },
+     "implements_features": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "pattern": "^F[0-9]+$"
+      },
+      "uniqueItems": true
+     },
+     "wireframe": {
+      "type": "string",
+      "pattern": "^pages/[a-z0-9-]+\\.json$"
+     },
+     "nav": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "header",
+       "footer"
+      ],
+      "properties": {
+       "header": {
+        "type": "boolean"
+       },
+       "footer": {
+        "type": "boolean"
+       },
+       "order": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "label": {
+        "type": "string"
+       }
+      }
+     },
+     "seo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "title": {
+        "type": "string",
+        "maxLength": 60
+       },
+       "description": {
+        "type": "string",
+        "maxLength": 160
+       },
+       "index": {
+        "type": "boolean",
+        "default": true
+       }
+      }
+     },
+     "data": {
+      "type": "array",
+      "items": {
+       "$ref": "#/$defs/slug"
+      },
+      "description": "本页读取的数据实体"
+     }
+    }
+   }
+  },
+  "flows": {
+   "type": "array",
+   "description": "关键用户路径。检查脚本会验证每一步之间真的有链接，且点击次数不超过 max_clicks",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "goal",
+     "steps"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^FL[0-9]+$"
+     },
+     "goal": {
+      "type": "string",
+      "pattern": "^G[0-9]+$"
+     },
+     "steps": {
+      "type": "array",
+      "items": {
+       "$ref": "#/$defs/pageId"
+      },
+      "minItems": 1
+     },
+     "max_clicks": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 3
+     },
+     "completes_with": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "action"
+      ],
+      "description": "流程在最后一页点击哪个按钮才算完成（例如跳到外部注册页）。检查器验证该按钮在最后一页存在",
+      "properties": {
+       "action": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{0,40}$"
+       }
+      }
+     }
+    }
+   }
+  },
+  "data_entities": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "fields"
+    ],
+    "properties": {
+     "id": {
+      "$ref": "#/$defs/slug"
+     },
+     "description": {
+      "type": "string"
+     },
+     "editable_by_owner": {
+      "type": "boolean",
+      "description": "上线后站长能否自己改（不走 AI）"
+     },
+     "fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "name",
+        "type"
+       ],
+       "properties": {
+        "name": {
+         "type": "string",
+         "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "type": {
+         "enum": [
+          "text",
+          "rich_text",
+          "number",
+          "money",
+          "image",
+          "date",
+          "datetime",
+          "boolean",
+          "url",
+          "email",
+          "phone",
+          "enum"
+         ]
+        },
+        "required": {
+         "type": "boolean"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "work_plan": {
+   "type": "array",
+   "minItems": 1,
+   "description": "谁产出什么、依赖谁。编排 Agent 按这里调度；检查脚本验证无环、依赖存在、Agent 合法",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "id",
+     "agent",
+     "produces"
+    ],
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^W[0-9]+$"
+     },
+     "agent": {
+      "$ref": "vocab.schema.json#/$defs/agentId"
+     },
+     "produces": {
+      "type": "string",
+      "minLength": 1
+     },
+     "depends_on": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "pattern": "^W[0-9]+$"
+      },
+      "uniqueItems": true
+     }
+    }
+   }
+  },
+  "base_url": {
+   "type": "string",
+   "pattern": "^https://[a-z0-9.-]+(/[a-z0-9._-]*)*$",
+   "description": "网站上线后的地址；sitemap.xml 要求完整网址，缺这一项就不生成 sitemap"
+  }
+ },
+ "$defs": {
+  "slug": {
+   "type": "string",
+   "pattern": "^[a-z][a-z0-9-]{1,62}$"
+  },
+  "pageId": {
+   "type": "string",
+   "pattern": "^[a-z][a-z0-9-]{0,40}$"
+  }
+ }
+}

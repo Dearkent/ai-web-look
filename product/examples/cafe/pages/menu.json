@@ -1,0 +1,12 @@
+{
+ "schema_version": "page/0.1", "page_id": "menu",
+ "sections": [
+  {"id": "header", "type": "header", "component": "registry:site-header", "layout": {"variant": "inline"}, "slots": {"logo": {"kind": "image", "asset": "A1"}}},
+  {"id": "list", "type": "menu", "component": "registry:menu-list", "layout": {"variant": "list"}, "data": "menu-item",
+   "slots": {"items": {"kind": "list", "asset": "A2"}},
+   "motion": [{"category": "Stagger List", "tier": "Subtle"}]},
+  {"id": "cta", "type": "cta", "component": "registry:cta-band", "layout": {"variant": "stack"}, "slots": {"heading": {"kind": "text"}},
+   "actions": [{"id": "book", "label": "预约座位", "primary": true, "target": {"page": "booking"}}]},
+  {"id": "footer", "type": "footer", "component": "registry:site-footer", "layout": {"variant": "grid-3", "mobile": "stack"}, "slots": {"address": {"kind": "text"}}}
+ ]
+}

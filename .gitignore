@@ -1,0 +1,13 @@
+# 运行时缓存
+__pycache__/
+*.pyc
+# 本机密钥（模型、托管令牌）永远不进仓库；模板 models.example.json 例外
+models.json
+.aisite/
+*.env
+.env*
+# 打包产物、临时文件
+*.zip
+*.tmp
+.venv/
+venv/

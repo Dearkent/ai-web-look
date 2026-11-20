@@ -1,0 +1,9 @@
+{
+ "schema_version": "page/0.1", "page_id": "visit",
+ "sections": [
+  {"id": "header", "type": "header", "component": "registry:site-header", "layout": {"variant": "inline"}, "slots": {"logo": {"kind": "image", "asset": "A1"}}},
+  {"id": "map", "type": "map", "component": "registry:map-embed", "layout": {"variant": "split-left", "mobile": "stack"}, "feature": "F2",
+   "slots": {"map": {"kind": "embed"}, "hours": {"kind": "text"}}},
+  {"id": "footer", "type": "footer", "component": "registry:site-footer", "layout": {"variant": "grid-3", "mobile": "stack"}, "slots": {"address": {"kind": "text"}}}
+ ]
+}

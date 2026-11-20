@@ -1,0 +1,422 @@
+[
+ {
+  "phase": "调研与学习",
+  "id": "A1",
+  "item": "开源代码库调研：157 个仓库、许可证与风险清单",
+  "weight": 3,
+  "status": "done",
+  "evidence": [],
+  "note": "档案“代码库总目录”"
+ },
+ {
+  "phase": "调研与学习",
+  "id": "A2",
+  "item": "读码笔记与参照物核对",
+  "weight": 3,
+  "status": "done",
+  "evidence": [
+   "E21",
+   "E26"
+  ],
+  "note": "代码事实可复核"
+ },
+ {
+  "phase": "调研与学习",
+  "id": "A3",
+  "item": "只读学习的安全规则",
+  "weight": 2,
+  "status": "done",
+  "evidence": [
+   "E27"
+  ],
+  "note": "不运行第三方代码"
+ },
+ {
+  "phase": "学习大脑",
+  "id": "B1",
+  "item": "经验卡片、召回、验证门",
+  "weight": 4,
+  "status": "done",
+  "evidence": [
+   "E13"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "学习大脑",
+  "id": "B2",
+  "item": "自我缺陷记录与死循环自查",
+  "weight": 2,
+  "status": "done",
+  "evidence": [
+   "E27",
+   "E29"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "学习大脑",
+  "id": "B3",
+  "item": "看板：沟通与进度",
+  "weight": 2,
+  "status": "done",
+  "evidence": [],
+  "note": "已上线"
+ },
+ {
+  "phase": "学习大脑",
+  "id": "B4",
+  "item": "用户选择回流学习（推荐越用越准）",
+  "weight": 2,
+  "status": "done",
+  "evidence": [
+   "E42"
+  ],
+  "note": "选择回流，同行业推荐排第一"
+ },
+ {
+  "phase": "学习大脑",
+  "id": "B5",
+  "item": "跨会话持久化（放进 GitHub 仓库）",
+  "weight": 2,
+  "status": "todo",
+  "evidence": [],
+  "note": "需要你提供仓库"
+ },
+ {
+  "phase": "学习大脑",
+  "id": "B6",
+  "item": "喂养学习：喂说法、纠正、喜欢的网站 → 试跑采纳，可撤回、可复核",
+  "weight": 3,
+  "status": "done",
+  "evidence": [
+   "E44",
+   "E45",
+   "E46"
+  ],
+  "note": "核心要求一；只抽封闭字段，指令不生效"
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C1",
+  "item": "三份图纸格式与检查器",
+  "weight": 5,
+  "status": "done",
+  "evidence": [
+   "E19",
+   "E20",
+   "E38"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C2",
+  "item": "图纸 → 网站生成器",
+  "weight": 4,
+  "status": "done",
+  "evidence": [
+   "E32"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C3",
+  "item": "真实浏览器检查",
+  "weight": 3,
+  "status": "done",
+  "evidence": [
+   "E33",
+   "E34"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C4",
+  "item": "文字理解（规则版）",
+  "weight": 4,
+  "status": "done",
+  "evidence": [
+   "E39"
+  ],
+  "note": "约 50 种行业"
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C5",
+  "item": "文字理解（模型版）",
+  "weight": 3,
+  "status": "partial",
+  "evidence": [
+   "E52",
+   "E42"
+  ],
+  "note": "已接好：模型只从清单里选、逐项校验、出错退回规则；用本机假服务测过，真实模型的理解质量要等你填密钥后验证；已提供填写模板 product/models/models.example.json（含 Gemini）"
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C6",
+  "item": "页面规划",
+  "weight": 3,
+  "status": "done",
+  "evidence": [
+   "E39"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C7",
+  "item": "风格可选（三种观感不同的候选）",
+  "weight": 4,
+  "status": "done",
+  "evidence": [
+   "E40"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C8",
+  "item": "文案（规则版初稿已有，成品文案需模型）",
+  "weight": 3,
+  "status": "partial",
+  "evidence": [
+   "E52"
+  ],
+  "note": "规则初稿 + 模型改写（逐处防编造校验）都有了；真实模型写得好不好待验证"
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C9",
+  "item": "图片与素材生成",
+  "weight": 3,
+  "status": "todo",
+  "evidence": [],
+  "note": "现在是占位图"
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C10",
+  "item": "视觉评审（硬指标版已做；截图审美评审需模型）",
+  "weight": 3,
+  "status": "partial",
+  "evidence": [
+   "E49"
+  ],
+  "note": "已在真实浏览器里量对比度、点按区域、字号，并修好三类老问题；“好不好看”这类判断需要模型看截图"
+ },
+ {
+  "phase": "生成流水线",
+  "id": "C11",
+  "item": "模型接入：多服务商、按用途分配、密钥本机保存、测试连接",
+  "weight": 3,
+  "status": "done",
+  "evidence": [
+   "E51",
+   "E42"
+  ],
+  "note": "Anthropic + OpenAI 兼容两种协议，覆盖 10 个预设和自定义；用本机假服务验证，真实服务商待你填密钥"
+ },
+ {
+  "phase": "修复与安全",
+  "id": "D1",
+  "item": "修复刹车（八种）",
+  "weight": 4,
+  "status": "done",
+  "evidence": [
+   "E24",
+   "E25"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "修复与安全",
+  "id": "D2",
+  "item": "存档回滚工作区",
+  "weight": 3,
+  "status": "done",
+  "evidence": [
+   "E30",
+   "E31"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "修复与安全",
+  "id": "D3",
+  "item": "修复回路接真实构建",
+  "weight": 3,
+  "status": "done",
+  "evidence": [
+   "E37"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "修复与安全",
+  "id": "D4",
+  "item": "模型修复者（接口已测通，未真实调用）",
+  "weight": 3,
+  "status": "partial",
+  "evidence": [
+   "E51"
+  ],
+  "note": "可用“模型设置”里配的任意服务商（两种协议）；未真实调用"
+ },
+ {
+  "phase": "修复与安全",
+  "id": "D5",
+  "item": "模型复读检测",
+  "weight": 2,
+  "status": "done",
+  "evidence": [
+   "E35"
+  ],
+  "note": ""
+ },
+ {
+  "phase": "修复与安全",
+  "id": "D6",
+  "item": "产品自我纠错：诊断选修补、复查、撤回、记住病因、对照实验后推广",
+  "weight": 3,
+  "status": "done",
+  "evidence": [
+   "E44",
+   "E42",
+   "E47"
+  ],
+  "note": "核心要求二；目前会修两类问题（撑破屏幕、首屏看不见），其余报告并记入待学清单"
+ },
+ {
+  "phase": "用户界面",
+  "id": "E1",
+  "item": "工作台：输入 → 预览点选 → 整站（标签页、步骤条、生成后收起）",
+  "weight": 5,
+  "status": "done",
+  "evidence": [
+   "E42"
+  ],
+  "note": "本地网页；只在本机可用。第十二轮界面优化：建站/教它/模型三个标签页，网站占主区域，全部改成用户的话（P032）"
+ },
+ {
+  "phase": "用户界面",
+  "id": "E2",
+  "item": "对话式修改（改哪里就回到哪一步）",
+  "weight": 4,
+  "status": "done",
+  "evidence": [
+   "E48",
+   "E42"
+  ],
+  "note": "能改：颜色、加/去页面、换风格、改名、首页标题/介绍/号召、字号、圆角、间距、撤销；看不懂的进待学清单（“字大一点”就是从清单里学会的）；挪动区块位置归到 E3 拖拽编辑"
+ },
+ {
+  "phase": "用户界面",
+  "id": "E3",
+  "item": "可视化拖拽编辑（与 Puck 数据同构）",
+  "weight": 4,
+  "status": "todo",
+  "evidence": [],
+  "note": ""
+ },
+ {
+  "phase": "用户界面",
+  "id": "E4",
+  "item": "“学到了 / 用了哪些经验”的界面",
+  "weight": 2,
+  "status": "done",
+  "evidence": [
+   "E42"
+  ],
+  "note": "理解时标出用到的已学知识；生成后显示自我纠错过程；知识和纠错记忆可查看、可撤回"
+ },
+ {
+  "phase": "上线运行",
+  "id": "F1",
+  "item": "预览沙箱服务（多用户隔离）",
+  "weight": 4,
+  "status": "todo",
+  "evidence": [],
+  "note": ""
+ },
+ {
+  "phase": "上线运行",
+  "id": "F2",
+  "item": "一键部署与域名",
+  "weight": 4,
+  "status": "partial",
+  "evidence": [
+   "E50"
+  ],
+  "note": "已能导出可离线打开、可直接上传静态托管的压缩包（附上线说明）；自动发布到托管和绑定域名还没做"
+ },
+ {
+  "phase": "上线运行",
+  "id": "F3",
+  "item": "账号与项目管理（登录后各自接自己的模型 API）",
+  "weight": 3,
+  "status": "todo",
+  "evidence": [],
+  "note": "你定的（11-19）：登录后在账号里选服务商、填自己的密钥（Claude / GPT / Gemini / Muse / DeepSeek 等，可选）；密钥按账号加密保存，只对本人显示末四位"
+ },
+ {
+  "phase": "上线运行",
+  "id": "F4",
+  "item": "SEO、性能、无障碍评分",
+  "weight": 2,
+  "status": "done",
+  "evidence": [
+   "E53",
+   "E42"
+  ],
+  "note": "四项体检打分 + 修好体检发现的生成器老问题；真实网络下的性能分要上线后测"
+ },
+ {
+  "phase": "上线运行",
+  "id": "F5",
+  "item": "国内部署与合规评估",
+  "weight": 2,
+  "status": "partial",
+  "evidence": [
+   "E53",
+   "E42"
+  ],
+  "note": "已有：表单同意勾选、隐私政策模板、广告法风险词检查、导出时加 ICP 备案号和 sitemap、上线清单；备案本身和隐私政策的法律审核要你来办"
+ },
+ {
+  "phase": "上线运行",
+  "id": "F6",
+  "item": "本机一键运行（自检、令牌防护、导出网站）",
+  "weight": 2,
+  "status": "done",
+  "evidence": [
+   "E50",
+   "E42"
+  ],
+  "note": "start.sh / start.bat；只听本机、每次新令牌、Host 检查"
+ },
+ {
+  "phase": "上线运行",
+  "id": "F7",
+  "item": "发布测试（全新环境、旧版 Python、压力测试）",
+  "weight": 2,
+  "status": "done",
+  "evidence": [
+   "E55",
+   "E54"
+  ],
+  "note": "Python 3.9/3.11/3.13 全新虚拟环境里从压缩包装到导出都通过；macOS/Windows 真机还没测"
+ },
+ {
+  "phase": "上线运行",
+  "id": "F8",
+  "item": "平台付费额度：没有自己密钥的用户用平台的公用接口，预充值、按用量扣",
+  "weight": 3,
+  "status": "todo",
+  "evidence": [],
+  "note": "你定的（11-19）：收美元、新币或 USDT；先按 Claude 官方 token 价定价（Opus 5.5 $4/$20、Sonnet 5.5 $2/$10、Haiku 5.5 $0.10/$0.50 每百万输入/输出，2026-11 核对）；公用接口的密钥只放服务器，不进浏览器；每个账号有用量上限和明细"
+ }
+]

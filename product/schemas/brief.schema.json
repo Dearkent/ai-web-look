@@ -1,0 +1,139 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://aisite.local/schemas/brief.schema.json",
+ "title": "需求简报 brief/0.1",
+ "description": "需求分析 Agent 的唯一产出。把用户的一句话变成可被机器检查的需求单。凡是由系统推断或补默认值的字段，都必须标明来源，供学习回路统计“哪些默认值被用户改掉了”。",
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["schema_version", "id", "original_request", "product_type", "goals", "audience", "style_preference", "features", "open_questions"],
+ "properties": {
+  "schema_version": {"const": "brief/0.1"},
+  "id": {"$ref": "#/$defs/slug"},
+  "created_at": {"type": "string", "format": "date-time"},
+  "original_request": {"type": "string", "minLength": 1, "description": "用户原话，逐字保留，不改写"},
+  "site_name": {"type": "string"},
+  "locales": {"type": "array", "items": {"$ref": "#/$defs/locale"}, "minItems": 1, "uniqueItems": true, "default": ["zh-CN"]},
+  "product_type": {
+   "type": "object", "additionalProperties": false, "required": ["value", "source", "confidence"],
+   "properties": {
+    "value": {"$ref": "vocab.schema.json#/$defs/productType"},
+    "source": {"$ref": "#/$defs/source"},
+    "confidence": {"$ref": "#/$defs/confidence"},
+    "kb_trace": {"$ref": "#/$defs/kbTrace"}
+   }
+  },
+  "goals": {
+   "type": "array", "minItems": 1, "maxItems": 5,
+   "items": {
+    "type": "object", "additionalProperties": false, "required": ["id", "kind", "priority", "description"],
+    "properties": {
+     "id": {"type": "string", "pattern": "^G[0-9]+$"},
+     "kind": {"enum": ["booking", "sell", "leads", "signup", "showcase", "inform", "community", "recruit", "download"]},
+     "priority": {"$ref": "#/$defs/priority"},
+     "description": {"type": "string", "minLength": 1},
+     "success_metric": {"type": "string"},
+     "source": {"$ref": "#/$defs/source"}
+    }
+   }
+  },
+  "audience": {
+   "type": "object", "additionalProperties": false, "required": ["primary"],
+   "properties": {
+    "primary": {"type": "string", "minLength": 1},
+    "regions": {"type": "array", "items": {"type": "string"}},
+    "devices": {"type": "array", "items": {"enum": ["mobile", "desktop", "tablet"]}, "uniqueItems": true},
+    "traits": {"type": "array", "items": {"type": "string"}},
+    "source": {"$ref": "#/$defs/source"}
+   }
+  },
+  "brand": {
+   "type": "object", "additionalProperties": false,
+   "properties": {
+    "name": {"type": "string"},
+    "tone": {"type": "array", "items": {"type": "string"}, "maxItems": 5},
+    "colors": {"type": "array", "items": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"}, "maxItems": 5},
+    "logo_asset": {"type": "string", "pattern": "^A[0-9]+$"},
+    "reference_urls": {"type": "array", "items": {"type": "string", "format": "uri"}},
+    "avoid": {"type": "array", "items": {"type": "string"}, "description": "用户明确不想要的东西"}
+   }
+  },
+  "style_preference": {
+   "type": "object", "additionalProperties": false, "required": ["style_ids", "motion_tier", "source", "confidence"],
+   "properties": {
+    "style_ids": {"type": "array", "items": {"$ref": "vocab.schema.json#/$defs/styleId"}, "minItems": 1, "maxItems": 3, "uniqueItems": true},
+    "landing_pattern": {"$ref": "vocab.schema.json#/$defs/landingPatternId"},
+    "motion_tier": {"$ref": "vocab.schema.json#/$defs/motionTier"},
+    "color_mode": {"enum": ["light", "dark", "both"], "default": "light"},
+    "source": {"$ref": "#/$defs/source"},
+    "confidence": {"$ref": "#/$defs/confidence"},
+    "kb_trace": {"$ref": "#/$defs/kbTrace"}
+   }
+  },
+  "content_assets": {
+   "type": "array",
+   "items": {
+    "type": "object", "additionalProperties": false, "required": ["id", "kind", "provided"],
+    "properties": {
+     "id": {"type": "string", "pattern": "^A[0-9]+$"},
+     "kind": {"enum": ["logo", "photo", "menu", "price_list", "text", "video", "document", "testimonial"]},
+     "description": {"type": "string"},
+     "provided": {"type": "boolean", "description": "false 表示需要文案 / 图片 Agent 生成占位或向用户索取"}
+    }
+   }
+  },
+  "features": {
+   "type": "array",
+   "items": {
+    "type": "object", "additionalProperties": false, "required": ["id", "kind", "priority"],
+    "properties": {
+     "id": {"type": "string", "pattern": "^F[0-9]+$"},
+     "kind": {"enum": ["contact_form", "booking", "payment", "membership", "blog", "cms", "multilingual", "map", "search", "newsletter", "gallery", "catalog", "cart", "faq", "analytics"]},
+     "priority": {"$ref": "#/$defs/priority"},
+     "note": {"type": "string"},
+     "source": {"$ref": "#/$defs/source"}
+    }
+   }
+  },
+  "constraints": {
+   "type": "object", "additionalProperties": false,
+   "properties": {
+    "deadline": {"type": "string", "format": "date"},
+    "budget_note": {"type": "string"},
+    "hosting_region": {"enum": ["cn-mainland", "global", "both"]},
+    "compliance": {"type": "array", "items": {"type": "string"}}
+   }
+  },
+  "open_questions": {
+   "type": "array", "maxItems": 3,
+   "description": "只问影响最大的问题，最多 3 个；每个都必须带“没人回答时用什么默认值”",
+   "items": {
+    "type": "object", "additionalProperties": false, "required": ["id", "question", "why", "default_if_unanswered", "blocking"],
+    "properties": {
+     "id": {"type": "string", "pattern": "^Q[0-9]+$"},
+     "question": {"type": "string"},
+     "why": {"type": "string"},
+     "affects": {"type": "array", "items": {"type": "string"}, "description": "受影响的字段路径，如 style_preference.style_ids"},
+     "default_if_unanswered": {"type": "string"},
+     "blocking": {"type": "boolean", "description": "true 时下游 Agent 不得开工"},
+     "answer": {"type": "string"}
+    }
+   }
+  }
+ },
+ "$defs": {
+  "slug": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,62}$"},
+  "locale": {"type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$"},
+  "priority": {"enum": ["P0", "P1", "P2"]},
+  "confidence": {"enum": ["high", "medium", "low"]},
+  "source": {"enum": ["user", "inferred", "default", "kb"], "description": "user=用户说的；inferred=模型推断；default=行业默认；kb=知识库规则推出"},
+  "kbTrace": {
+   "type": "object", "additionalProperties": false,
+   "description": "知识库推理留痕：查了哪一行、得到哪些 ID、哪些段落解析不了",
+   "properties": {
+    "rule": {"type": "string"},
+    "resolved": {"type": "array", "items": {"type": "string"}},
+    "unresolved": {"type": "array", "items": {"type": "string"}}
+   }
+  }
+ }
+}

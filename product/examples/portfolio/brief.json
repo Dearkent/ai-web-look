@@ -1,0 +1,96 @@
+{
+ "schema_version": "brief/0.1",
+ "id": "lin-portfolio",
+ "original_request": "我是独立插画师，想要一个作品集网站，让品牌方能看到作品并联系我约稿，要有点动感",
+ "site_name": "林的插画",
+ "product_type": {
+  "value": "Portfolio/Personal",
+  "source": "inferred",
+  "confidence": "high",
+  "kb_trace": {
+   "rule": "products.csv: Portfolio/Personal",
+   "resolved": [
+    "style:motion-driven",
+    "style:minimalism-and-swiss-style",
+    "landing:scroll-triggered-storytelling"
+   ],
+   "unresolved": []
+  }
+ },
+ "goals": [
+  {
+   "id": "G1",
+   "kind": "showcase",
+   "priority": "P0",
+   "description": "品牌方浏览作品",
+   "source": "user"
+  },
+  {
+   "id": "G2",
+   "kind": "leads",
+   "priority": "P0",
+   "description": "品牌方发来约稿",
+   "source": "user"
+  }
+ ],
+ "audience": {
+  "primary": "品牌方的市场和设计负责人",
+  "devices": [
+   "desktop",
+   "mobile"
+  ],
+  "source": "inferred"
+ },
+ "brand": {
+  "name": "林",
+  "tone": [
+   "轻松",
+   "有个性"
+  ]
+ },
+ "style_preference": {
+  "style_ids": [
+   "motion-driven",
+   "minimalism-and-swiss-style"
+  ],
+  "landing_pattern": "scroll-triggered-storytelling",
+  "motion_tier": "Complex",
+  "color_mode": "light",
+  "source": "kb",
+  "confidence": "medium",
+  "kb_trace": {
+   "rule": "products.csv: Portfolio/Personal；落地页 Storytelling-Driven 已弃用 → landing:scroll-triggered-storytelling；用户说“要有点动感”",
+   "resolved": [
+    "style:motion-driven"
+   ],
+   "unresolved": []
+  }
+ },
+ "content_assets": [
+  {
+   "id": "A1",
+   "kind": "photo",
+   "description": "作品图 20 张",
+   "provided": true
+  },
+  {
+   "id": "A2",
+   "kind": "text",
+   "description": "个人简介",
+   "provided": false
+  }
+ ],
+ "features": [
+  {
+   "id": "F1",
+   "kind": "contact_form",
+   "priority": "P0"
+  },
+  {
+   "id": "F2",
+   "kind": "gallery",
+   "priority": "P0"
+  }
+ ],
+ "open_questions": []
+}

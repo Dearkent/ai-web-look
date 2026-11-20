@@ -1,0 +1,42 @@
+[
+ {
+  "seq": 1,
+  "label": "真实构建·脚本空值修复",
+  "result": "修好",
+  "code": "",
+  "rounds": 1,
+  "errors_before": 4,
+  "errors_after": 0,
+  "seconds": 6.22
+ },
+ {
+  "seq": 2,
+  "label": "真实构建·模型接口（模拟回复）",
+  "result": "修好",
+  "code": "",
+  "rounds": 1,
+  "errors_before": 4,
+  "errors_after": 0,
+  "seconds": 6.57
+ },
+ {
+  "seq": 3,
+  "label": "真实构建·模型复读",
+  "result": "停下",
+  "code": "G02",
+  "rounds": 3,
+  "errors_before": 4,
+  "errors_after": 4,
+  "seconds": 4.15
+ },
+ {
+  "seq": 4,
+  "label": "真实构建·改坏图纸后改回",
+  "result": "修好",
+  "code": "",
+  "rounds": 2,
+  "errors_before": 4,
+  "errors_after": 0,
+  "seconds": 6.64
+ }
+]

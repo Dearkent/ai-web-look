@@ -1,0 +1,14 @@
+# 读码笔记 · VibeSDK 中引用的代码事实
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/get-runtime-errors.ts	USER-INTERACTION DRIVEN	运行时错误只在用户操作时产生
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/get-runtime-errors.ts	Use wait(20-30) to allow time for user interaction	部署→等待→复查的流程写在工具说明里
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/get-runtime-errors.ts	**When NOT to use:**	工具说明写明何时不该用
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/deep-debugger.ts	CALL_LIMIT_EXCEEDED	每轮只能调用一次
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/deep-debugger.ts	GENERATION_IN_PROGRESS	生成中不能调试，并告诉下一步怎么做
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/deep-debugger.ts	gitCommit: true	调试工具声明会提交
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/generate-blueprint.ts	BLUEPRINT_CHUNK	蓝图边生成边推给界面
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/generate-blueprint.ts	detailed PRD for phasic	两种模式：计划 / 详细需求文档
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/deploy-preview.ts	is expensive	强制重新部署很贵
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/resources.ts	export function hasResourceConflict(	资源冲突判断
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/resources.ts	'read' operations can run in parallel with each other	只读可并行
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/resources.ts	// Git commit: conflicts with file writes	提交与写文件冲突
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/resource-types.ts	files: { mode: 'write', paths: [path] }	参数类型自带资源声明

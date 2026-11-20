@@ -1,0 +1,25 @@
+{
+ "schema_version": "page/0.1", "page_id": "home", "pattern": "hero-centric-design",
+ "sections": [
+  {"id": "header", "type": "header", "component": "registry:site-header", "layout": {"variant": "inline", "container": "wide"},
+   "slots": {"logo": {"kind": "image", "asset": "A1"}}},
+  {"id": "hero", "type": "hero", "component": "registry:hero-split", "layout": {"variant": "split-right", "mobile": "stack"},
+   "slots": {"heading": {"kind": "text", "brief": "一句话说清：写字楼旁、午休能坐下来", "max_chars": 16},
+             "body": {"kind": "text", "brief": "营业时间 + 可预约", "max_chars": 40},
+             "image": {"kind": "image", "asset": "A3", "brief": "靠窗座位，午后光线"}},
+   "actions": [{"id": "book", "label": "预约座位", "primary": true, "target": {"page": "booking"}},
+               {"id": "see-menu", "label": "看菜单", "target": {"page": "menu"}}],
+   "motion": [{"category": "Scroll Reveal", "tier": "Subtle", "target": "heading"}]},
+  {"id": "highlights", "type": "value-props", "component": "registry:feature-cards", "layout": {"variant": "grid-3", "mobile": "stack"},
+   "slots": {"items": {"kind": "list", "count": 3, "brief": "安静、快出餐、可预约"}},
+   "motion": [{"category": "Hover Micro-interaction", "tier": "Subtle"}]},
+  {"id": "menu-teaser", "type": "menu", "component": "registry:menu-grid", "layout": {"variant": "grid-4", "mobile": "carousel"},
+   "data": "menu-item", "slots": {"items": {"kind": "list", "count": 4}},
+   "actions": [{"id": "full-menu", "label": "完整菜单", "target": {"page": "menu"}}]},
+  {"id": "cta", "type": "cta", "component": "registry:cta-band", "layout": {"variant": "stack", "align": "center"},
+   "slots": {"heading": {"kind": "text", "max_chars": 14}},
+   "actions": [{"id": "book-bottom", "label": "现在预约", "primary": true, "target": {"page": "booking"}}]},
+  {"id": "footer", "type": "footer", "component": "registry:site-footer", "layout": {"variant": "grid-3", "mobile": "stack"},
+   "slots": {"address": {"kind": "text"}}}
+ ]
+}

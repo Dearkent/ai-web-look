@@ -1,0 +1,32 @@
+{
+ "schema_version": "brief/0.1",
+ "id": "cafe-lane",
+ "created_at": "2026-11-18T10:40:00+08:00",
+ "original_request": "帮我做个咖啡馆的网站，能让附近上班的人在线预约座位，顺便看看菜单",
+ "site_name": "巷口咖啡",
+ "locales": ["zh-CN"],
+ "product_type": {"value": "Bakery/Cafe", "source": "inferred", "confidence": "high",
+  "kb_trace": {"rule": "products.csv: Bakery/Cafe", "resolved": ["style:vibrant-and-block-based", "style:soft-ui-evolution", "landing:hero-centric-design"], "unresolved": ["Conversion"]}},
+ "goals": [
+  {"id": "G1", "kind": "booking", "priority": "P0", "description": "附近上班族在线预约座位", "success_metric": "每周预约数", "source": "user"},
+  {"id": "G2", "kind": "inform", "priority": "P1", "description": "让顾客提前看到菜单和价格", "source": "user"}
+ ],
+ "audience": {"primary": "附近写字楼的上班族", "devices": ["mobile", "desktop"], "traits": ["午休时间短", "多用手机"], "source": "user"},
+ "brand": {"name": "巷口咖啡", "tone": ["亲切", "安静"], "logo_asset": "A1", "avoid": ["太花哨"]},
+ "style_preference": {"style_ids": ["vibrant-and-block-based", "soft-ui-evolution"], "landing_pattern": "hero-centric-design",
+  "motion_tier": "Subtle", "color_mode": "light", "source": "kb", "confidence": "medium",
+  "kb_trace": {"rule": "products.csv: Bakery/Cafe；用户说“别太花哨”，动效降到 Subtle", "resolved": ["style:vibrant-and-block-based", "style:soft-ui-evolution"], "unresolved": []}},
+ "content_assets": [
+  {"id": "A1", "kind": "logo", "provided": true},
+  {"id": "A2", "kind": "menu", "description": "饮品与轻食清单含价格", "provided": true},
+  {"id": "A3", "kind": "photo", "description": "店内环境照片", "provided": false}
+ ],
+ "features": [
+  {"id": "F1", "kind": "booking", "priority": "P0", "note": "选日期、时段、人数", "source": "user"},
+  {"id": "F2", "kind": "map", "priority": "P1", "source": "default"}
+ ],
+ "constraints": {"hosting_region": "cn-mainland"},
+ "open_questions": [
+  {"id": "Q1", "question": "预约需要先付定金吗？", "why": "决定是否要接支付", "affects": ["features"], "default_if_unanswered": "不收定金，只登记", "blocking": false}
+ ]
+}

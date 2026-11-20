@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>建站工作台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect width=%2716%27 height=%2716%27 rx=%273%27 fill=%27%231F5FBF%27/%3E%3Cpath d=%27M4 11h8M4 8h5M4 5h8%27 stroke=%27white%27 stroke-width=%271.6%27/%3E%3C/svg%3E">
+<style>
+/* 建站工作台：工具本身要安静，用户的网站才是主角。只有一处醒目：开头那句“想做什么网站”。 */
+:root{--bg:#EEF0EC;--surface:#FFFFFF;--ink:#1C2320;--muted:#59615C;--line:#D5DAD4;--line-2:#E6E9E4;
+  --accent:#1F5FBF;--accent-ink:#FFFFFF;--accent-soft:#E4ECF8;--ok:#276B45;--ok-soft:#E3F1E8;--warn:#8A5A00;--warn-soft:#F7EEDB;--bad:#B42318;--bad-soft:#FBE7E4;
+  --r-sm:6px;--r:10px;--font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",system-ui,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.6;font-size:15px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+[hidden]{display:none!important}
+.muted{color:var(--muted)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+h2{font-size:17px;margin:0 0 12px;font-weight:650}h3{font-size:15px;margin:0 0 8px;font-weight:650}
+
+/* 顶栏 */
+.top{position:sticky;top:0;z-index:10;background:var(--ink);color:#fff;display:flex;align-items:center;gap:24px;padding:0 24px;height:52px}
+.brand{font-weight:700;font-size:16px;letter-spacing:.02em;white-space:nowrap}
+.tabs{display:flex;gap:4px;height:100%;overflow-x:auto}
+.tabs button{all:unset;cursor:pointer;padding:0 14px;display:flex;align-items:center;color:#C9D0CB;font-size:15px;border-bottom:3px solid transparent;white-space:nowrap}
+.tabs button[aria-selected=true]{color:#fff;border-bottom-color:#7FA8E8}
+.tabs button:focus-visible{outline:2px solid #7FA8E8;outline-offset:-4px}
+.engine{margin-left:auto;font-size:13px;color:#C9D0CB;white-space:nowrap}
+.engine b{color:#fff;font-weight:600}
+
+main{max-width:1440px;margin:0 auto;padding:24px 24px 96px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+
+/* 步骤条：真的是先后顺序，所以用编号 */
+.steps{display:flex;gap:0;margin:0 0 20px;padding:0;list-style:none;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.steps li{display:flex;align-items:center;gap:8px;padding-right:28px;position:relative}
+.steps li+li::before{content:"";position:absolute;left:-20px;top:50%;width:12px;border-top:1px solid var(--line)}
+.steps .n{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;background:var(--surface)}
+.steps li.done{color:var(--ink)}.steps li.done .n{background:var(--ink);border-color:var(--ink);color:#fff}
+.steps li.now{color:var(--ink);font-weight:600}.steps li.now .n{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+/* 1. 开头：唯一醒目的地方 */
+.ask{padding:36px 40px 28px}
+.ask label.q1{display:block;font-size:34px;line-height:1.25;font-weight:650;margin:0 0 18px;max-width:20em}
+.ask textarea{width:100%;min-height:96px;font:inherit;font-size:19px;line-height:1.55;padding:14px 16px;border:1.5px solid var(--line);border-radius:var(--r);resize:vertical;background:#FBFCFA;color:var(--ink)}
+.ask textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft);background:#fff}
+.examples{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0;align-items:center}
+.examples span{font-size:13px;color:var(--muted);margin-right:2px}
+.chip{all:unset;cursor:pointer;font-size:13px;padding:4px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink)}
+.chip:hover{border-color:var(--ink)}
+.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px}
+#status{font-size:14px;min-height:1.6em}
+
+button{font:inherit;font-size:15px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:var(--r-sm);padding:9px 20px;cursor:pointer;font-weight:600}
+button:hover{filter:brightness(1.08)}
+button.ghost{background:var(--surface);color:var(--ink);border-color:var(--line);font-weight:500}
+button.ghost:hover{border-color:var(--ink);filter:none}
+button:disabled{opacity:.5;cursor:progress}
+button.big{font-size:17px;padding:11px 30px}
+input[type=text],input[type=password],input[type=number],select,textarea{font:inherit;color:var(--ink)}
+input[type=text],input[type=password],input[type=number],select{padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);min-height:40px}
+input:focus,select:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+
+/* 2+3. 确认需求 + 选风格 */
+.pick-area{display:grid;grid-template-columns:340px 1fr;gap:20px;margin-top:20px;align-items:start}
+#step-understood dl,#summary{margin:0}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0 0 14px}
+.facts dt{color:var(--muted);font-size:14px;white-space:nowrap}.facts dd{margin:0}
+.q{margin:12px 0 0}.q label{display:block;margin-bottom:4px;font-size:14px}.q input{width:100%}
+.note{background:var(--bg);border-radius:var(--r-sm);padding:10px 12px;margin-top:12px;font-size:14px}
+.note h3{font-size:13px;margin:8px 0 2px;color:var(--muted);font-weight:600}.note ul{margin:0;padding-left:18px}.note li{margin:2px 0}
+.note strong{font-weight:600}
+.styles-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.styles-head h2{margin:0}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.opt{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;background:var(--surface)}
+.opt.picked{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.opt header{padding:12px 14px 10px}.opt h3{margin:0;font-size:16px}.opt .en{font-size:12px;color:var(--muted);font-weight:400;margin-left:6px}
+.opt p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.frame{position:relative;height:440px;overflow:hidden;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);background:#fff}
+.frame iframe{border:0;position:absolute;top:0;left:0;width:1280px;height:1600px;transform-origin:0 0;pointer-events:none}
+.opt .row{padding:12px 14px}
+
+/* 4. 工作区：网站是主角，右边一栏是“改一改、体检、下载” */
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;margin-top:20px;align-items:start}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.stage-bar{display:flex;align-items:center;gap:12px;padding:8px 10px 8px 6px;border-bottom:1px solid var(--line-2);flex-wrap:wrap}
+#pages{display:flex;gap:2px;overflow-x:auto;flex:1;min-width:0}
+#pages a{padding:6px 12px;border-radius:var(--r-sm);color:var(--ink);text-decoration:none;white-space:nowrap;font-size:14px}
+#pages a:hover{background:var(--bg)}
+#pages a[aria-current=page]{background:var(--ink);color:#fff}
+.device{display:flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.device button{border:0;border-radius:0;background:var(--surface);color:var(--muted);padding:5px 12px;font-size:13px;font-weight:500}
+.device button[aria-pressed=true]{background:var(--ink);color:#fff}
+.viewport{background:var(--bg);display:flex;justify-content:center;padding:0}
+.viewport.phone{padding:20px 0}
+#site{display:block;width:100%;height:calc(100vh - 190px);min-height:560px;border:0;background:#fff}
+.viewport.phone #site{width:390px;height:760px;min-height:0;border:1px solid var(--line);border-radius:14px}
+.side{display:flex;flex-direction:column;gap:14px}
+.side .panel{padding:16px}
+#checks{margin:0;font-size:14px;line-height:1.5}
+#checks span{display:inline}
+.versionline{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.editbox label{display:block;margin-bottom:8px}
+.editbox textarea{width:100%;min-height:64px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);resize:vertical;font-size:15px}
+.editbox textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+.editbox .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.hints{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.teach{margin-top:8px}.teach button{margin:6px 6px 0 0;padding:4px 12px;font-size:13px}
+.meters{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 0}
+.meter{font-size:13px}.meter b{display:block;font-size:22px;font-weight:650;line-height:1.2;font-variant-numeric:tabular-nums}
+.meter i{display:block;height:4px;border-radius:2px;background:var(--line-2);margin-top:4px;overflow:hidden}.meter i s{display:block;height:100%;background:var(--ok)}
+.meter.mid i s{background:var(--warn)}.meter.low i s{background:var(--bad)}
+details summary{cursor:pointer;font-size:14px;color:var(--muted);margin-top:8px}
+details[open] summary{margin-bottom:6px}
+.fields{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;margin:10px 0}
+.fields label{font-size:14px;color:var(--muted)}
+a#download{display:block;text-align:center;padding:11px 14px;border-radius:var(--r-sm);text-decoration:none;color:#fff;background:var(--ink);font-weight:600}
+a#download:hover{background:#2E3833}
+.small{font-size:13px}
+
+/* 教它 / 模型 两个标签页 */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.two textarea{width:100%;min-height:110px;padding:12px;border:1px solid var(--line);border-radius:var(--r-sm);resize:vertical}
+.form-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.form-row>label{min-width:5.5em;font-size:14px;color:var(--muted)}
+.form-row input[type=text],.form-row input[type=password],.form-row select{flex:1;min-width:0}
+.klist{list-style:none;padding:0;margin:0}
+.klist li{display:flex;gap:8px;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--line-2);padding:8px 0;font-size:14px}
+.tag{font-size:12px;border-radius:999px;padding:1px 8px;background:var(--bg);white-space:nowrap;color:var(--muted)}
+.klist button{padding:2px 10px;font-size:13px}
+.roles{width:100%;border-collapse:collapse}.roles td{padding:6px 8px 6px 0;vertical-align:middle}.roles td:first-child{font-size:14px;width:34%}
+.roles select,.roles input{width:100%}
+.lead{max-width:46em;margin:0 0 18px}
+code{font-size:13px;background:var(--bg);padding:1px 5px;border-radius:4px;word-break:break-all}
+
+section,.panel{scroll-margin-top:68px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.filebtn{display:inline-block;border:1px solid var(--line);border-radius:var(--r-sm);padding:7px 14px;background:var(--surface);cursor:pointer;font-size:14px;color:var(--ink)}
+.filebtn:hover{border-color:var(--ink)}#feedfile:focus-visible+.filebtn{outline:2px solid var(--accent);outline-offset:2px}
+.form-row .lbl{color:var(--muted);font-size:14px;min-width:5.5em}.form-row label.wide{min-width:9em}
+/* 有了网站以后：上面三步收起来，把位置让给网站 */
+.has-site .ask{padding:14px 20px}.has-site .ask label.q1{font-size:16px;margin:0 0 8px}
+.has-site .ask textarea{min-height:46px;font-size:15px;padding:10px 12px}.has-site .examples{display:none}
+.has-site .ask .actions{margin-top:10px}.has-site #go{font-size:15px;padding:8px 18px}
+.has-site .pick-area{display:none}.has-site.show-pick .pick-area{display:grid}
+.recap{display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:14px}
+.has-site .recap{display:flex}
+@media (max-width:1100px){.pick-area{grid-template-columns:1fr}.workspace{grid-template-columns:1fr}#site{height:72vh}}
+@media (max-width:900px){.grid{grid-template-columns:1fr}.frame{height:380px}.two{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .steps li{padding-right:14px}.steps li+li::before{display:none}.steps li:not(.now) .t{display:none}
+  .frame{height:300px}
+  .top{padding:0 12px;gap:12px}.engine{display:none}main{padding:16px 12px 80px}
+  .ask{padding:22px 18px}.ask label.q1{font-size:25px}.ask textarea{font-size:17px}
+  .steps{font-size:13px}.steps li{padding-right:22px}
+  .viewport.phone #site{width:100%;border-radius:0;border:0}.viewport.phone{padding:0}
+  .meters{grid-template-columns:repeat(2,1fr)}
+  .form-row>label{min-width:100%}
+}
+</style></head>
+<body>
+<header class="top">
+  <div class="brand">建站工作台</div>
+  <nav class="tabs" role="tablist" aria-label="工作台">
+    <button role="tab" id="tab-btn-build" aria-controls="tab-build" aria-selected="true">建站</button>
+    <button role="tab" id="tab-btn-teach" aria-controls="tab-teach" aria-selected="false" tabindex="-1">教它</button>
+    <button role="tab" id="tab-btn-models" aria-controls="tab-models" aria-selected="false" tabindex="-1">模型</button>
+  </nav>
+  <div class="engine" id="engine">理解与文案：<b>规则版</b></div>
+</header>
+<main>
+
+<section id="tab-build" role="tabpanel" aria-labelledby="tab-btn-build">
+  <ol class="steps" id="steps" aria-label="进度">
+    <li class="now"><span class="n">1</span><span class="t">说想要什么</span></li><li><span class="n">2</span><span class="t">确认读懂的</span></li><li><span class="n">3</span><span class="t">挑风格</span></li><li><span class="n">4</span><span class="t">修改和下载</span></li>
+  </ol>
+
+  <section class="panel ask" id="step-input">
+    <label class="q1" for="text">想做一个什么样的网站？</label>
+    <textarea id="text" maxlength="500" placeholder="用一句话说清楚：做什么的、想让来访的人做什么。比如：咖啡馆，想让附近上班的人在线预约座位，顺便看看菜单，别太花哨"></textarea>
+    <div class="examples" id="examples"><span>试试：</span></div>
+    <div class="actions"><button id="go" type="button" class="big">生成三种风格</button><span id="status" role="status" aria-live="polite" class="muted"></span></div>
+  </section>
+
+  <div class="recap" id="recap"><span class="muted" id="recap-text"></span><button type="button" class="ghost" id="toggle-pick">换一种风格或改回答</button></div>
+
+  <div class="pick-area">
+    <section class="panel" id="step-understood" aria-labelledby="h-und" hidden>
+      <h2 id="h-und">我读懂的是这样</h2>
+      <dl class="facts" id="summary"></dl>
+      <div id="questions"></div>
+      <div class="actions"><button id="apply" type="button" class="ghost">按我的回答更新</button></div>
+      <p class="muted small">不回答也行，会用框里写的默认做法。</p>
+      <div class="note" id="usedby" hidden></div>
+      <div class="note" id="used" hidden></div>
+    </section>
+
+    <section class="panel" id="step-styles" aria-labelledby="h-styles" hidden>
+      <div class="styles-head"><h2 id="h-styles">挑一种风格</h2><span class="muted small">三个预览是同一套页面，只换了风格</span></div>
+      <div class="grid" id="options"></div>
+      <div class="note" id="copyby" hidden></div>
+    </section>
+  </div>
+
+  <section id="step-site" aria-labelledby="h-site" hidden>
+    <h2 id="h-site" class="sr-only" style="position:absolute;left:-9999px">你的网站</h2>
+    <div class="workspace">
+      <div class="stage">
+        <div class="stage-bar">
+          <nav id="pages" aria-label="网站页面"></nav>
+          <div class="device" role="group" aria-label="预览尺寸">
+            <button type="button" id="dev-desk" aria-pressed="true">电脑</button><button type="button" id="dev-phone" aria-pressed="false">手机</button>
+          </div>
+        </div>
+        <div class="viewport" id="viewport"><iframe id="site" title="生成的网站"></iframe></div>
+      </div>
+
+      <aside class="side" aria-label="修改、体检和下载">
+        <div class="panel">
+          <p id="checks"></p>
+          <div class="editbox">
+            <label for="edittext"><strong>想改哪里？直接说</strong></label>
+            <textarea id="edittext" maxlength="500" autocomplete="off" placeholder="比如：按钮换成绿色，再加一个相册"></textarea>
+            <div class="row"><button id="editgo" type="button">改</button><button id="editundo" type="button" class="ghost">撤销上一步</button></div>
+            <p id="editstatus" class="muted small" role="status" aria-live="polite" style="margin:6px 0 0;min-height:1.4em"></p>
+            <div class="hints" id="hints"></div>
+            <div class="note" id="editresult" hidden></div>
+          </div>
+        </div>
+
+        <div class="panel" id="audit" hidden></div>
+
+        <div class="panel">
+          <h3>下载网站</h3>
+          <a id="download" hidden download>下载网站</a>
+          <details>
+            <summary>准备上线？填域名和备案号（可选）</summary>
+            <div class="fields">
+              <label for="pubdomain">网站域名</label><input id="pubdomain" type="text" placeholder="www.example.com" maxlength="80" spellcheck="false">
+              <label for="pubicp">ICP 备案号</label><input id="pubicp" type="text" placeholder="京ICP备12345678号" maxlength="30">
+            </div>
+            <p class="muted small">填了域名会附带 sitemap 和规范网址；填了备案号会加到每页页脚。</p>
+          </details>
+          <p class="muted small">压缩包里双击 index.html 就能打开；整个文件夹上传到任意静态托管即可上线，里面有上线说明。</p>
+        </div>
+
+        <div class="panel">
+          <div class="note" id="selffix" hidden style="margin-top:0"></div>
+          <div class="note" id="learned"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</section>
+
+<section id="tab-teach" role="tabpanel" aria-labelledby="tab-btn-teach" hidden>
+  <p class="lead">它从你这里学东西：一句话的行业知识、纠正，或者一个你喜欢的网站。每条都要先试跑、不冲突才会收下，随时可以撤回。</p>
+  <div class="two">
+    <section class="panel" aria-labelledby="h-feed">
+      <h2 id="h-feed">教它新东西</h2>
+      <label for="feedtext" class="muted small">一句一条。比如：猫咖是咖啡馆，要放猫咪照片。律所别用深色。花店要用复古风格。</label>
+      <textarea id="feedtext" maxlength="2000"></textarea>
+      <div class="form-row"><span class="lbl">喜欢的网站</span><input id="feedfile" class="vh" type="file" accept=".html,.htm,text/html"><label for="feedfile" class="filebtn">选择文件</label><span class="muted" id="feedfile-name">还没选</span></div>
+      <p class="muted small">选 .html 源码文件。只学观感和颜色，不存文字、不运行里面的脚本。</p>
+      <div class="form-row"><label for="feedfor">用于哪个行业</label><input id="feedfor" type="text" maxlength="20" placeholder="比如：咖啡馆"></div>
+      <div class="actions"><button id="feedgo" type="button">教给它</button><span id="feedstatus" role="status" aria-live="polite" class="muted small"></span></div>
+      <div id="feedresult"></div>
+    </section>
+    <section class="panel" aria-labelledby="h-known">
+      <h2 id="h-known">它学到的</h2>
+      <ul class="klist" id="klist"></ul>
+      <h2 style="margin-top:24px">它的纠错记忆</h2>
+      <ul class="klist" id="mlist"></ul>
+      <p class="muted small" id="unfixed"></p>
+    </section>
+  </div>
+</section>
+
+<section id="tab-models" role="tabpanel" aria-labelledby="tab-btn-models" hidden>
+  <p class="lead">不设置也能用（规则版）。设置后，“理解需求”和“写文案”先请模型做，再由规则校验，不合格或出错时自动退回规则版。密钥只存在你电脑的 <code id="mfile"></code>，只有你能读，页面上只显示末四位。</p>
+  <div class="two">
+    <section class="panel" aria-labelledby="h-m1">
+      <h2 id="h-m1">填服务商的密钥</h2>
+      <div class="form-row"><label for="mprov">服务商</label><select id="mprov"></select></div>
+      <p class="muted small"><a id="mkeyurl" target="_blank" rel="noopener noreferrer">去这家申请密钥</a> <span id="mnote"></span></p>
+      <div class="form-row"><label for="mkey">API 密钥</label><input id="mkey" type="password" autocomplete="off" spellcheck="false"></div>
+      <div class="form-row"><label for="mbase">接口地址</label><input id="mbase" type="text" spellcheck="false"></div>
+      <div class="form-row"><label for="mtestmodel">模型名</label><input id="mtestmodel" type="text" list="mlist-dl" spellcheck="false"><datalist id="mlist-dl"></datalist></div>
+      <div class="actions"><button id="msave" type="button">保存</button><button id="mtest" type="button" class="ghost">测试连接</button><button id="mlistbtn" type="button" class="ghost">获取模型列表</button><button id="mclear" type="button" class="ghost">清除密钥</button></div>
+      <p id="mstatus" role="status" aria-live="polite" class="muted small"></p>
+    </section>
+    <section class="panel" aria-labelledby="h-m2">
+      <h2 id="h-m2">每个用途用哪个模型</h2>
+      <table class="roles" id="mroles"></table>
+      <div class="form-row"><label for="mmax" class="wide">每次建站最多调用</label><input id="mmax" type="number" min="1" max="50" style="width:6em"> 次</div>
+      <div class="form-row"><label for="mtimeout" class="wide">等待上限</label><input id="mtimeout" type="number" min="10" max="180" style="width:6em"> 秒</div>
+      <div class="actions"><button id="mroles-save" type="button">保存用途设置</button></div>
+      <h2 style="margin-top:24px">最近的模型调用</h2>
+      <ul class="klist" id="mlog"></ul>
+    </section>
+  </div>
+</section>
+</main>
+<script>
+(function () {
+  var S = {session: null, options: []};
+  var $ = function (id) { return document.getElementById(id); };
+  function say(t, bad) {
+    ['status', 'editstatus'].forEach(function (id) { var x = $(id); if (x) { x.textContent = t; x.className = (bad ? 'bad' : 'muted') + (id === 'editstatus' ? ' small' : ''); } });
+  }
+  var TOKEN = (document.querySelector('meta[name="aisite-token"]') || {}).content || '';
+  function api(path, body) {
+    return fetch(path, {method: 'POST', headers: {'Content-Type': 'application/json', 'X-AISite-Token': TOKEN}, body: JSON.stringify(body)})
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || ('出错了 ' + r.status)); return j; }); });
+  }
+  function el(tag, text, cls) { var e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; }
+  function busy(on) { ['go', 'apply', 'editgo', 'editundo'].forEach(function (id) { $(id).disabled = on; });
+    document.querySelectorAll('.pick').forEach(function (b) { b.disabled = on; }); }
+
+  function showUnderstood(v) {
+    S.session = v.session; S.options = v.options;
+    var t = $('summary'); t.replaceChildren();
+    Object.keys(v.understood).forEach(function (k) { t.append(el('dt', k), el('dd', v.understood[k] || '—')); });
+    var q = $('questions'); q.replaceChildren();
+    if (!v.questions.length) q.append(el('p', '没有需要问你的。', 'muted small'));
+    v.questions.forEach(function (x) {
+      var d = el('div', null, 'q'); var lab = el('label', x.question); lab.htmlFor = 'ans-' + x.id;
+      var inp = el('input'); inp.type = 'text'; inp.id = 'ans-' + x.id; inp.dataset.qid = x.id; inp.placeholder = '不回答就：' + x.default; inp.value = x.answer || '';
+      d.append(lab, inp); q.append(d);
+    });
+    showUsed(v.used_learning); showBy('usedby', '理解方式', v.understood_by);
+    $('step-understood').hidden = false; if (!S.version) setStep(2);
+  }
+  function showBy(id, title, by) {
+    var box = $(id); box.replaceChildren();
+    if (!by || (by.how === 'rules' && !by.model)) { box.hidden = true; return; }  // 没配模型时不重复说“规则版”，顶栏已经写了
+    var head = by.how === 'model' ? title + '：模型（' + by.model + (by.seconds ? '，' + by.seconds + ' 秒' : '') + '）+ 规则校验' : title + '：规则版' + (by.model ? '（' + by.model + ' 没用上）' : '');
+    box.append(el('strong', head));
+    if (by.note) box.append(el('div', by.note, 'muted'));
+    box.append(list('用上了', by.used), list('不合格、丢掉或退回规则', (by.rejected || []).concat(by.fallback || [])));
+    box.hidden = false;
+  }
+  function showUsed(u) {
+    var box = $('used'); box.replaceChildren();
+    if (!u || !u.length) { box.hidden = true; return; }
+    box.append(el('h3', '用到了你教过的'));
+    var ul = el('ul'); u.forEach(function (k) { ul.append(el('li', k.id + '：' + k.what)); }); box.append(ul); box.hidden = false;
+  }
+  function list(title, items) {
+    var f = document.createDocumentFragment(); if (!items || !items.length) return f;
+    f.append(el('h3', title)); var ul = el('ul'); items.forEach(function (t) { ul.append(el('li', typeof t === 'string' ? t : JSON.stringify(t))); });
+    f.append(ul); return f;
+  }
+  function showSelffix(x) {
+    var box = $('selffix'); box.replaceChildren();
+    box.append(el('strong', '自我纠错：' + x.stop + '（共构建 ' + x.rounds + ' 次）'));
+    box.append(list('提前避开（用了以前的教训）', x.prevented), list('自己修好的', x.fixed),
+               list('撤回的修补', x.reverted.map(function (r) { return r.fixes.join('、') + '：' + r.why; })),
+               list('还不会修（已记进待学清单）', x.unfixed), list('记住了', x.remembered));
+    box.hidden = false;
+  }
+  function loadKnowledge() {
+    fetch('/api/knowledge').then(function (r) { return r.json(); }).then(function (k) {
+      var ul = $('klist'); ul.replaceChildren();
+      if (!k.learned.length) ul.append(el('li', '还没喂过东西', 'muted'));
+      k.learned.forEach(function (x) {
+        var li = el('li'); var t = el('span', x.id + '　' + x.what + (x.reason ? '（' + x.reason + '）' : ''));
+        var st = {active: '有效', undone: '已撤回', suspended: '已停用'}[x.status] || x.status;
+        var right = el('span'); right.append(el('span', st, 'tag'));
+        if (x.status === 'active') { var b = el('button', '撤回', 'ghost'); b.type = 'button'; b.setAttribute('aria-label', '撤回 ' + x.id);
+          b.addEventListener('click', function () { api('/api/undo', {id: x.id}).then(loadKnowledge).catch(function (e) { $('feedstatus').textContent = e.message; }); });
+          right.append(' ', b); }
+        li.append(t, right); ul.append(li);
+      });
+      var ml = $('mlist'); ml.replaceChildren();
+      if (!k.fix_memory.length) ml.append(el('li', '还没有', 'muted'));
+      k.fix_memory.forEach(function (m) { var li = el('li'); li.append(el('span', m.id + '　' + m.what + '　适用：' + m.scope),
+        el('span', (m.status === 'active' ? '' : '已停用 · ') + '修好 ' + m.wins + ' · 提前避开 ' + m.prevented + ' · 失手 ' + m.misses, 'tag')); ml.append(li); });
+      $('unfixed').textContent = (k.unfixed.length ? '还不会自动修：' + k.unfixed.map(function (u) { return u.category + '×' + u.count; }).join('、') + '。' : '')
+        + (k.edit_backlog.length ? '还不会改：' + k.edit_backlog.map(function (u) { return '“' + u.text + '”×' + u.count; }).join('、') : '');
+    });
+  }
+  function feedIt() {
+    var text = $('feedtext').value.trim(), file = $('feedfile').files[0], forType = $('feedfor').value.trim();
+    if (!text && !file) { $('feedstatus').textContent = '先写一句话，或选一个网页文件'; return; }
+    $('feedgo').disabled = true; $('feedstatus').textContent = '正在学习：抽取 → 试跑 → 采纳……';
+    var read = file ? file.text() : Promise.resolve(null);
+    read.then(function (doc) { return api('/api/feed', {text: text, html: doc, for: forType}); }).then(function (r) {
+      var box = $('feedresult'); box.replaceChildren();
+      box.append(list('学会了', r.learned.map(function (x) { return x.id + '：' + x.what; })),
+                 list('没收（试跑不通过或有冲突）', r.rejected.map(function (x) { return x.what + ' —— ' + x.reason; })),
+                 list('没学', r.skipped));
+      box.className = 'note'; $('feedstatus').textContent = '喂养 ' + r.feed + ' 完成'; loadKnowledge();
+    }).catch(function (e) { $('feedstatus').textContent = e.message; }).finally(function () { $('feedgo').disabled = false; });
+  }
+
+  function showPreviews(p) {
+    var g = $('options'); g.replaceChildren();
+    S.options.forEach(function (o, i) {
+      var card = el('article', null, 'opt'); card.id = 'opt-' + o.id;
+      var h = el('header'); var h3 = el('h3', o.family); h3.append(el('span', o.name, 'en')); h.append(h3, el('p', o.why));
+      var f = el('div', null, 'frame'); var ifr = document.createElement('iframe');
+      ifr.title = o.name + ' 首页预览'; ifr.src = p.previews[i].url; ifr.setAttribute('tabindex', '-1'); f.append(ifr);
+      var r = el('div', null, 'row'); var b = el('button', '选这个', 'pick'); b.type = 'button'; b.dataset.style = o.id;
+      b.addEventListener('click', function () { choose(o.id); }); r.append(b);
+      card.append(h, f, r); g.append(card);
+    });
+    $('step-styles').hidden = false; fit(); setTimeout(fit, 50); if (!S.version) setStep(3);
+  }
+  function fit() { document.querySelectorAll('.frame').forEach(function (f) { var i = f.querySelector('iframe');
+    if (i) i.style.transform = 'scale(' + Math.min(1, f.clientWidth / 1280) + ')'; }); }
+  window.addEventListener('resize', fit);
+
+  function start() {
+    var text = $('text').value.trim(); if (!text) { say('先写一句话', true); $('text').focus(); return; }
+    S.version = null; $('step-site').hidden = true; $('tab-build').classList.remove('has-site', 'show-pick');
+    busy(true); say('正在理解你的需求……');
+    api('/api/start', {text: text}).then(function (v) { showUnderstood(v); say('正在生成三种风格的预览……');
+      return api('/api/preview', {session: v.session}); })
+      .then(function (p) { showPreviews(p); showBy('copyby', '文案', p.copy_by); say('预览好了，挑一个吧'); })
+      .catch(function (e) { say(e.message, true); }).finally(function () { busy(false); });
+  }
+  function applyAnswers() {
+    var ans = {}; document.querySelectorAll('#questions input').forEach(function (i) { if (i.value.trim()) ans[i.dataset.qid] = i.value.trim(); });
+    busy(true); say('按你的回答更新……');
+    api('/api/answer', {session: S.session, answers: ans}).then(function (v) { showUnderstood(v); return api('/api/preview', {session: v.session}); })
+      .then(function (p) { showPreviews(p); showBy('copyby', '文案', p.copy_by); say('已更新'); }).catch(function (e) { say(e.message, true); }).finally(function () { busy(false); });
+  }
+  function choose(style) {
+    busy(true); say('正在生成整站并用浏览器检查……');
+    document.querySelectorAll('.opt').forEach(function (c) { c.classList.toggle('picked', c.id === 'opt-' + style); });
+    api('/api/choose', {session: S.session, style: style}).then(function (r) {
+      showSite(r); $('learned').textContent = r.learned; $('learned').hidden = false; $('editresult').hidden = true;
+      $('step-site').hidden = false; setStep(4); say('网站生成好了');
+      var picked = S.options.filter(function (o) { return o.id === style; })[0] || {};
+      $('recap-text').textContent = '现在用的风格：' + (picked.family || style) + '。三个预览和读懂的需求先收起来了。';
+      $('tab-build').classList.add('has-site'); $('tab-build').classList.remove('show-pick'); $('toggle-pick').textContent = '换一种风格或改回答';
+      $('step-site').scrollIntoView();
+    }).catch(function (e) { say(e.message, true); }).finally(function () { busy(false); });
+  }
+  function showSite(r) {
+    var nav = $('pages'); nav.replaceChildren();
+    r.pages.forEach(function (pg, i) { var a = el('a', pg.title); a.href = pg.url;
+      a.addEventListener('click', function (e) { e.preventDefault(); $('site').src = pg.url;
+        nav.querySelectorAll('a').forEach(function (x) { x.removeAttribute('aria-current'); }); a.setAttribute('aria-current', 'page'); });
+      if (i === 0) a.setAttribute('aria-current', 'page'); nav.append(a); });
+    $('site').src = r.url;
+    var c = $('checks'); c.replaceChildren();
+    var okAll = !r.blueprint_errors.length && !r.browser_problems.length;
+    c.append(el('strong', '第 ' + r.version + ' 版'), el('br'),
+             el('span', '图纸检查 ' + r.blueprint_errors.length + ' 个错误，浏览器检查 ' + r.browser_problems.length + ' 个问题', okAll ? 'ok' : 'bad'));
+    if (r.browser_problems.length) { var ul = el('ul', null, 'small bad'); r.browser_problems.slice(0, 3).forEach(function (x) { ul.append(el('li', x)); }); c.append(ul); }
+    if (r.not_yet.length) { c.append(el('br'), el('span', '这一版还做不出：' + r.not_yet.join('、'), 'muted small')); }
+    if (r.browser_skipped) { c.append(el('br'), el('span', r.browser_skipped, 'bad small')); }
+    S.version = r.version; setDownload();
+    dl = $('download'); dl.textContent = '下载第 ' + r.version + ' 版（压缩包）'; dl.hidden = false;
+    showAudit(r.audit);
+    showSelffix(r.selffix); loadKnowledge();
+  }
+  var dl;
+  function setDownload() {
+    $('download').href = '/api/export?session=' + encodeURIComponent(S.session) + '&version=' + S.version + '&token=' + encodeURIComponent(TOKEN)
+      + '&domain=' + encodeURIComponent($('pubdomain').value.trim()) + '&icp=' + encodeURIComponent($('pubicp').value.trim());
+  }
+  function showAudit(a) {
+    var box = $('audit'); box.replaceChildren(); if (!a) { box.hidden = true; return; }
+    box.append(el('h3', '上线前体检'));
+    var m = el('div', null, 'meters');
+    Object.keys(a.scores).forEach(function (k) {
+      var v = a.scores[k], d = el('div', null, 'meter' + (v >= 90 ? '' : v >= 60 ? ' mid' : ' low'));
+      var bar = el('i'); var fill = el('s'); fill.style.width = v + '%'; bar.append(fill);
+      bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', k + ' ' + v + ' 分');
+      d.append(el('b', String(v)), el('span', k), bar); m.append(d);
+    });
+    box.append(m);
+    var bad = a.items.filter(function (x) { return !x.ok; });
+    var todo = bad.filter(function (x) { return !x.pending; }), later = bad.filter(function (x) { return x.pending; });
+    if (bad.length) {
+      var det = el('details'); det.append(el('summary', '要处理 ' + todo.length + ' 项，上线时再做 ' + later.length + ' 项'));
+      var fmt = function (x) { return x.cat + '：' + x.msg + (x.fix ? '。' + x.fix : ''); };
+      var f = el('div', null, 'small'); f.append(list('要处理的', todo.map(fmt)), list('上线时再做', later.map(fmt))); det.append(f); box.append(det);
+    }
+    box.hidden = false;
+  }
+  function editIt(text) {
+    if (!text) { $('edittext').focus(); return; }
+    busy(true); $('editgo').disabled = $('editundo').disabled = true; say('正在修改并重新检查……');
+    api('/api/edit', {session: S.session, text: text}).then(function (r) {
+      var e = r.edit, box = $('editresult'); box.replaceChildren();
+      if (!e.kept) { showSite(r); $('learned').hidden = true; }
+      box.append(list('改了', e.done), list('没改', e.refused), list('没看懂（已记进待学清单）', e.unknown));
+      if (r.teach && r.teach.length) {
+        var t = el('div', null, 'teach'); t.append(el('span', '以后同行业都这样？点一下教给它：', 'muted'));
+        r.teach.forEach(function (sent) { var b = el('button', sent, 'ghost'); b.type = 'button';
+          b.addEventListener('click', function () { b.disabled = true;
+            api('/api/feed', {text: sent}).then(function (f) { b.textContent = sent + (f.learned.length ? ' ✓ 学会了 ' + f.learned[0].id : ' —— 没收：' + ((f.rejected[0] || {}).reason || (f.skipped[0] || ''))); loadKnowledge(); })
+              .catch(function (er) { b.textContent = er.message; }); });
+          t.append(b); });
+        box.append(t);
+      }
+      box.hidden = false; $('edittext').value = ''; say(e.kept ? '这次没有改动网站' : '已改好，现在是第 ' + r.version + ' 版'); loadKnowledge();
+    }).catch(function (er) { say(er.message, true); }).finally(function () { busy(false); $('editgo').disabled = $('editundo').disabled = false; });
+  }
+  $('go').addEventListener('click', start);
+  $('apply').addEventListener('click', applyAnswers);
+  $('feedgo').addEventListener('click', feedIt);
+  $('pubdomain').addEventListener('input', setDownload); $('pubicp').addEventListener('input', setDownload);
+  var M = null;
+  function mprov() { return M.providers.filter(function (p) { return p.id === $('mprov').value; })[0]; }
+  function showProv() {
+    var p = mprov(); if (!p) return;
+    $('mkeyurl').href = p.key_url || '#'; $('mkeyurl').hidden = !p.key_url;
+    $('mkey').value = ''; $('mkey').placeholder = p.has_key ? '已有密钥 ' + p.key_hint + '（' + p.key_source + '）；要换就填新的' : (p.needs_key ? '粘贴 API 密钥' : '这个服务不需要密钥');
+    $('mbase').value = p.base_url; $('mnote').textContent = p.note || '';
+    var used = Object.keys(M.roles).map(function (r) { return M.roles[r]; }).filter(function (r) { return r.provider === p.id; })[0];
+    $('mtestmodel').value = (used && used.model) || p.example_model || '';
+  }
+  function loadModels() {
+    return fetch('/api/models').then(function (r) { return r.json(); }).then(function (m) {
+      var keep = $('mprov').value; M = m; $('mfile').textContent = m.file;
+      var sel = $('mprov'); sel.replaceChildren();
+      m.providers.forEach(function (p) { var o = el('option', p.name + (p.has_key ? ' ✓' : '')); o.value = p.id; sel.append(o); });
+      if (keep) sel.value = keep; showProv();
+      var t = $('mroles'); t.replaceChildren();
+      Object.keys(m.roles).forEach(function (r) {
+        var tr = el('tr'), role = m.roles[r];
+        var s1 = el('select'); s1.id = 'role-' + r + '-p'; s1.setAttribute('aria-label', role.label + '：服务商');
+        var none = el('option', '不用模型（规则版）'); none.value = ''; s1.append(none);
+        m.providers.forEach(function (p) { var o = el('option', p.name); o.value = p.id; s1.append(o); });
+        s1.value = role.provider || '';
+        var i1 = el('input'); i1.type = 'text'; i1.id = 'role-' + r + '-m'; i1.value = role.model || ''; i1.placeholder = '模型名'; i1.setAttribute('list', 'mlist-dl');
+        i1.setAttribute('aria-label', role.label + '：模型名');
+        var td0 = el('td', role.label), td1 = el('td'), td2 = el('td'); td1.append(s1); td2.append(i1); tr.append(td0, td1, td2); t.append(tr);
+      });
+      $('mmax').value = m.limits.max_calls_per_session; $('mtimeout').value = m.limits.timeout;
+      var used = ['understand', 'copy'].map(function (r) { return m.roles[r] && m.roles[r].provider ? m.roles[r] : null; }).filter(Boolean);
+      var eng = $('engine'); eng.replaceChildren('理解与文案：');
+      eng.append(el('b', used.length ? used.map(function (r) { return (m.providers.filter(function (p) { return p.id === r.provider; })[0] || {}).name + ' / ' + r.model; })
+        .filter(function (x, i, a) { return a.indexOf(x) === i; }).join('，') + ' + 规则校验' : '规则版'));
+      var lg = $('mlog'); lg.replaceChildren();
+      if (!m.log.length) lg.append(el('li', '还没有调用过', 'muted'));
+      m.log.forEach(function (x) { lg.append(el('li', x.at + '　' + (x.role || '') + '　' + x.provider + ' / ' + x.model + '　' + (x.ok ? '成功 ' + x.seconds + ' 秒' : '失败：' + x.error))); });
+    });
+  }
+  function mcall(path, body, done) {
+    $('mstatus').textContent = '处理中……';
+    return api(path, body).then(done).catch(function (e) { $('mstatus').textContent = e.message; });
+  }
+  $('mprov').addEventListener('change', showProv);
+  $('msave').addEventListener('click', function () {
+    mcall('/api/models/save', {provider: $('mprov').value, key: $('mkey').value, base_url: $('mbase').value},
+      function (m) { $('mstatus').textContent = '已保存'; return loadModels(); });
+  });
+  $('mclear').addEventListener('click', function () {
+    mcall('/api/models/save', {provider: $('mprov').value, clear_key: true}, function () { $('mstatus').textContent = '已清除保存的密钥'; return loadModels(); });
+  });
+  $('mtest').addEventListener('click', function () {
+    mcall('/api/models/test', {provider: $('mprov').value, model: $('mtestmodel').value}, function (r) {
+      $('mstatus').textContent = r.ok ? '连接成功：' + r.seconds + ' 秒，回复“' + r.reply + '”' : '连接失败：' + r.error; return loadModels(); });
+  });
+  $('mlistbtn').addEventListener('click', function () {
+    mcall('/api/models/list', {provider: $('mprov').value}, function (r) {
+      if (!r.ok) { $('mstatus').textContent = '获取失败：' + r.error; return; }
+      var dl = $('mlist-dl'); dl.replaceChildren(); r.models.forEach(function (x) { var o = el('option'); o.value = x; dl.append(o); });
+      $('mstatus').textContent = '共 ' + r.models.length + ' 个模型，在“模型名”框里可以选';
+    });
+  });
+  $('mroles-save').addEventListener('click', function () {
+    var roles = {}; Object.keys(M.roles).forEach(function (r) { roles[r] = {provider: $('role-' + r + '-p').value, model: $('role-' + r + '-m').value.trim()}; });
+    mcall('/api/models/save', {roles: roles, limits: {max_calls_per_session: +$('mmax').value, timeout: +$('mtimeout').value}},
+      function () { $('mstatus').textContent = '用途设置已保存'; return loadModels(); });
+  });
+  loadModels();
+  $('editgo').addEventListener('click', function () { editIt($('edittext').value.trim()); });
+  $('edittext').addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); editIt($('edittext').value.trim()); } });
+  $('editundo').addEventListener('click', function () { editIt('撤销'); });
+
+  // 标签页：建站 / 教它 / 模型（左右方向键也能切换）
+  var TABS = ['build', 'teach', 'models'];
+  function showTab(name, focus) {
+    TABS.forEach(function (t) {
+      var on = t === name, b = $('tab-btn-' + t);
+      b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; $('tab-' + t).hidden = !on;
+      if (on && focus) b.focus();
+    });
+    if (name === 'teach') loadKnowledge();
+    if (name === 'build') fit();
+  }
+  TABS.forEach(function (t, i) {
+    $('tab-btn-' + t).addEventListener('click', function () { showTab(t); });
+    $('tab-btn-' + t).addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); showTab(TABS[(i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length], true); }
+    });
+  });
+  // 进度条
+  function setStep(n) {
+    document.querySelectorAll('#steps li').forEach(function (li, i) {
+      li.className = i + 1 < n ? 'done' : (i + 1 === n ? 'now' : '');
+      if (i + 1 === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+    });
+  }
+  // 例句：点一下填进去
+  ['咖啡馆，想让附近上班的人在线预约座位，顺便看看菜单', '律师事务所官网，主要做劳动纠纷，要庄重一点', '插画师作品集，作品要多，留个联系方式',
+   '健身房，想让人报名体验课'].forEach(function (t) {
+    var b = el('button', t.split('，')[0], 'chip'); b.type = 'button'; b.title = t;
+    b.addEventListener('click', function () { $('text').value = t; $('text').focus(); }); $('examples').append(b);
+  });
+  $('text').addEventListener('keydown', function (e) { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) start(); });
+  // 修改提示：点一下填进修改框
+  ['按钮换成绿色', '字大一点', '加一个相册', '换成复古风格', '标题改成 '].forEach(function (t) {
+    var b = el('button', t.trim(), 'chip'); b.type = 'button';
+    b.addEventListener('click', function () { var x = $('edittext'); x.value = t; x.focus(); x.setSelectionRange(t.length, t.length); }); $('hints').append(b);
+  });
+  $('toggle-pick').addEventListener('click', function () {
+    var open = $('tab-build').classList.toggle('show-pick'); this.textContent = open ? '收起' : '换一种风格或改回答'; if (open) fit();
+  });
+  $('feedfile').addEventListener('change', function () {
+    $('feedfile-name').textContent = this.files[0] ? this.files[0].name : '还没选';
+  });
+  // 电脑 / 手机预览
+  function device(phone) {
+    $('viewport').classList.toggle('phone', phone);
+    $('dev-desk').setAttribute('aria-pressed', !phone); $('dev-phone').setAttribute('aria-pressed', phone);
+  }
+  $('dev-desk').addEventListener('click', function () { device(false); });
+  $('dev-phone').addEventListener('click', function () { device(true); });
+  loadKnowledge();
+})();
+</script>
+</body></html>

@@ -1,0 +1,17 @@
+# 读码笔记 · 图纸格式参照物中引用的代码事实
+/home/claude/repos/cloudflare_vibesdk	worker/agents/schemas.ts	uiLayout: z.string()	VibeSDK 蓝图的布局是自由文本
+/home/claude/repos/cloudflare_vibesdk	worker/agents/schemas.ts	styleSelection: z.enum(['Minimalist Design', 'Brutalism', 'Retro', 'Illustrative', 'Kid_Playful', 'Custom'])	风格只有 6 个枚举
+/home/claude/repos/cloudflare_vibesdk	worker/agents/schemas.ts	confidence: z.enum(['high', 'medium', 'low'])	项目类型判断带置信度
+/home/claude/repos/cloudflare_vibesdk	worker/agents/schemas.ts	pitfalls: z.array(z.string())	蓝图要求列出坑
+/home/claude/repos/puckeditor_puck	packages/core/types/Data.tsx	zones?: Record<string, Content<Components>>;	Puck 页面数据的 zones
+/home/claude/repos/puckeditor_puck	packages/core/types/Data.tsx	props: WithDeepSlots<WithId<Props>, Content<Components>>;	组件 id 放在 props 里，插槽可嵌套
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	.claude/skills/ui-ux-pro-max/data/styles.csv	Style ID,Aliases,Status,Parent Style ID	风格有稳定 ID、别名、状态
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	.claude/skills/ui-ux-pro-max/data/landing.csv	Pattern ID,Aliases	落地页模式有稳定 ID
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	.claude/skills/ui-ux-pro-max/data/motion.csv	Intensity Tier	动效分强度档
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	.claude/skills/ui-ux-pro-max/data/styles.csv	lines=90	风格表 89 行数据
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	.claude/skills/ui-ux-pro-max/data/landing.csv	lines=35	落地页模式 34 行数据
+/home/claude/repos3/FoundationAgents_MetaGPT	metagpt/actions/write_prd_an.py	List down the top-5 requirements with their priority (P0, P1, P2).	需求池按 P0-P2 排优先级
+/home/claude/repos3/FoundationAgents_MetaGPT	metagpt/actions/write_prd_an.py	key="Anything UNCLEAR",	需求文档专设“不清楚的地方”
+/home/claude/repos3/design-tokens_community-group	technical-reports/format/design-token.md	While `$value` is the only required property for a token	DTCG 只有 $value 必填
+/home/claude/repos3/design-tokens_community-group	technical-reports/format/aliases.md	"$value": "{colors.blue}",	令牌引用用花括号
+/home/claude/repos3/xyflow_xyflow	packages/system/src/types/edges.ts	  source: string;	xyflow 边有 source/target

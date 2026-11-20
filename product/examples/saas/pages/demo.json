@@ -1,0 +1,69 @@
+{
+ "schema_version": "page/0.1",
+ "page_id": "demo",
+ "sections": [
+  {
+   "id": "header",
+   "type": "header",
+   "component": "registry:site-header",
+   "layout": {
+    "variant": "inline"
+   },
+   "slots": {
+    "logo": {
+     "kind": "image",
+     "asset": "A1"
+    }
+   }
+  },
+  {
+   "id": "form",
+   "type": "contact-form",
+   "component": "registry:form-split",
+   "layout": {
+    "variant": "split-left",
+    "mobile": "stack"
+   },
+   "feature": "F1",
+   "data": "demo-request",
+   "slots": {
+    "heading": {
+     "kind": "text"
+    },
+    "fields": {
+     "kind": "form_fields",
+     "fields": [
+      "company",
+      "email",
+      "team_size"
+     ]
+    }
+   },
+   "actions": [
+    {
+     "id": "send",
+     "label": "提交",
+     "primary": true,
+     "target": {
+      "submit": "F1",
+      "then": "home"
+     }
+    }
+   ]
+  },
+  {
+   "id": "footer",
+   "type": "footer",
+   "component": "registry:site-footer",
+   "layout": {
+    "variant": "grid-4",
+    "mobile": "stack"
+   },
+   "slots": {
+    "links": {
+     "kind": "list"
+    }
+   }
+  }
+ ]
+}

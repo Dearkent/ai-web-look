@@ -1,0 +1,8 @@
+{
+ "schema_version": "page/0.1", "page_id": "booked",
+ "sections": [
+  {"id": "done", "type": "content", "component": "registry:message", "layout": {"variant": "stack", "align": "center"},
+   "slots": {"heading": {"kind": "text", "max_chars": 12}, "body": {"kind": "text"}},
+   "actions": [{"id": "back", "label": "回到首页", "target": {"page": "home"}}]}
+ ]
+}

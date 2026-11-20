@@ -1,0 +1,101 @@
+{
+ "schema_version": "page/0.1",
+ "page_id": "home",
+ "pattern": "scroll-triggered-storytelling",
+ "sections": [
+  {
+   "id": "header",
+   "type": "header",
+   "component": "registry:site-header-minimal",
+   "layout": {
+    "variant": "inline"
+   },
+   "slots": {
+    "name": {
+     "kind": "text"
+    }
+   }
+  },
+  {
+   "id": "intro",
+   "type": "hero",
+   "component": "registry:hero-kinetic",
+   "layout": {
+    "variant": "full-bleed"
+   },
+   "slots": {
+    "heading": {
+     "kind": "text",
+     "max_chars": 12
+    },
+    "body": {
+     "kind": "text",
+     "asset": "A2"
+    }
+   },
+   "motion": [
+    {
+     "category": "Parallax Scroll",
+     "tier": "Standard"
+    }
+   ],
+   "actions": [
+    {
+     "id": "see",
+     "label": "看作品",
+     "target": {
+      "section": "work"
+     }
+    }
+   ]
+  },
+  {
+   "id": "work",
+   "type": "gallery",
+   "component": "registry:masonry-gallery",
+   "layout": {
+    "variant": "bento",
+    "mobile": "stack"
+   },
+   "feature": "F2",
+   "data": "artwork",
+   "slots": {
+    "items": {
+     "kind": "list",
+     "asset": "A1",
+     "count": 12
+    }
+   },
+   "motion": [
+    {
+     "category": "Scroll Reveal",
+     "tier": "Complex"
+    }
+   ]
+  },
+  {
+   "id": "cta",
+   "type": "cta",
+   "component": "registry:cta-band",
+   "layout": {
+    "variant": "stack",
+    "align": "center"
+   },
+   "slots": {
+    "heading": {
+     "kind": "text"
+    }
+   },
+   "actions": [
+    {
+     "id": "hire",
+     "label": "约稿",
+     "primary": true,
+     "target": {
+      "page": "contact"
+     }
+    }
+   ]
+  }
+ ]
+}

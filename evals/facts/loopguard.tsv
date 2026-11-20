@@ -1,0 +1,19 @@
+# 读码笔记 · 自动修复怎么停下来（防死循环）
+/home/claude/repos4/OpenHands_software-agent-sdk	openhands-sdk/openhands/sdk/conversation/types.py	default=4, ge=1, description="Threshold for action-observation loop detection"	同动作同结果 4 次算卡住
+/home/claude/repos4/OpenHands_software-agent-sdk	openhands-sdk/openhands/sdk/conversation/types.py	default=3, ge=1, description="Threshold for action-error loop detection"	同动作连续报错 3 次算卡住
+/home/claude/repos4/OpenHands_software-agent-sdk	openhands-sdk/openhands/sdk/conversation/types.py	default=6, ge=1, description="Threshold for alternating pattern detection"	ABAB 来回 6 次算卡住
+/home/claude/repos4/OpenHands_software-agent-sdk	openhands-sdk/openhands/sdk/conversation/stuck_detector.py	# scenario 4: action, observation alternating pattern	来回振荡检测
+/home/claude/repos4/OpenHands_software-agent-sdk	openhands-sdk/openhands/sdk/conversation/stuck_detector.py	# scenario 5: context window error loop	上下文超长报错循环
+/home/claude/repos4/OpenHands_software-agent-sdk	openhands-sdk/openhands/sdk/conversation/stuck_detector.py	Nudges once per streak	卡住前先提醒一次
+/home/claude/repos4/OpenHands_software-agent-sdk	openhands-sdk/openhands/sdk/conversation/stuck_detector.py	Without it, the repeated events that made it stuck are still in the window	人工恢复后要清空检测窗口
+/home/claude/repos4/OpenHands_software-agent-sdk	openhands-sdk/openhands/sdk/conversation/impl/local_conversation.py	max_iteration_per_run: int = 500,	单次运行步数上限
+/home/claude/repos4/OpenHands_software-agent-sdk	openhands-sdk/openhands/sdk/conversation/impl/local_conversation.py	max_budget_per_run: Accumulated LLM cost limit.	单次运行花费上限
+/home/claude/repos/cloudflare_vibesdk	worker/agents/inferutils/loopDetection.ts	const WINDOW_MS = 2 * 60 * 1000;	两分钟滑动窗口
+/home/claude/repos/cloudflare_vibesdk	worker/agents/inferutils/loopDetection.ts	return matchingCalls.length >= 2;	同工具同参数第 3 次触发
+/home/claude/repos/cloudflare_vibesdk	worker/agents/assistants/utils.ts	the warning is injected into the tool's result	只提醒、不强停
+/home/claude/repos/cloudflare_vibesdk	worker/agents/operations/common.ts	// CRITICAL: Abort the request to stop the LLM from generating more tokens	文本复读直接中断生成
+/home/claude/repos/cloudflare_vibesdk	worker/agents/assistants/realtimeCodeFixer.ts	const MAX_RETRIES = 3;	实时修复重试 3 次
+/home/claude/repos/cloudflare_vibesdk	worker/agents/tools/toolkit/deep-debugger.ts	Cannot start debugging: Already called once this turn	深度调试每轮一次
+/home/claude/repos/dyad-sh_dyad	src/ipc/handlers/chat_stream_handlers.ts	searchReplaceFixAttempts < 2 &&	修补失败最多重试 2 次
+/home/claude/repos/dyad-sh_dyad	src/lib/schemas.ts	delete activeSettings.enableAutoFixProblems;	旧的自动修复开关在迁移中删除
+/home/claude/repos/bolt.diy	app/lib/.server/llm/stream-recovery.ts	timeout: 30000, // 30 seconds default	流式恢复 30 秒超时

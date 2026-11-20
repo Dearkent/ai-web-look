@@ -1,0 +1,258 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>风格预览 · 巷口咖啡</title><style>
+body{margin:0;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#1d1d1f;background:#f5f5f2}
+main{max-width:1400px;margin:0 auto;padding:28px 20px 60px} h1{font-size:26px;margin:0 0 6px} .muted{color:#6b6b6b}
+.ask{background:#fff;border:1px solid #e3e3de;border-radius:12px;padding:16px 18px;margin:18px 0} .ask blockquote{margin:0 0 12px;font-size:17px}
+.ask table{border-collapse:collapse} .ask th{text-align:left;padding:3px 14px 3px 0;color:#6b6b6b;font-weight:500;white-space:nowrap;vertical-align:top}
+.ask td{padding:3px 0} .ask ul{margin:6px 0 0 18px;padding:0}
+.bar{display:flex;gap:8px;align-items:center;margin:18px 0 10px} .bar button{border:1px solid #cfcfc8;background:#fff;border-radius:999px;padding:6px 14px;cursor:pointer;font:inherit}
+.bar button[aria-pressed=true]{background:#1d1d1f;color:#fff;border-color:#1d1d1f}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.opt{background:#fff;border:1px solid #e3e3de;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.opt header{padding:14px 16px 8px} .opt h3{margin:0 0 4px;font-size:18px} .why{margin:0 0 6px} .spec{margin:0;font-size:12.5px;color:#6b6b6b} .spec.ok{color:#2f6f3e}
+.frame{position:relative;height:620px;overflow:hidden;border-top:1px solid #eee;background:#fff}
+.frame iframe{border:0;transform-origin:0 0;position:absolute;top:0;left:0;height:1800px}
+.pick{margin:0;padding:10px 16px;font-size:13px;border-top:1px solid #eee} code{background:#f1f1ec;padding:2px 6px;border-radius:6px}
+</style></head><body><main>
+<h1>同一份需求，三种风格</h1><p class="muted">由一句话自动生成。三个预览用的是同一套页面结构，只换了风格，方便对比。</p>
+<section class="ask"><blockquote>“帮我做个咖啡馆的网站，叫“巷口咖啡”，能让附近上班的人在线预约座位，顺便看看菜单，别太花哨”</blockquote><table><tr><th>产品类型</th><td>Bakery/Cafe（把握：high）</td></tr><tr><th>名字</th><td>巷口咖啡</td></tr><tr><th>目标</th><td>P0 预约；P1 介绍信息</td></tr><tr><th>功能</th><td>预约表单、商品或菜单列表</td></tr><tr><th>受众</th><td>附近上班的人</td></tr><tr><th>语言</th><td>zh-CN</td></tr><tr><th>动效</th><td>Subtle</td></tr></table>
+<p style="margin:12px 0 0"><b>还想确认的问题</b>（不回答也能生成，会用括号里的默认做法）：</p><ul><li>预约需要先付定金吗？<span class='muted'>　不回答就：不收定金，只登记</span></li></ul></section>
+<div class="bar" role="group" aria-label="预览宽度"><span class="muted">预览宽度</span>
+<button type="button" data-w="1280" aria-pressed="true">电脑</button><button type="button" data-w="390" aria-pressed="false">手机</button></div>
+<div class="grid"><article class='opt' id='opt-vibrant-and-block-based'><header><h3>Vibrant &amp; Block-based</h3><p class='why'>知识库为“Bakery/Cafe”推荐</p><p class='spec'>圆角 8px · 边框 1px · 阴影 glow · 浅色 · 字体 Neo Brutalism Mobile (Space Grotesk Bold)</p><p class='spec ok'>图纸检查通过 · 浏览器检查 0 个问题</p></header><div class='frame'><iframe title='Vibrant &amp; Block-based 首页预览' srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;zh-CN&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;title&gt;巷口咖啡&lt;/title&gt;&lt;meta name=&quot;description&quot; content=&quot;巷口咖啡：在线预约&quot;&gt;&lt;style&gt;:root {
+  --color-primary: #92400E;
+  --color-secondary: #B45309;
+  --color-accent: #92400E;
+  --color-background: #FFFFFF;
+  --color-foreground: #111111;
+  --color-card: #FFFFFF;
+  --color-muted: #475569;
+  --color-border: #111111;
+  --color-band: #FF7F00;
+  --color-band-2: #FFAA00;
+  --color-on-primary: #FFFFFF;
+  --color-band-ink: #111111;
+  --color-card-surface: #FFFFFF;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --border-width: 1px;
+  --surface-blur: 0px;
+  --shadow-card: 0px 0px 16px 0px rgba(146, 64, 14, 0.45);
+  --font-heading: &quot;Space Grotesk&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, &quot;Noto Sans SC&quot;, system-ui, sans-serif;
+  --font-body: &quot;Space Grotesk&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, &quot;Noto Sans SC&quot;, system-ui, sans-serif;
+  --heading-transform: none;
+  --duration-base: 250ms;
+}
+
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-body,system-ui,-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif);
+  background:var(--color-background,#fff);color:var(--color-foreground,#222);line-height:1.6}
+h1,h2,h3,.brand{font-family:var(--font-heading,inherit);text-transform:var(--heading-transform,none);line-height:1.25}
+.t-hero h2{font-size:clamp(28px,5vw,48px);margin:0 0 12px}
+.muted{color:var(--color-muted,#666)}
+a{color:var(--color-primary,#0b57d0)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.site{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--color-border,#ddd)}
+header.site nav a,footer.site nav a{margin-right:16px;text-decoration:none}
+nav.crumbs{font-size:13px;padding:8px 20px;opacity:.8}
+section{padding:40px 20px}
+.btn{display:inline-block;padding:10px 18px;border-radius:var(--radius-md,8px);border:var(--border-width,1px) solid var(--color-primary,#0b57d0);text-decoration:none;margin:4px 8px 4px 0;transition:transform var(--duration-base,200ms) ease-out}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--color-primary,#0b57d0);color:var(--color-on-primary,#fff)}
+.grid{display:grid;gap:16px;list-style:none;padding:0;margin:16px 0 0}
+.grid .card h3{margin:0 0 4px;font-size:17px}.grid .card p{margin:0}
+.v-grid-2 .grid{grid-template-columns:repeat(2,1fr)}.v-grid-3 .grid,.v-carousel .grid,.v-bento .grid{grid-template-columns:repeat(3,1fr)}
+.v-grid-4 .grid{grid-template-columns:repeat(4,1fr)}
+.has-media.v-split-left&gt;.wrap,.has-media.v-split-right&gt;.wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.v-split-left&gt;.wrap&gt;.media{order:-1}
+.media{margin:0}.ph{min-height:260px;padding:16px;text-align:center;font-size:14px;opacity:.85}
+.actions{margin-top:20px}.t-cta{text-align:center}.t-cta h2{margin:0 0 8px}
+.t-hero{padding:72px 20px}.t-hero p{font-size:18px;max-width:34em}
+.card{background:var(--color-card-surface,var(--color-card,#fafafa));border:var(--border-width,1px) solid var(--color-border,#eee);border-radius:var(--radius-md,8px);padding:16px;box-shadow:var(--shadow-card,none);backdrop-filter:blur(var(--surface-blur,0px))}
+.ph{background:repeating-linear-gradient(45deg,#0000000d 0 10px,#0000 10px 20px);border-radius:var(--radius-md,8px);min-height:180px;display:flex;align-items:center;justify-content:center}
+.todo{outline:1px dashed #c33;outline-offset:2px}
+.v-split-right .ph,.v-split-left .ph{min-height:320px}
+form label{display:block;margin:10px 0 4px}form input{width:100%;padding:8px;border:1px solid var(--color-border,#ccc);border-radius:6px}
+footer.site{padding:24px 20px;border-top:1px solid var(--color-border,#ddd);font-size:14px}
+@media (max-width:767px){.grid{grid-template-columns:1fr!important}.has-media.v-split-left&gt;.wrap,.has-media.v-split-right&gt;.wrap{grid-template-columns:1fr}.t-hero{padding:40px 20px}}
+/* ---------- 六种风格家族 ---------- */
+.fam-block h1,.fam-block h2{font-weight:800;letter-spacing:-.01em}
+.fam-block section:nth-of-type(even){background:var(--color-band);color:var(--color-band-ink)}
+.fam-block .card,.fam-block .btn,.fam-block .ph{border:3px solid var(--color-foreground);box-shadow:4px 4px 0 var(--color-foreground)}
+.fam-block header.site{border-bottom:3px solid var(--color-foreground)}
+.fam-soft .btn{border-radius:999px}.fam-soft .card{border:none;border-radius:var(--radius-lg,20px)}
+.fam-soft section:nth-of-type(even){background:var(--color-band)}.fam-soft .ph{border-radius:var(--radius-lg,20px);background-color:var(--color-band)}
+.fam-minimal h1{font-size:clamp(36px,7vw,72px);font-weight:700;letter-spacing:-.02em}.fam-minimal .t-hero h1{font-size:clamp(36px,7vw,72px)}
+.fam-minimal .card{border:none;border-top:1px solid var(--color-foreground);border-radius:0;background:transparent;box-shadow:none;padding:16px 0}
+.fam-minimal .btn{border-radius:0}.fam-minimal .ph{border-radius:0}.fam-minimal section{border-top:1px solid var(--color-border)}
+body.fam-glass{background:linear-gradient(135deg,var(--color-band),var(--color-band-2)) fixed}
+.fam-glass .card,.fam-glass header.site,.fam-glass .ph{background:rgba(255,255,255,.55);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.7)}
+.fam-glass .btn{border-radius:12px}
+.fam-dark .btn.primary{box-shadow:0 0 18px var(--color-primary)}.fam-dark section:nth-of-type(even){background:var(--color-band)}
+.fam-dark .ph{background-color:var(--color-card)}
+.fam-editorial h1,.fam-editorial h2{font-weight:400}.fam-editorial .t-hero h1{font-size:clamp(34px,6vw,64px)}
+.fam-editorial section{border-top:1px solid var(--color-foreground)}
+.fam-editorial .card{border:none;border-left:2px solid var(--color-foreground);border-radius:0;background:transparent;box-shadow:none}
+.fam-editorial .btn{border-radius:0}
+@media (prefers-reduced-motion:no-preference){.reveal{opacity:0;transform:translateY(12px);transition:opacity .4s ease-out,transform .4s ease-out}.reveal.in{opacity:1;transform:none}}
+&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;fam-block&quot;&gt;&lt;header class=&quot;site&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;brand&quot;&gt;&lt;strong&gt;巷口咖啡&lt;/strong&gt;&lt;/a&gt;&lt;nav aria-label=&quot;主导航&quot;&gt;&lt;a href=&quot;#&quot; aria-current=&quot;page&quot;&gt;首页&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;菜单&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;预约&lt;/a&gt;&lt;/nav&gt;&lt;/header&gt;&lt;main&gt;&lt;section id=&quot;hero&quot; class=&quot;t-hero v-split-right m-stack has-media&quot; data-motion=&quot;1&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;h1&gt;巷口咖啡：提前约好，到了就有位置&lt;/h1&gt;&lt;p&gt;为附近上班的人准备。在线预约、一眼看清，都在这里。&lt;/p&gt;&lt;div class=&quot;actions&quot;&gt;&lt;a class=&quot;btn primary&quot; href=&quot;#&quot;&gt;立即预约&lt;/a&gt;&lt;a class=&quot;btn&quot; href=&quot;#&quot;&gt;看菜单&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;figure class=&quot;media&quot;&gt;&lt;div class=&quot;ph&quot; role=&quot;img&quot; aria-label=&quot;巷口咖啡的代表性画面&quot; data-brief=&quot;巷口咖啡的代表性画面&quot;&gt;&lt;span&gt;图片待生成：巷口咖啡的代表性画面&lt;/span&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;/section&gt;&lt;section id=&quot;value-props&quot; class=&quot;t-value-props v-grid-3 m-stack&quot; data-motion=&quot;1&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;h2&gt;为什么选巷口咖啡&lt;/h2&gt;&lt;ul class=&quot;grid items&quot;&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;现做现卖&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;每一份都是点了才做。&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;坐得舒服&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;座位宽松，适合一个人待会儿，也适合几个人聊聊。&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;不用排队&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;提前在线预约，到店就有位置。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;section id=&quot;catalog-teaser&quot; class=&quot;t-menu v-grid-4 m-stack&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;ul class=&quot;grid items&quot;&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;拿铁&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;美式&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;手冲&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;燕麦拿铁&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;div class=&quot;actions&quot;&gt;&lt;a class=&quot;btn&quot; href=&quot;#&quot;&gt;查看全部&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;section id=&quot;cta&quot; class=&quot;t-cta v-stack&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;h2&gt;现在就预约&lt;/h2&gt;&lt;div class=&quot;actions&quot;&gt;&lt;a class=&quot;btn primary&quot; href=&quot;#&quot;&gt;立即预约&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;/main&gt;&lt;footer class=&quot;site&quot;&gt;&lt;nav aria-label=&quot;页脚导航&quot;&gt;&lt;a href=&quot;#&quot; aria-current=&quot;page&quot;&gt;首页&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;菜单&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;关于&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;隐私政策&lt;/a&gt;&lt;/nav&gt;&lt;/footer&gt;&lt;/body&gt;&lt;/html&gt;
+" loading='lazy'></iframe></div><p class='pick'>选这个：<code>--style vibrant-and-block-based</code></p></article><article class='opt' id='opt-soft-ui-evolution'><header><h3>Soft UI Evolution</h3><p class='why'>知识库为“Bakery/Cafe”推荐</p><p class='spec'>圆角 10px · 边框 1px · 阴影 inset · 浅色 · 字体 Neumorphism Mobile (Plus Jakarta Sans + System)</p><p class='spec ok'>图纸检查通过 · 浏览器检查 0 个问题</p></header><div class='frame'><iframe title='Soft UI Evolution 首页预览' srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;zh-CN&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;title&gt;巷口咖啡&lt;/title&gt;&lt;meta name=&quot;description&quot; content=&quot;巷口咖啡：在线预约&quot;&gt;&lt;style&gt;:root {
+  --color-primary: #92400E;
+  --color-secondary: #B45309;
+  --color-accent: #92400E;
+  --color-background: #FFF2F4;
+  --color-foreground: #78350F;
+  --color-card: #FFFFFF;
+  --color-muted: #475569;
+  --color-border: #FFE2E6;
+  --color-band: #FFE5E9;
+  --color-band-2: #FFF8F9;
+  --color-on-primary: #FFFFFF;
+  --color-band-ink: #111111;
+  --color-card-surface: #FFFFFF;
+  --radius-md: 10px;
+  --radius-lg: 15px;
+  --border-width: 1px;
+  --surface-blur: 0px;
+  --shadow-card: 4px 4px 10px 0px rgba(0, 0, 0, 0.1), -4px -4px 10px 0px rgba(255, 255, 255, 0.7);
+  --font-heading: &quot;Plus Jakarta Sans&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, &quot;Noto Sans SC&quot;, system-ui, sans-serif;
+  --font-body: &quot;Plus Jakarta Sans&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, &quot;Noto Sans SC&quot;, system-ui, sans-serif;
+  --heading-transform: none;
+  --duration-base: 250ms;
+}
+
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-body,system-ui,-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif);
+  background:var(--color-background,#fff);color:var(--color-foreground,#222);line-height:1.6}
+h1,h2,h3,.brand{font-family:var(--font-heading,inherit);text-transform:var(--heading-transform,none);line-height:1.25}
+.t-hero h2{font-size:clamp(28px,5vw,48px);margin:0 0 12px}
+.muted{color:var(--color-muted,#666)}
+a{color:var(--color-primary,#0b57d0)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.site{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--color-border,#ddd)}
+header.site nav a,footer.site nav a{margin-right:16px;text-decoration:none}
+nav.crumbs{font-size:13px;padding:8px 20px;opacity:.8}
+section{padding:40px 20px}
+.btn{display:inline-block;padding:10px 18px;border-radius:var(--radius-md,8px);border:var(--border-width,1px) solid var(--color-primary,#0b57d0);text-decoration:none;margin:4px 8px 4px 0;transition:transform var(--duration-base,200ms) ease-out}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--color-primary,#0b57d0);color:var(--color-on-primary,#fff)}
+.grid{display:grid;gap:16px;list-style:none;padding:0;margin:16px 0 0}
+.grid .card h3{margin:0 0 4px;font-size:17px}.grid .card p{margin:0}
+.v-grid-2 .grid{grid-template-columns:repeat(2,1fr)}.v-grid-3 .grid,.v-carousel .grid,.v-bento .grid{grid-template-columns:repeat(3,1fr)}
+.v-grid-4 .grid{grid-template-columns:repeat(4,1fr)}
+.has-media.v-split-left&gt;.wrap,.has-media.v-split-right&gt;.wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.v-split-left&gt;.wrap&gt;.media{order:-1}
+.media{margin:0}.ph{min-height:260px;padding:16px;text-align:center;font-size:14px;opacity:.85}
+.actions{margin-top:20px}.t-cta{text-align:center}.t-cta h2{margin:0 0 8px}
+.t-hero{padding:72px 20px}.t-hero p{font-size:18px;max-width:34em}
+.card{background:var(--color-card-surface,var(--color-card,#fafafa));border:var(--border-width,1px) solid var(--color-border,#eee);border-radius:var(--radius-md,8px);padding:16px;box-shadow:var(--shadow-card,none);backdrop-filter:blur(var(--surface-blur,0px))}
+.ph{background:repeating-linear-gradient(45deg,#0000000d 0 10px,#0000 10px 20px);border-radius:var(--radius-md,8px);min-height:180px;display:flex;align-items:center;justify-content:center}
+.todo{outline:1px dashed #c33;outline-offset:2px}
+.v-split-right .ph,.v-split-left .ph{min-height:320px}
+form label{display:block;margin:10px 0 4px}form input{width:100%;padding:8px;border:1px solid var(--color-border,#ccc);border-radius:6px}
+footer.site{padding:24px 20px;border-top:1px solid var(--color-border,#ddd);font-size:14px}
+@media (max-width:767px){.grid{grid-template-columns:1fr!important}.has-media.v-split-left&gt;.wrap,.has-media.v-split-right&gt;.wrap{grid-template-columns:1fr}.t-hero{padding:40px 20px}}
+/* ---------- 六种风格家族 ---------- */
+.fam-block h1,.fam-block h2{font-weight:800;letter-spacing:-.01em}
+.fam-block section:nth-of-type(even){background:var(--color-band);color:var(--color-band-ink)}
+.fam-block .card,.fam-block .btn,.fam-block .ph{border:3px solid var(--color-foreground);box-shadow:4px 4px 0 var(--color-foreground)}
+.fam-block header.site{border-bottom:3px solid var(--color-foreground)}
+.fam-soft .btn{border-radius:999px}.fam-soft .card{border:none;border-radius:var(--radius-lg,20px)}
+.fam-soft section:nth-of-type(even){background:var(--color-band)}.fam-soft .ph{border-radius:var(--radius-lg,20px);background-color:var(--color-band)}
+.fam-minimal h1{font-size:clamp(36px,7vw,72px);font-weight:700;letter-spacing:-.02em}.fam-minimal .t-hero h1{font-size:clamp(36px,7vw,72px)}
+.fam-minimal .card{border:none;border-top:1px solid var(--color-foreground);border-radius:0;background:transparent;box-shadow:none;padding:16px 0}
+.fam-minimal .btn{border-radius:0}.fam-minimal .ph{border-radius:0}.fam-minimal section{border-top:1px solid var(--color-border)}
+body.fam-glass{background:linear-gradient(135deg,var(--color-band),var(--color-band-2)) fixed}
+.fam-glass .card,.fam-glass header.site,.fam-glass .ph{background:rgba(255,255,255,.55);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.7)}
+.fam-glass .btn{border-radius:12px}
+.fam-dark .btn.primary{box-shadow:0 0 18px var(--color-primary)}.fam-dark section:nth-of-type(even){background:var(--color-band)}
+.fam-dark .ph{background-color:var(--color-card)}
+.fam-editorial h1,.fam-editorial h2{font-weight:400}.fam-editorial .t-hero h1{font-size:clamp(34px,6vw,64px)}
+.fam-editorial section{border-top:1px solid var(--color-foreground)}
+.fam-editorial .card{border:none;border-left:2px solid var(--color-foreground);border-radius:0;background:transparent;box-shadow:none}
+.fam-editorial .btn{border-radius:0}
+@media (prefers-reduced-motion:no-preference){.reveal{opacity:0;transform:translateY(12px);transition:opacity .4s ease-out,transform .4s ease-out}.reveal.in{opacity:1;transform:none}}
+&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;fam-soft&quot;&gt;&lt;header class=&quot;site&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;brand&quot;&gt;&lt;strong&gt;巷口咖啡&lt;/strong&gt;&lt;/a&gt;&lt;nav aria-label=&quot;主导航&quot;&gt;&lt;a href=&quot;#&quot; aria-current=&quot;page&quot;&gt;首页&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;菜单&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;预约&lt;/a&gt;&lt;/nav&gt;&lt;/header&gt;&lt;main&gt;&lt;section id=&quot;hero&quot; class=&quot;t-hero v-split-right m-stack has-media&quot; data-motion=&quot;1&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;h1&gt;巷口咖啡：提前约好，到了就有位置&lt;/h1&gt;&lt;p&gt;为附近上班的人准备。在线预约、一眼看清，都在这里。&lt;/p&gt;&lt;div class=&quot;actions&quot;&gt;&lt;a class=&quot;btn primary&quot; href=&quot;#&quot;&gt;立即预约&lt;/a&gt;&lt;a class=&quot;btn&quot; href=&quot;#&quot;&gt;看菜单&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;figure class=&quot;media&quot;&gt;&lt;div class=&quot;ph&quot; role=&quot;img&quot; aria-label=&quot;巷口咖啡的代表性画面&quot; data-brief=&quot;巷口咖啡的代表性画面&quot;&gt;&lt;span&gt;图片待生成：巷口咖啡的代表性画面&lt;/span&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;/section&gt;&lt;section id=&quot;value-props&quot; class=&quot;t-value-props v-grid-3 m-stack&quot; data-motion=&quot;1&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;h2&gt;为什么选巷口咖啡&lt;/h2&gt;&lt;ul class=&quot;grid items&quot;&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;现做现卖&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;每一份都是点了才做。&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;坐得舒服&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;座位宽松，适合一个人待会儿，也适合几个人聊聊。&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;不用排队&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;提前在线预约，到店就有位置。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;section id=&quot;catalog-teaser&quot; class=&quot;t-menu v-grid-4 m-stack&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;ul class=&quot;grid items&quot;&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;拿铁&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;美式&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;手冲&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;燕麦拿铁&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;div class=&quot;actions&quot;&gt;&lt;a class=&quot;btn&quot; href=&quot;#&quot;&gt;查看全部&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;section id=&quot;cta&quot; class=&quot;t-cta v-stack&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;h2&gt;现在就预约&lt;/h2&gt;&lt;div class=&quot;actions&quot;&gt;&lt;a class=&quot;btn primary&quot; href=&quot;#&quot;&gt;立即预约&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;/main&gt;&lt;footer class=&quot;site&quot;&gt;&lt;nav aria-label=&quot;页脚导航&quot;&gt;&lt;a href=&quot;#&quot; aria-current=&quot;page&quot;&gt;首页&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;菜单&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;关于&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;隐私政策&lt;/a&gt;&lt;/nav&gt;&lt;/footer&gt;&lt;/body&gt;&lt;/html&gt;
+" loading='lazy'></iframe></div><p class='pick'>选这个：<code>--style soft-ui-evolution</code></p></article><article class='opt' id='opt-minimalism-and-swiss-style'><header><h3>Minimalism &amp; Swiss Style</h3><p class='why'>对照选项：观感与前面的不同</p><p class='spec'>圆角 0px · 边框 1px · 阴影 none · 浅色 · 字体 Minimal Swiss</p><p class='spec ok'>图纸检查通过 · 浏览器检查 0 个问题</p></header><div class='frame'><iframe title='Minimalism &amp; Swiss Style 首页预览' srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;zh-CN&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;title&gt;巷口咖啡&lt;/title&gt;&lt;meta name=&quot;description&quot; content=&quot;巷口咖啡：在线预约&quot;&gt;&lt;style&gt;:root {
+  --color-primary: #92400E;
+  --color-secondary: #B45309;
+  --color-accent: #92400E;
+  --color-background: #FFFFFF;
+  --color-foreground: #111111;
+  --color-card: #FFFFFF;
+  --color-muted: #475569;
+  --color-border: #E5E5E5;
+  --color-band: #F5F1E8;
+  --color-band-2: #FFFFFF;
+  --color-on-primary: #FFFFFF;
+  --color-band-ink: #111111;
+  --color-card-surface: #FFFFFF;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --border-width: 1px;
+  --surface-blur: 0px;
+  --shadow-card: none;
+  --font-heading: &quot;Inter&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, &quot;Noto Sans SC&quot;, system-ui, sans-serif;
+  --font-body: &quot;Inter&quot;, &quot;PingFang SC&quot;, &quot;Microsoft YaHei&quot;, &quot;Noto Sans SC&quot;, system-ui, sans-serif;
+  --heading-transform: none;
+  --duration-base: 225ms;
+}
+
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-body,system-ui,-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif);
+  background:var(--color-background,#fff);color:var(--color-foreground,#222);line-height:1.6}
+h1,h2,h3,.brand{font-family:var(--font-heading,inherit);text-transform:var(--heading-transform,none);line-height:1.25}
+.t-hero h2{font-size:clamp(28px,5vw,48px);margin:0 0 12px}
+.muted{color:var(--color-muted,#666)}
+a{color:var(--color-primary,#0b57d0)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.site{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--color-border,#ddd)}
+header.site nav a,footer.site nav a{margin-right:16px;text-decoration:none}
+nav.crumbs{font-size:13px;padding:8px 20px;opacity:.8}
+section{padding:40px 20px}
+.btn{display:inline-block;padding:10px 18px;border-radius:var(--radius-md,8px);border:var(--border-width,1px) solid var(--color-primary,#0b57d0);text-decoration:none;margin:4px 8px 4px 0;transition:transform var(--duration-base,200ms) ease-out}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--color-primary,#0b57d0);color:var(--color-on-primary,#fff)}
+.grid{display:grid;gap:16px;list-style:none;padding:0;margin:16px 0 0}
+.grid .card h3{margin:0 0 4px;font-size:17px}.grid .card p{margin:0}
+.v-grid-2 .grid{grid-template-columns:repeat(2,1fr)}.v-grid-3 .grid,.v-carousel .grid,.v-bento .grid{grid-template-columns:repeat(3,1fr)}
+.v-grid-4 .grid{grid-template-columns:repeat(4,1fr)}
+.has-media.v-split-left&gt;.wrap,.has-media.v-split-right&gt;.wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.v-split-left&gt;.wrap&gt;.media{order:-1}
+.media{margin:0}.ph{min-height:260px;padding:16px;text-align:center;font-size:14px;opacity:.85}
+.actions{margin-top:20px}.t-cta{text-align:center}.t-cta h2{margin:0 0 8px}
+.t-hero{padding:72px 20px}.t-hero p{font-size:18px;max-width:34em}
+.card{background:var(--color-card-surface,var(--color-card,#fafafa));border:var(--border-width,1px) solid var(--color-border,#eee);border-radius:var(--radius-md,8px);padding:16px;box-shadow:var(--shadow-card,none);backdrop-filter:blur(var(--surface-blur,0px))}
+.ph{background:repeating-linear-gradient(45deg,#0000000d 0 10px,#0000 10px 20px);border-radius:var(--radius-md,8px);min-height:180px;display:flex;align-items:center;justify-content:center}
+.todo{outline:1px dashed #c33;outline-offset:2px}
+.v-split-right .ph,.v-split-left .ph{min-height:320px}
+form label{display:block;margin:10px 0 4px}form input{width:100%;padding:8px;border:1px solid var(--color-border,#ccc);border-radius:6px}
+footer.site{padding:24px 20px;border-top:1px solid var(--color-border,#ddd);font-size:14px}
+@media (max-width:767px){.grid{grid-template-columns:1fr!important}.has-media.v-split-left&gt;.wrap,.has-media.v-split-right&gt;.wrap{grid-template-columns:1fr}.t-hero{padding:40px 20px}}
+/* ---------- 六种风格家族 ---------- */
+.fam-block h1,.fam-block h2{font-weight:800;letter-spacing:-.01em}
+.fam-block section:nth-of-type(even){background:var(--color-band);color:var(--color-band-ink)}
+.fam-block .card,.fam-block .btn,.fam-block .ph{border:3px solid var(--color-foreground);box-shadow:4px 4px 0 var(--color-foreground)}
+.fam-block header.site{border-bottom:3px solid var(--color-foreground)}
+.fam-soft .btn{border-radius:999px}.fam-soft .card{border:none;border-radius:var(--radius-lg,20px)}
+.fam-soft section:nth-of-type(even){background:var(--color-band)}.fam-soft .ph{border-radius:var(--radius-lg,20px);background-color:var(--color-band)}
+.fam-minimal h1{font-size:clamp(36px,7vw,72px);font-weight:700;letter-spacing:-.02em}.fam-minimal .t-hero h1{font-size:clamp(36px,7vw,72px)}
+.fam-minimal .card{border:none;border-top:1px solid var(--color-foreground);border-radius:0;background:transparent;box-shadow:none;padding:16px 0}
+.fam-minimal .btn{border-radius:0}.fam-minimal .ph{border-radius:0}.fam-minimal section{border-top:1px solid var(--color-border)}
+body.fam-glass{background:linear-gradient(135deg,var(--color-band),var(--color-band-2)) fixed}
+.fam-glass .card,.fam-glass header.site,.fam-glass .ph{background:rgba(255,255,255,.55);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.7)}
+.fam-glass .btn{border-radius:12px}
+.fam-dark .btn.primary{box-shadow:0 0 18px var(--color-primary)}.fam-dark section:nth-of-type(even){background:var(--color-band)}
+.fam-dark .ph{background-color:var(--color-card)}
+.fam-editorial h1,.fam-editorial h2{font-weight:400}.fam-editorial .t-hero h1{font-size:clamp(34px,6vw,64px)}
+.fam-editorial section{border-top:1px solid var(--color-foreground)}
+.fam-editorial .card{border:none;border-left:2px solid var(--color-foreground);border-radius:0;background:transparent;box-shadow:none}
+.fam-editorial .btn{border-radius:0}
+@media (prefers-reduced-motion:no-preference){.reveal{opacity:0;transform:translateY(12px);transition:opacity .4s ease-out,transform .4s ease-out}.reveal.in{opacity:1;transform:none}}
+&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;fam-minimal&quot;&gt;&lt;header class=&quot;site&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;brand&quot;&gt;&lt;strong&gt;巷口咖啡&lt;/strong&gt;&lt;/a&gt;&lt;nav aria-label=&quot;主导航&quot;&gt;&lt;a href=&quot;#&quot; aria-current=&quot;page&quot;&gt;首页&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;菜单&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;预约&lt;/a&gt;&lt;/nav&gt;&lt;/header&gt;&lt;main&gt;&lt;section id=&quot;hero&quot; class=&quot;t-hero v-split-right m-stack has-media&quot; data-motion=&quot;1&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;h1&gt;巷口咖啡：提前约好，到了就有位置&lt;/h1&gt;&lt;p&gt;为附近上班的人准备。在线预约、一眼看清，都在这里。&lt;/p&gt;&lt;div class=&quot;actions&quot;&gt;&lt;a class=&quot;btn primary&quot; href=&quot;#&quot;&gt;立即预约&lt;/a&gt;&lt;a class=&quot;btn&quot; href=&quot;#&quot;&gt;看菜单&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;figure class=&quot;media&quot;&gt;&lt;div class=&quot;ph&quot; role=&quot;img&quot; aria-label=&quot;巷口咖啡的代表性画面&quot; data-brief=&quot;巷口咖啡的代表性画面&quot;&gt;&lt;span&gt;图片待生成：巷口咖啡的代表性画面&lt;/span&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;/section&gt;&lt;section id=&quot;value-props&quot; class=&quot;t-value-props v-grid-3 m-stack&quot; data-motion=&quot;1&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;h2&gt;为什么选巷口咖啡&lt;/h2&gt;&lt;ul class=&quot;grid items&quot;&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;现做现卖&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;每一份都是点了才做。&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;坐得舒服&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;座位宽松，适合一个人待会儿，也适合几个人聊聊。&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;不用排队&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;提前在线预约，到店就有位置。&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;section id=&quot;catalog-teaser&quot; class=&quot;t-menu v-grid-4 m-stack&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;ul class=&quot;grid items&quot;&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;拿铁&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;美式&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;手冲&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;li class=&quot;card&quot;&gt;&lt;h3&gt;燕麦拿铁&lt;/h3&gt;&lt;p class=&quot;muted&quot;&gt;价格待填&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;div class=&quot;actions&quot;&gt;&lt;a class=&quot;btn&quot; href=&quot;#&quot;&gt;查看全部&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;section id=&quot;cta&quot; class=&quot;t-cta v-stack&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;&lt;div class=&quot;text&quot;&gt;&lt;h2&gt;现在就预约&lt;/h2&gt;&lt;div class=&quot;actions&quot;&gt;&lt;a class=&quot;btn primary&quot; href=&quot;#&quot;&gt;立即预约&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;/main&gt;&lt;footer class=&quot;site&quot;&gt;&lt;nav aria-label=&quot;页脚导航&quot;&gt;&lt;a href=&quot;#&quot; aria-current=&quot;page&quot;&gt;首页&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;菜单&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;关于&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;隐私政策&lt;/a&gt;&lt;/nav&gt;&lt;/footer&gt;&lt;/body&gt;&lt;/html&gt;
+" loading='lazy'></iframe></div><p class='pick'>选这个：<code>--style minimalism-and-swiss-style</code></p></article></div></main>
+<script>(function(){var W=1280;function fit(){document.querySelectorAll('.frame').forEach(function(f){var i=f.querySelector('iframe');if(!i)return;
+var s=Math.min(1,f.clientWidth/W);i.style.width=W+'px';i.style.transform='scale('+s+')';});}
+document.querySelectorAll('.bar button').forEach(function(b){b.addEventListener('click',function(){W=+b.getAttribute('data-w');
+document.querySelectorAll('.bar button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});fit();});});
+window.addEventListener('resize',fit);fit();})();</script></body></html>

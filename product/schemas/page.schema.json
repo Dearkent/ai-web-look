@@ -1,0 +1,94 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://aisite.local/schemas/page.schema.json",
+ "title": "页面线框 page/0.1",
+ "description": "布局 Agent 的产出。区块树与 Puck 的 {type, props:{id}} 同构，以后可直接载入可视化编辑器拖拽修改。布局、组件、跳转、动效都用封闭词表或 ID 引用，不写自由文本，检查脚本才能逐条验证。",
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["schema_version", "page_id", "sections"],
+ "properties": {
+  "schema_version": {"const": "page/0.1"},
+  "page_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{0,40}$"},
+  "pattern": {"$ref": "vocab.schema.json#/$defs/landingPatternId"},
+  "style_overrides": {
+   "type": "object", "additionalProperties": false,
+   "description": "页面覆盖层：只能引用已有令牌（{group.token}），不能写死色值",
+   "properties": {
+    "tokens": {"type": "object", "additionalProperties": {"$ref": "#/$defs/tokenRef"}},
+    "motion_tier": {"$ref": "vocab.schema.json#/$defs/motionTier"},
+    "reason": {"type": "string"}
+   }
+  },
+  "sections": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/section"}}
+ },
+ "$defs": {
+  "sectionId": {"type": "string", "pattern": "^[a-z][a-z0-9-]{0,40}$"},
+  "tokenRef": {"type": "string", "pattern": "^\\{[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\\}$"},
+  "section": {
+   "type": "object", "additionalProperties": false, "required": ["id", "type", "layout", "slots"],
+   "properties": {
+    "id": {"$ref": "#/$defs/sectionId"},
+    "type": {"enum": ["header", "hero", "value-props", "features", "steps", "stats", "logos", "testimonials", "gallery", "menu", "pricing", "comparison", "team", "faq", "cta", "contact-form", "booking-form", "map", "content", "blog-list", "newsletter", "footer"]},
+    "component": {"type": ["string", "null"], "pattern": "^registry:[a-z0-9-]+$", "description": "对应自建组件 registry 里的真实组件；null 表示暂无，需工程 Agent 新建"},
+    "layout": {
+     "type": "object", "additionalProperties": false, "required": ["variant"],
+     "properties": {
+      "variant": {"$ref": "#/$defs/variant"},
+      "container": {"enum": ["narrow", "normal", "wide", "full"], "default": "normal"},
+      "align": {"enum": ["start", "center", "end"]},
+      "mobile": {"$ref": "#/$defs/variant", "description": "375px 档的变体，缺省时多列一律变单列 stack"}
+     }
+    },
+    "slots": {
+     "type": "object",
+     "description": "内容槽位。key 是槽位名（heading、body、image、items……）",
+     "propertyNames": {"pattern": "^[a-z][a-z0-9_]*$"},
+     "additionalProperties": {"$ref": "#/$defs/slot"}
+    },
+    "actions": {"type": "array", "items": {"$ref": "#/$defs/action"}},
+    "motion": {
+     "type": "array",
+     "items": {
+      "type": "object", "additionalProperties": false, "required": ["category", "tier"],
+      "properties": {
+       "category": {"$ref": "vocab.schema.json#/$defs/motionCategory"},
+       "tier": {"$ref": "vocab.schema.json#/$defs/motionTier"},
+       "target": {"type": "string", "description": "作用于哪个槽位"}
+      }
+     }
+    },
+    "data": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,62}$", "description": "绑定的数据实体 ID"},
+    "feature": {"type": "string", "pattern": "^F[0-9]+$", "description": "本区块实现的功能"},
+    "children": {"type": "array", "items": {"$ref": "#/$defs/section"}, "description": "嵌套区块（对应 Puck 的插槽）"}
+   }
+  },
+  "variant": {"enum": ["stack", "split-left", "split-right", "grid-2", "grid-3", "grid-4", "bento", "carousel", "full-bleed", "list", "inline"]},
+  "slot": {
+   "type": "object", "additionalProperties": false, "required": ["kind"],
+   "properties": {
+    "kind": {"enum": ["text", "rich_text", "image", "icon", "video", "list", "form_fields", "embed"]},
+    "asset": {"type": "string", "pattern": "^A[0-9]+$", "description": "引用需求简报里的素材"},
+    "brief": {"type": "string", "description": "给文案 / 图片 Agent 的一句话说明"},
+    "max_chars": {"type": "integer", "minimum": 1},
+    "count": {"type": "integer", "minimum": 1, "description": "列表类槽位的条目数"},
+    "fields": {"type": "array", "items": {"type": "string"}, "description": "表单字段名"}
+   }
+  },
+  "action": {
+   "type": "object", "additionalProperties": false, "required": ["id", "label", "target"],
+   "properties": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{0,40}$"},
+    "label": {"type": "string", "minLength": 1},
+    "primary": {"type": "boolean"},
+    "target": {
+     "oneOf": [
+      {"type": "object", "additionalProperties": false, "required": ["page"], "properties": {"page": {"type": "string"}, "section": {"type": "string"}}},
+      {"type": "object", "additionalProperties": false, "required": ["section"], "properties": {"section": {"type": "string"}}},
+      {"type": "object", "additionalProperties": false, "required": ["url"], "properties": {"url": {"type": "string", "pattern": "^(https://|tel:|mailto:)"}}},
+      {"type": "object", "additionalProperties": false, "required": ["submit"], "properties": {"submit": {"type": "string", "pattern": "^F[0-9]+$"}, "then": {"type": "string"}}}
+     ]
+    }
+   }
+  }
+ }
+}

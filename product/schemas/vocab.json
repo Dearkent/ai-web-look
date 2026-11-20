@@ -1,0 +1,1314 @@
+{
+ "source": {
+  "repo": "nextlevelbuilder/ui-ux-pro-max-skill",
+  "commit": "e59ff37",
+  "license": "MIT",
+  "note": "仅提取 ID 与名称等事实数据"
+ },
+ "styles": {
+  "minimalism-and-swiss-style": {
+   "name": "Minimalism & Swiss Style",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Minimal",
+    "Minimalism",
+    "Minimalism (Frame)"
+   ],
+   "replacement": null
+  },
+  "neumorphism": {
+   "name": "Neumorphism",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "glassmorphism": {
+   "name": "Glassmorphism",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "brutalism": {
+   "name": "Brutalism",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "3d-and-hyperrealism": {
+   "name": "3D & Hyperrealism",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "vibrant-and-block-based": {
+   "name": "Vibrant & Block-based",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Vibrant & Block"
+   ],
+   "replacement": null
+  },
+  "dark-mode-oled": {
+   "name": "Dark Mode (OLED)",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Dark Mode"
+   ],
+   "replacement": null
+  },
+  "accessible-and-ethical": {
+   "name": "Accessible & Ethical",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "claymorphism": {
+   "name": "Claymorphism",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Claymorphism (for patients)"
+   ],
+   "replacement": null
+  },
+  "aurora-ui": {
+   "name": "Aurora UI",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "retro-futurism": {
+   "name": "Retro-Futurism",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "flat-design": {
+   "name": "Flat Design",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "skeuomorphism": {
+   "name": "Skeuomorphism",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "liquid-glass": {
+   "name": "Liquid Glass",
+   "type": "Platform/Material",
+   "status": "active",
+   "aliases": [
+    "Apple Liquid Glass"
+   ],
+   "replacement": null
+  },
+  "motion-driven": {
+   "name": "Motion-Driven",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "micro-interactions": {
+   "name": "Micro-interactions",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "inclusive-design": {
+   "name": "Inclusive Design",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "zero-interface": {
+   "name": "Zero Interface",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "soft-ui-evolution": {
+   "name": "Soft UI Evolution",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "hero-centric-design": {
+   "name": "Hero-Centric Design",
+   "type": "Landing Page",
+   "status": "deprecated",
+   "aliases": [],
+   "replacement": {
+    "domain": "landing",
+    "id": "hero-centric-design"
+   }
+  },
+  "conversion-optimized": {
+   "name": "Conversion-Optimized",
+   "type": "Landing Page",
+   "status": "deprecated",
+   "aliases": [],
+   "replacement": {
+    "domain": "landing",
+    "id": "funnel-3-step-conversion"
+   }
+  },
+  "feature-rich-showcase": {
+   "name": "Feature-Rich Showcase",
+   "type": "Landing Page",
+   "status": "deprecated",
+   "aliases": [
+    "Feature-Rich"
+   ],
+   "replacement": {
+    "domain": "landing",
+    "id": "feature-rich-showcase"
+   }
+  },
+  "minimal-and-direct": {
+   "name": "Minimal & Direct",
+   "type": "Landing Page",
+   "status": "deprecated",
+   "aliases": [],
+   "replacement": {
+    "domain": "landing",
+    "id": "minimal-single-column"
+   }
+  },
+  "social-proof-focused": {
+   "name": "Social Proof-Focused",
+   "type": "Landing Page",
+   "status": "deprecated",
+   "aliases": [],
+   "replacement": {
+    "domain": "landing",
+    "id": "hero-testimonials-cta"
+   }
+  },
+  "interactive-product-demo": {
+   "name": "Interactive Product Demo",
+   "type": "Landing Page",
+   "status": "deprecated",
+   "aliases": [],
+   "replacement": {
+    "domain": "landing",
+    "id": "product-demo-features"
+   }
+  },
+  "trust-and-authority": {
+   "name": "Trust & Authority",
+   "type": "Landing Page",
+   "status": "deprecated",
+   "aliases": [],
+   "replacement": {
+    "domain": "landing",
+    "id": "trust-authority-conversion"
+   }
+  },
+  "storytelling-driven": {
+   "name": "Storytelling-Driven",
+   "type": "Landing Page",
+   "status": "deprecated",
+   "aliases": [],
+   "replacement": {
+    "domain": "landing",
+    "id": "scroll-triggered-storytelling"
+   }
+  },
+  "data-dense-dashboard": {
+   "name": "Data-Dense Dashboard",
+   "type": "BI/Analytics",
+   "status": "active",
+   "aliases": [
+    "Data-Dense"
+   ],
+   "replacement": null
+  },
+  "heat-map-and-heatmap-style": {
+   "name": "Heat Map & Heatmap Style",
+   "type": "BI/Analytics",
+   "status": "supplemental",
+   "aliases": [
+    "Heat Map",
+    "Heat Map & Heatmap"
+   ],
+   "replacement": null
+  },
+  "executive-dashboard": {
+   "name": "Executive Dashboard",
+   "type": "BI/Analytics",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "real-time-monitoring": {
+   "name": "Real-Time Monitoring",
+   "type": "BI/Analytics",
+   "status": "supplemental",
+   "aliases": [
+    "Real-Time",
+    "Real-Time Monitor"
+   ],
+   "replacement": null
+  },
+  "drill-down-analytics": {
+   "name": "Drill-Down Analytics",
+   "type": "BI/Analytics",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "comparative-analysis-dashboard": {
+   "name": "Comparative Analysis Dashboard",
+   "type": "BI/Analytics",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "predictive-analytics": {
+   "name": "Predictive Analytics",
+   "type": "BI/Analytics",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "user-behavior-analytics": {
+   "name": "User Behavior Analytics",
+   "type": "BI/Analytics",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "financial-dashboard": {
+   "name": "Financial Dashboard",
+   "type": "BI/Analytics",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "sales-intelligence-dashboard": {
+   "name": "Sales Intelligence Dashboard",
+   "type": "BI/Analytics",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "neubrutalism": {
+   "name": "Neubrutalism",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "bento-box-grid": {
+   "name": "Bento Box Grid",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Bento Grids",
+    "Masonry Grid"
+   ],
+   "replacement": null
+  },
+  "y2k-aesthetic": {
+   "name": "Y2K Aesthetic",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "cyberpunk-ui": {
+   "name": "Cyberpunk UI",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "organic-biophilic": {
+   "name": "Organic Biophilic",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "ai-native-ui": {
+   "name": "AI-Native UI",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "memphis-design": {
+   "name": "Memphis Design",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "vaporwave": {
+   "name": "Vaporwave",
+   "type": "General",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "dimensional-layering": {
+   "name": "Dimensional Layering",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "exaggerated-minimalism": {
+   "name": "Exaggerated Minimalism",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "kinetic-typography": {
+   "name": "Kinetic Typography",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "parallax-storytelling": {
+   "name": "Parallax Storytelling",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Parallax"
+   ],
+   "replacement": null
+  },
+  "swiss-modernism-2-0": {
+   "name": "Swiss Modernism 2.0",
+   "type": "General",
+   "status": "supplemental",
+   "aliases": [
+    "Swiss Modernism"
+   ],
+   "replacement": null
+  },
+  "hud-sci-fi-fui": {
+   "name": "HUD / Sci-Fi FUI",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "HUD",
+    "FUI",
+    "Sci-Fi HUD",
+    "HUD/Sci-Fi FUI",
+    "Holographic / HUD",
+    "Holographic/HUD"
+   ],
+   "replacement": null
+  },
+  "pixel-art": {
+   "name": "Pixel Art",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "bento-grids": {
+   "name": "Bento Grids (Legacy)",
+   "type": "General",
+   "status": "deprecated",
+   "aliases": [],
+   "replacement": {
+    "domain": "style",
+    "id": "bento-box-grid"
+   }
+  },
+  "spatial-ui-visionos": {
+   "name": "Spatial UI (VisionOS)",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Spatial UI"
+   ],
+   "replacement": null
+  },
+  "e-ink-paper": {
+   "name": "E-Ink / Paper",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "E-Ink Paper",
+    "E-Ink/Paper"
+   ],
+   "replacement": null
+  },
+  "gen-z-chaos-maximalism": {
+   "name": "Gen Z Chaos / Maximalism",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Gen Z Chaos"
+   ],
+   "replacement": null
+  },
+  "biomimetic-organic-2-0": {
+   "name": "Biomimetic / Organic 2.0",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Biomimetic/Organic 2.0"
+   ],
+   "replacement": null
+  },
+  "anti-polish-raw-aesthetic": {
+   "name": "Anti-Polish / Raw Aesthetic",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Anti-Polish Raw"
+   ],
+   "replacement": null
+  },
+  "tactile-digital-deformable-ui": {
+   "name": "Tactile Digital / Deformable UI",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "nature-distilled": {
+   "name": "Nature Distilled",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "interactive-cursor-design": {
+   "name": "Interactive Cursor Design",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "voice-first-multimodal": {
+   "name": "Voice-First Multimodal",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "3d-product-preview": {
+   "name": "3D Product Preview",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "gradient-mesh-aurora-evolved": {
+   "name": "Gradient Mesh / Aurora Evolved",
+   "type": "General",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "editorial-grid-magazine": {
+   "name": "Editorial Grid / Magazine",
+   "type": "General",
+   "status": "active",
+   "aliases": [
+    "Editorial Grid"
+   ],
+   "replacement": null
+  },
+  "chromatic-aberration-rgb-split": {
+   "name": "Chromatic Aberration / RGB Split",
+   "type": "General",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "vintage-analog-retro-film": {
+   "name": "Vintage Analog / Retro Film",
+   "type": "General",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "bauhaus": {
+   "name": "Bauhaus (包豪斯)",
+   "type": "Mobile",
+   "status": "active",
+   "aliases": [],
+   "replacement": null
+  },
+  "minimalist-monochrome": {
+   "name": "Minimalist Monochrome",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "modern-dark-cinema-mobile": {
+   "name": "Modern Dark (Cinema Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "saas-mobile-high-tech-boutique": {
+   "name": "SaaS Mobile (High-Tech Boutique)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "terminal-cli-mobile": {
+   "name": "Terminal CLI (Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "kinetic-brutalism-mobile": {
+   "name": "Kinetic Brutalism (Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "flat-design-mobile-touch-first": {
+   "name": "Flat Design Mobile (Touch-First)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "material-you-md3-mobile": {
+   "name": "Material 3 Expressive (Mobile)",
+   "type": "Mobile",
+   "status": "active",
+   "aliases": [
+    "Material You",
+    "Material You (MD3 Mobile)",
+    "MD3 Mobile",
+    "M3 Expressive",
+    "Material Design 3 Expressive"
+   ],
+   "replacement": null
+  },
+  "neo-brutalism-mobile": {
+   "name": "Neo Brutalism (Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "bold-typography-mobile-poster": {
+   "name": "Bold Typography (Mobile Poster)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "academia-scholarly-mobile": {
+   "name": "Academia (Scholarly Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "cyberpunk-mobile-hud": {
+   "name": "Cyberpunk Mobile HUD",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "bitcoin-defi-mobile": {
+   "name": "Bitcoin DeFi (Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "claymorphism-mobile": {
+   "name": "Claymorphism (Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "enterprise-saas-mobile": {
+   "name": "Enterprise SaaS (Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "sketch-hand-drawn-mobile": {
+   "name": "Sketch Hand-Drawn (Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [
+    "Sketch Hand-Drawn"
+   ],
+   "replacement": null
+  },
+  "neumorphism-mobile": {
+   "name": "Neumorphism (Mobile)",
+   "type": "Mobile",
+   "status": "supplemental",
+   "aliases": [],
+   "replacement": null
+  },
+  "fluent-2": {
+   "name": "Fluent 2",
+   "type": "Platform/System",
+   "status": "active",
+   "aliases": [
+    "Fluent UI",
+    "Microsoft Fluent 2"
+   ],
+   "replacement": null
+  },
+  "shopify-polaris": {
+   "name": "Shopify Polaris",
+   "type": "Platform/System",
+   "status": "active",
+   "aliases": [
+    "Polaris",
+    "Polaris Web Components"
+   ],
+   "replacement": null
+  },
+  "spectrum-design-system": {
+   "name": "Adobe Spectrum",
+   "type": "Platform/System",
+   "status": "active",
+   "aliases": [
+    "Spectrum",
+    "Adobe Spectrum Design System"
+   ],
+   "replacement": null
+  },
+  "spectrum-2": {
+   "name": "Spectrum 2",
+   "type": "Platform/System",
+   "status": "supplemental",
+   "aliases": [
+    "Adobe Spectrum 2",
+    "S2"
+   ],
+   "replacement": null
+  },
+  "apple-native-experience": {
+   "name": "Apple Native Experience",
+   "type": "Platform/System",
+   "status": "active",
+   "aliases": [
+    "Apple Native",
+    "Native Apple UI",
+    "iOS-inspired interface"
+   ],
+   "replacement": null
+  }
+ },
+ "landing_patterns": {
+  "hero-features-cta": {
+   "name": "Hero + Features + CTA",
+   "section_order": "Hero with headline/image > Value prop > Key features (3-5) > CTA section > Footer",
+   "cta": "Hero (sticky) + Bottom",
+   "aliases": []
+  },
+  "hero-testimonials-cta": {
+   "name": "Hero + Testimonials + CTA",
+   "section_order": "Hero > Problem statement > Solution overview > Testimonials carousel > CTA",
+   "cta": "Hero (sticky) + Post-testimonials",
+   "aliases": [
+    "Conversion-Optimized + Social Proof",
+    "Feature-Rich + Social Proof",
+    "Feature-Rich Showcase + Social Proof",
+    "Hero-Centric + Social Proof",
+    "Minimal & Direct + Social Proof",
+    "Social Proof + Conversion",
+    "Social Proof + Feature-Rich",
+    "Social Proof-Focused",
+    "Social Proof-Focused + Conversion",
+    "Social Proof-Focused + Feature-Rich",
+    "Storytelling + Social Proof",
+    "Storytelling-Driven + Social Proof"
+   ]
+  },
+  "product-demo-features": {
+   "name": "Product Demo + Features",
+   "section_order": "Hero > Product video/mockup (center) > Feature breakdown per section > Comparison (optional) > CTA",
+   "cta": "Video center + CTA right/bottom",
+   "aliases": [
+    "Conversion-Optimized + Demo",
+    "Feature-Rich Showcase + Demo",
+    "Feature-Rich Showcase + Interactive Demo",
+    "Interactive Demo + Feature-Rich",
+    "Interactive Demo + Minimal",
+    "Interactive Product Demo",
+    "Interactive Product Demo + Minimal",
+    "Interactive Product Demo + Social Proof",
+    "Interactive Product Demo + Storytelling",
+    "Minimal & Direct + Demo",
+    "Social Proof-Focused + Demo"
+   ]
+  },
+  "minimal-single-column": {
+   "name": "Minimal Single Column",
+   "section_order": "Hero headline > Short description > Benefit bullets (3 max) > CTA > Footer",
+   "cta": "Center, large CTA button",
+   "aliases": [
+    "Minimal & Direct"
+   ]
+  },
+  "funnel-3-step-conversion": {
+   "name": "Funnel (3-Step Conversion)",
+   "section_order": "Hero > Step 1 (problem) > Step 2 (solution) > Step 3 (action) > CTA progression",
+   "cta": "Each step: mini-CTA. Final: main CTA",
+   "aliases": [
+    "Conversion + Feature-Rich",
+    "Conversion-Optimized",
+    "Conversion-Optimized + Feature-Rich",
+    "Feature-Rich + Conversion",
+    "Hero-Centric + Conversion",
+    "Minimal & Direct + Conversion",
+    "Minimal + Conversion"
+   ]
+  },
+  "comparison-table-cta": {
+   "name": "Comparison Table + CTA",
+   "section_order": "Hero > Problem intro > Comparison table (product vs competitors) > Pricing (optional) > CTA",
+   "cta": "Table: Right column. CTA: Below table",
+   "aliases": []
+  },
+  "lead-magnet-form": {
+   "name": "Lead Magnet + Form",
+   "section_order": "Hero (benefit headline) > Lead magnet preview (ebook cover, checklist, etc) > Form (minimal fields) > CTA submit",
+   "cta": "Form CTA: Submit button",
+   "aliases": []
+  },
+  "pricing-page-cta": {
+   "name": "Pricing Page + CTA",
+   "section_order": "Hero (pricing headline) > Price comparison cards > Feature comparison table > FAQ section > Final CTA",
+   "cta": "Each card: CTA button. Sticky CTA in nav",
+   "aliases": []
+  },
+  "video-first-hero": {
+   "name": "Video-First Hero",
+   "section_order": "Hero with video background > Key features overlay > Benefits section > CTA",
+   "cta": "Overlay on video (center/bottom) + Bottom section",
+   "aliases": []
+  },
+  "scroll-triggered-storytelling": {
+   "name": "Scroll-Triggered Storytelling",
+   "section_order": "Intro hook > Chapter 1 (problem) > Chapter 2 (journey) > Chapter 3 (solution) > Climax CTA",
+   "cta": "End of each chapter (mini) + Final climax CTA",
+   "aliases": [
+    "Storytelling + Data",
+    "Storytelling + Feature-Rich",
+    "Storytelling + Hero-Centric",
+    "Storytelling-Driven",
+    "Storytelling-Driven + Feature-Rich",
+    "Storytelling-Driven + Hero",
+    "Storytelling-Driven + Hero-Centric"
+   ]
+  },
+  "ai-personalization-landing": {
+   "name": "AI Personalization Landing",
+   "section_order": "Dynamic hero (personalized) > Relevant features > Tailored testimonials > Smart CTA",
+   "cta": "Context-aware placement based on user segment",
+   "aliases": []
+  },
+  "waitlist-coming-soon": {
+   "name": "Waitlist/Coming Soon",
+   "section_order": "Hero with countdown > Product teaser/preview > Email capture form > Social proof (waitlist count)",
+   "cta": "Email form prominent (above fold) + Sticky form on scroll",
+   "aliases": []
+  },
+  "comparison-table-focus": {
+   "name": "Comparison Table Focus",
+   "section_order": "Hero (problem statement) > Comparison matrix (you vs competitors) > Feature deep-dive > Winner CTA",
+   "cta": "After comparison table (highlighted row) + Bottom",
+   "aliases": []
+  },
+  "pricing-focused-landing": {
+   "name": "Pricing-Focused Landing",
+   "section_order": "Hero (value proposition) > Pricing cards (3 tiers) > Feature comparison > FAQ > Final CTA",
+   "cta": "Each pricing card + Sticky CTA in nav + Bottom",
+   "aliases": []
+  },
+  "app-store-style-landing": {
+   "name": "App Store Style Landing",
+   "section_order": "Hero with device mockup > Screenshots carousel > Features with icons > Reviews/ratings > Download CTAs",
+   "cta": "Download buttons prominent (App Store + Play Store) throughout",
+   "aliases": []
+  },
+  "faq-documentation-landing": {
+   "name": "FAQ/Documentation Landing",
+   "section_order": "Hero with search bar > Popular categories > FAQ accordion > Contact/support CTA",
+   "cta": "Search bar prominent + Contact CTA for unresolved questions",
+   "aliases": [
+    "FAQ + Minimal",
+    "Feature-Rich + Documentation",
+    "Minimal + Documentation"
+   ]
+  },
+  "immersive-interactive-experience": {
+   "name": "Immersive/Interactive Experience",
+   "section_order": "Full-screen interactive element > Guided product tour > Key benefits revealed > CTA after completion",
+   "cta": "After interaction complete + Skip option for impatient users",
+   "aliases": [
+    "Immersive + Feature-Rich",
+    "Immersive + Interactive"
+   ]
+  },
+  "event-conference-landing": {
+   "name": "Event/Conference Landing",
+   "section_order": "Hero (date/location/countdown) > Speakers grid > Agenda/schedule > Sponsors > Register CTA",
+   "cta": "Register CTA sticky + After speakers + Bottom",
+   "aliases": []
+  },
+  "product-review-ratings-focused": {
+   "name": "Product Review/Ratings Focused",
+   "section_order": "Hero (product + aggregate rating) > Rating breakdown > Individual reviews > Buy/CTA",
+   "cta": "After reviews summary + Buy button alongside reviews",
+   "aliases": []
+  },
+  "community-forum-landing": {
+   "name": "Community/Forum Landing",
+   "section_order": "Hero (community value prop) > Popular topics/categories > Active members showcase > Join CTA",
+   "cta": "Join button prominent + After member showcase",
+   "aliases": []
+  },
+  "before-after-transformation": {
+   "name": "Before-After Transformation",
+   "section_order": "Hero (problem state) > Transformation slider/comparison > How it works > Results CTA",
+   "cta": "After transformation reveal + Bottom",
+   "aliases": []
+  },
+  "marketplace-directory": {
+   "name": "Marketplace / Directory",
+   "section_order": "Hero (Search focused) > Categories > Featured Listings > Trust/Safety > CTA (Become a host/seller)",
+   "cta": "Hero Search Bar + Navbar 'List your item'",
+   "aliases": []
+  },
+  "newsletter-content-first": {
+   "name": "Newsletter / Content First",
+   "section_order": "Hero (Value Prop + Form) > Recent Issues/Archives > Social Proof (Subscriber count) > About Author",
+   "cta": "Hero inline form + Sticky header form",
+   "aliases": []
+  },
+  "webinar-registration": {
+   "name": "Webinar Registration",
+   "section_order": "Hero (Topic + Timer + Form) > What you'll learn > Speaker Bio > Urgency/Bonuses > Form (again)",
+   "cta": "Hero (Right side form) + Bottom anchor",
+   "aliases": []
+  },
+  "enterprise-gateway": {
+   "name": "Enterprise Gateway",
+   "section_order": "Hero (Video/Mission) > Solutions by Industry > Solutions by Role > Client Logos > Contact Sales",
+   "cta": "Contact Sales (Primary) + Login (Secondary)",
+   "aliases": [
+    "Data-Dense + Drill-Down",
+    "Data-Dense + Storytelling",
+    "Data-Dense Dashboard"
+   ]
+  },
+  "portfolio-grid": {
+   "name": "Portfolio Grid",
+   "section_order": "Hero (Name/Role) > Project Grid (Masonry) > About/Philosophy > Contact",
+   "cta": "Project Card Hover + Footer Contact",
+   "aliases": [
+    "Portfolio + Hero-Centric"
+   ]
+  },
+  "horizontal-scroll-journey": {
+   "name": "Horizontal Scroll Journey",
+   "section_order": "Intro (Vertical) > The Journey (Horizontal Track) > Detail Reveal > Vertical Footer",
+   "cta": "Floating Sticky CTA or End of Horizontal Track",
+   "aliases": []
+  },
+  "bento-grid-showcase": {
+   "name": "Bento Grid Showcase",
+   "section_order": "Hero > Bento Grid (Key Features) > Detail Cards > Tech Specs > CTA",
+   "cta": "Floating Action Button or Bottom of Grid",
+   "aliases": []
+  },
+  "interactive-3d-configurator": {
+   "name": "Interactive 3D Configurator",
+   "section_order": "Hero (Configurator) > Feature Highlight (synced) > Price/Specs > Purchase",
+   "cta": "Inside Configurator UI + Sticky Bottom Bar",
+   "aliases": []
+  },
+  "ai-driven-dynamic-landing": {
+   "name": "AI-Driven Dynamic Landing",
+   "section_order": "Prompt/Input Hero > Generated Result Preview > How it Works > Value Prop",
+   "cta": "Input Field (Hero) + 'Try it' Buttons",
+   "aliases": []
+  },
+  "feature-rich-showcase": {
+   "name": "Feature-Rich Showcase",
+   "section_order": "Hero (value prop) > Feature grid/cards (4-6) > Use cases or benefits > Social proof or logos > CTA",
+   "cta": "Hero (sticky) + After features + Bottom",
+   "aliases": [
+    "Feature-Rich + Data",
+    "Showcase + Feature-Rich"
+   ]
+  },
+  "hero-centric-design": {
+   "name": "Hero-Centric Design",
+   "section_order": "Full-bleed Hero (headline + visual) > Single value prop strip > Key benefit or proof > Primary CTA",
+   "cta": "Hero dominant (center/bottom) + Sticky nav CTA",
+   "aliases": [
+    "Feature-Rich Showcase + Hero-Centric",
+    "Hero-Centric + Feature-Rich",
+    "Hero-Centric Design + Feature-Rich"
+   ]
+  },
+  "trust-authority-conversion": {
+   "name": "Trust & Authority + Conversion",
+   "section_order": "Hero (mission/credibility) > Proof (logos, certs, stats) > Solution overview > Clear CTA path",
+   "cta": "Contact Sales / Get Quote (primary) + Nav",
+   "aliases": [
+    "Conversion + Trust",
+    "Conversion-Optimized + Trust",
+    "Data + Trust",
+    "Feature-Rich Showcase + Trust",
+    "Hero-Centric + Trust",
+    "Social Proof-Focused + Trust",
+    "Storytelling + Trust",
+    "Trust & Authority",
+    "Trust & Authority + Accessible",
+    "Trust & Authority + Conversion-Optimized",
+    "Trust & Authority + Feature",
+    "Trust & Authority + Feature-Rich",
+    "Trust & Authority + Minimal",
+    "Trust & Authority + Social Proof"
+   ]
+  },
+  "real-time-operations-landing": {
+   "name": "Real-Time / Operations Landing",
+   "section_order": "Hero (product + live preview or status) > Key metrics/indicators > How it works > CTA (Start trial / Contact)",
+   "cta": "Primary CTA in nav + After metrics",
+   "aliases": [
+    "Feature-Rich + Real-Time",
+    "Feature-Rich Showcase + Real-Time",
+    "Real-Time + Feature-Rich",
+    "Real-Time Monitoring",
+    "Trust & Authority + Real-Time"
+   ]
+  }
+ },
+ "product_types": [
+  "AI Photo & Avatar Generator",
+  "AI/Chatbot Platform",
+  "API Developer Portal",
+  "Academic Journal / Scholarly Publishing",
+  "Agriculture/Farm Tech",
+  "Airline",
+  "Alarm & World Clock",
+  "Analytics Dashboard",
+  "Anonymous Community / Confession",
+  "Arcade & Retro Game",
+  "Architecture / Interior",
+  "Auction Platform",
+  "Automotive/Car Dealership",
+  "Autonomous Drone Fleet Manager",
+  "B2B Service",
+  "Bakery/Cafe",
+  "Banking/Traditional Finance",
+  "Beauty/Spa/Wellness Service",
+  "Biohacking / Longevity App",
+  "Biotech / Life Sciences",
+  "Book & Reading Tracker",
+  "Booking & Appointment App",
+  "Bookmark & Read-Later",
+  "Brewery/Winery",
+  "CRM & Client Management",
+  "Calculator & Unit Converter",
+  "Calendar & Scheduling App",
+  "Calorie & Nutrition Counter",
+  "Card & Board Game",
+  "Casual Puzzle Game",
+  "Changelog / Release Notes",
+  "Chat & Messaging App",
+  "Childcare/Daycare",
+  "Church/Religious Organization",
+  "Citizen Science Platform",
+  "Classifieds / Buy-Sell",
+  "Coding Bootcamp",
+  "Coding Challenge & Practice",
+  "Conference / Symposium Landing Page",
+  "Construction/Architecture",
+  "Couple & Relationship App",
+  "Coworking Space",
+  "Creative Agency",
+  "Creator Economy Platform",
+  "Crowdfunding Platform",
+  "Cybersecurity Platform",
+  "Dating App",
+  "Dental Practice",
+  "Design System/Component Library",
+  "Developer Tool / IDE",
+  "Diary & Journal App",
+  "Digital Products/Downloads",
+  "Digital Signage / Kiosk",
+  "Directory / Listing Site",
+  "Drawing & Sketching Canvas",
+  "E-commerce",
+  "E-commerce Luxury",
+  "E-signature / Document Workflow",
+  "EV/Charging Ecosystem",
+  "Educational App",
+  "Email Client",
+  "Emergency SOS & Safety",
+  "Event Management",
+  "Expense Splitter / Bill Split",
+  "Family Calendar & Chores",
+  "Fasting & Intermittent Timer",
+  "Feature Flag / Config Management",
+  "File Manager & Transfer",
+  "Financial Dashboard",
+  "Fintech/Crypto",
+  "Fitness/Gym App",
+  "Flashcard & Study Tool",
+  "Florist/Plant Shop",
+  "Food Delivery / On-Demand",
+  "Forum / Discussion Board",
+  "Freelancer Platform",
+  "Gaming",
+  "Generative Art Platform",
+  "Gift & Wishlist",
+  "Government Portal / Civic Services",
+  "Government/Public Service",
+  "Grant / Funding Portal",
+  "Grocery & Shopping List",
+  "Habit Tracker",
+  "Healthcare App",
+  "Home Decoration & Interior Design",
+  "Home Services (Plumber/Electrician)",
+  "Hotel/Hospitality",
+  "Hyperlocal Services",
+  "Idle & Clicker Game",
+  "Insurance Platform",
+  "Inventory & Stock Management",
+  "Invoice & Billing Tool",
+  "Job Board/Recruitment",
+  "Kids Learning (ABC & Math)",
+  "Knowledge Base/Documentation",
+  "LMS (Learning Management System)",
+  "Language Learning App",
+  "Legal Services",
+  "Link-in-Bio Page Builder",
+  "Local Events & Discovery",
+  "Logistics/Delivery",
+  "Luxury/Premium Brand",
+  "Magazine/Blog",
+  "Marketing Agency",
+  "Marketplace (P2P)",
+  "Medical Clinic",
+  "Medication & Pill Reminder",
+  "Meditation & Mindfulness",
+  "Membership/Community",
+  "Meme & Sticker Maker",
+  "Mental Health App",
+  "Micro SaaS",
+  "Micro-Credentials/Badges Platform",
+  "Mood Tracker",
+  "Museum/Gallery",
+  "Music Creation & Beat Maker",
+  "Music Instrument Learning",
+  "Music Streaming",
+  "NFT/Web3 Platform",
+  "News/Media Platform",
+  "Newsletter Platform",
+  "No-code / Low-code Builder",
+  "Non-profit/Charity",
+  "Notes & Writing App",
+  "Online Course/E-learning",
+  "Open Source Project Landing",
+  "Parenting & Baby Tracker",
+  "Parking Finder",
+  "Password Manager",
+  "Patent / IP Database",
+  "Patient Portal / Health Records",
+  "Period & Cycle Tracker",
+  "Personal Finance Tracker",
+  "Pet Tech App",
+  "Pharmacy/Drug Store",
+  "Photo Editor & Filters",
+  "Photography Studio",
+  "Plant Care Tracker",
+  "Podcast Platform",
+  "Portfolio/Personal",
+  "Productivity Tool",
+  "Public Transit Guide",
+  "Q&A Community Platform",
+  "Quantum Computing Interface",
+  "RPA / Automation Dashboard",
+  "Real Estate/Property",
+  "Recipe & Cooking App",
+  "Remote Work/Collaboration Tool",
+  "Research Lab / University Department",
+  "Restaurant/Food Service",
+  "Resume / CV Builder",
+  "Review Platform",
+  "Ride Hailing / Transportation",
+  "Road Trip Planner",
+  "Running & Cycling GPS",
+  "SaaS (General)",
+  "Scanner & Document Manager",
+  "Senior Care/Elderly",
+  "Short Video Editor",
+  "Sleep Tracker",
+  "Smart Home/IoT Dashboard",
+  "Social Media App",
+  "Space Tech / Aerospace",
+  "Spatial Computing OS / App",
+  "Sports Team/Club",
+  "Status Page / Incident Management",
+  "Study Together / Virtual Coworking",
+  "Subscription Box Service",
+  "Survey / Form Builder",
+  "Sustainable Energy / Climate Tech",
+  "Telemedicine Platform",
+  "Testimonial & Social Proof Widget",
+  "Theater/Cinema",
+  "Ticketing / Box Office",
+  "Timer & Pomodoro",
+  "Translator App",
+  "Travel/Tourism Agency",
+  "Trivia & Quiz Game",
+  "VPN & Privacy Tool",
+  "Veterinary Clinic",
+  "Video Streaming/OTT",
+  "Voice Recorder & Memo",
+  "Wallpaper & Theme App",
+  "Wardrobe & Outfit Planner",
+  "Water & Hydration Reminder",
+  "Weather App",
+  "Wedding/Event Planning",
+  "White Noise & Ambient Sound",
+  "Wiki / Encyclopedia",
+  "Word & Crossword Game",
+  "Yoga & Stretching Guide"
+ ],
+ "motion_categories": [
+  "Carousel / Auto-Rotation",
+  "Hover Micro-interaction",
+  "Loading / Skeleton",
+  "Page Transition",
+  "Parallax Scroll",
+  "Scroll Reveal",
+  "Stagger List"
+ ],
+ "motion_available": [
+  [
+   "Carousel / Auto-Rotation",
+   "Standard"
+  ],
+  [
+   "Hover Micro-interaction",
+   "Complex"
+  ],
+  [
+   "Hover Micro-interaction",
+   "Standard"
+  ],
+  [
+   "Hover Micro-interaction",
+   "Subtle"
+  ],
+  [
+   "Loading / Skeleton",
+   "Standard"
+  ],
+  [
+   "Loading / Skeleton",
+   "Subtle"
+  ],
+  [
+   "Page Transition",
+   "Complex"
+  ],
+  [
+   "Page Transition",
+   "Standard"
+  ],
+  [
+   "Page Transition",
+   "Subtle"
+  ],
+  [
+   "Parallax Scroll",
+   "Standard"
+  ],
+  [
+   "Parallax Scroll",
+   "Subtle"
+  ],
+  [
+   "Scroll Reveal",
+   "Complex"
+  ],
+  [
+   "Scroll Reveal",
+   "Standard"
+  ],
+  [
+   "Scroll Reveal",
+   "Subtle"
+  ],
+  [
+   "Stagger List",
+   "Complex"
+  ],
+  [
+   "Stagger List",
+   "Standard"
+  ],
+  [
+   "Stagger List",
+   "Subtle"
+  ]
+ ],
+ "motion_tiers": [
+  "Subtle",
+  "Standard",
+  "Complex"
+ ],
+ "agents": {
+  "orchestrator": "编排 Agent：理解请求、分派、汇总、向用户确认",
+  "requirements": "需求分析 Agent：一句话 → 需求简报，最多问 3 个问题",
+  "architect": "信息架构 Agent：站点地图、导航、用户流程",
+  "design-director": "设计总监 Agent：选风格、定配色字体，产出 DESIGN.md + 设计令牌",
+  "layout": "布局 Agent：每页区块顺序和对应组件，产出页面线框",
+  "content": "文案 / 图片 Agent：写文案、生成或选图",
+  "engineer": "工程 Agent：写代码、装依赖",
+  "motion": "动效 Agent：在风格允许的档位内加动效",
+  "reviewer": "审查 Agent：截图视觉评审、无障碍与性能检查",
+  "fixer": "修复 Agent：读报错并修复",
+  "learner": "学习 Agent：反思、整理、入库"
+ }
+}

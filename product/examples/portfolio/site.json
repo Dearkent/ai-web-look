@@ -1,0 +1,164 @@
+{
+ "schema_version": "site/0.1",
+ "id": "lin-site",
+ "brief_id": "lin-portfolio",
+ "default_locale": "zh-CN",
+ "style": {
+  "style_id": "motion-driven",
+  "secondary_style_ids": [
+   "minimalism-and-swiss-style"
+  ],
+  "motion_tier": "Complex",
+  "design_md": "design/DESIGN.md",
+  "tokens": "design/tokens.json"
+ },
+ "pages": [
+  {
+   "id": "home",
+   "title": "首页",
+   "path": "/",
+   "parent": null,
+   "kind": "home",
+   "pattern": "scroll-triggered-storytelling",
+   "serves_goals": [
+    "G1",
+    "G2"
+   ],
+   "implements_features": [
+    "F2"
+   ],
+   "wireframe": "pages/home.json",
+   "nav": {
+    "header": true,
+    "footer": false,
+    "order": 0
+   },
+   "data": [
+    "artwork"
+   ]
+  },
+  {
+   "id": "contact",
+   "title": "约稿",
+   "path": "/contact",
+   "parent": "home",
+   "kind": "contact",
+   "serves_goals": [
+    "G2"
+   ],
+   "implements_features": [
+    "F1"
+   ],
+   "wireframe": "pages/contact.json",
+   "nav": {
+    "header": true,
+    "footer": false,
+    "order": 1
+   }
+  }
+ ],
+ "flows": [
+  {
+   "id": "FL1",
+   "goal": "G1",
+   "steps": [
+    "home"
+   ]
+  },
+  {
+   "id": "FL2",
+   "goal": "G2",
+   "steps": [
+    "home",
+    "contact"
+   ]
+  }
+ ],
+ "data_entities": [
+  {
+   "id": "artwork",
+   "editable_by_owner": true,
+   "fields": [
+    {
+     "name": "title",
+     "type": "text",
+     "required": true
+    },
+    {
+     "name": "image",
+     "type": "image",
+     "required": true
+    },
+    {
+     "name": "client",
+     "type": "text"
+    }
+   ]
+  }
+ ],
+ "work_plan": [
+  {
+   "id": "W1",
+   "agent": "design-director",
+   "produces": "design/DESIGN.md"
+  },
+  {
+   "id": "W2",
+   "agent": "design-director",
+   "produces": "design/tokens.json",
+   "depends_on": [
+    "W1"
+   ]
+  },
+  {
+   "id": "W3",
+   "agent": "layout",
+   "produces": "pages/home.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W4",
+   "agent": "layout",
+   "produces": "pages/contact.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W5",
+   "agent": "content",
+   "produces": "content/zh-CN.json",
+   "depends_on": [
+    "W3",
+    "W4"
+   ]
+  },
+  {
+   "id": "W6",
+   "agent": "engineer",
+   "produces": "src/",
+   "depends_on": [
+    "W5"
+   ]
+  },
+  {
+   "id": "W7",
+   "agent": "motion",
+   "produces": "src/motion",
+   "depends_on": [
+    "W6"
+   ]
+  },
+  {
+   "id": "W8",
+   "agent": "reviewer",
+   "produces": "review/report.json",
+   "depends_on": [
+    "W7"
+   ]
+  }
+ ],
+ "base_url": "https://lin.example.com"
+}

@@ -1,0 +1,39 @@
+{
+ "schema_version": "page/0.1",
+ "page_id": "contact",
+ "sections": [
+  {
+   "id": "form",
+   "type": "contact-form",
+   "component": "registry:form-simple",
+   "layout": {
+    "variant": "stack",
+    "container": "narrow"
+   },
+   "feature": "F1",
+   "slots": {
+    "fields": {
+     "kind": "form_fields",
+     "fields": [
+      "name",
+      "company",
+      "email",
+      "brief",
+      "budget"
+     ]
+    }
+   },
+   "actions": [
+    {
+     "id": "send",
+     "label": "发送",
+     "primary": true,
+     "target": {
+      "submit": "F1",
+      "then": "home"
+     }
+    }
+   ]
+  }
+ ]
+}

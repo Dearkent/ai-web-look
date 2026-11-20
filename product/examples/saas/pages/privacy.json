@@ -1,0 +1,48 @@
+{
+ "schema_version": "page/0.1",
+ "page_id": "privacy",
+ "sections": [
+  {
+   "id": "header",
+   "type": "header",
+   "component": "registry:site-header",
+   "layout": {
+    "variant": "inline"
+   },
+   "slots": {
+    "logo": {
+     "kind": "image",
+     "asset": "A1"
+    }
+   }
+  },
+  {
+   "id": "body",
+   "type": "content",
+   "component": "registry:prose",
+   "layout": {
+    "variant": "stack",
+    "container": "narrow"
+   },
+   "slots": {
+    "body": {
+     "kind": "rich_text"
+    }
+   }
+  },
+  {
+   "id": "footer",
+   "type": "footer",
+   "component": "registry:site-footer",
+   "layout": {
+    "variant": "grid-4",
+    "mobile": "stack"
+   },
+   "slots": {
+    "links": {
+     "kind": "list"
+    }
+   }
+  }
+ ]
+}

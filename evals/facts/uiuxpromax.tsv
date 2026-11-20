@@ -1,0 +1,14 @@
+# 读码笔记 · UI UX Pro Max 中引用的代码事实
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/core.py	BM25 search engine for UI/UX style guides	检索用 BM25
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/core.py	_DOMAIN_SCORE_FLOORS	各领域置信门槛
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/core.py	measured by the calibration suite	门槛由校准测试集测出
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/core.py	multi-word/longer phrases are	更长更具体的词权重更高
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/design_system.py	# Step 1: First search product to get category	第一步定行业类别
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/design_system.py	# Step 2: Get reasoning rules for this category	第二步取该类别规则
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/design_system.py	variance/motion/density are optional 1-10 dials	三个 1-10 旋钮
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/design_system.py	let a dark-primary style ship with a light background	先定明暗再选配色的由来
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/design_system.py	def format_tokens_dtcg(	输出 DTCG 设计令牌
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/design_system.py	Master + Overrides pattern	总规范 + 页面覆盖
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/design_system.py	MASTER.md already exists, persistence is skipped	已有总规范不覆盖
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/reasoning_contract.py	Closed, non-executable grammar for design-system decision rules	规则用封闭、不可执行的语法
+/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill	src/ui-ux-pro-max/scripts/validate_data.py	lines=1095	数据校验脚本行数

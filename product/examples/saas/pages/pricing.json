@@ -1,0 +1,83 @@
+{
+ "schema_version": "page/0.1",
+ "page_id": "pricing",
+ "pattern": "pricing-page-cta",
+ "sections": [
+  {
+   "id": "header",
+   "type": "header",
+   "component": "registry:site-header",
+   "layout": {
+    "variant": "inline"
+   },
+   "slots": {
+    "logo": {
+     "kind": "image",
+     "asset": "A1"
+    }
+   }
+  },
+  {
+   "id": "plans",
+   "type": "pricing",
+   "component": "registry:pricing-3tier",
+   "layout": {
+    "variant": "grid-3",
+    "mobile": "carousel"
+   },
+   "slots": {
+    "plans": {
+     "kind": "list",
+     "count": 3
+    }
+   },
+   "actions": [
+    {
+     "id": "start",
+     "label": "开始试用",
+     "primary": true,
+     "target": {
+      "url": "https://app.example.com/signup"
+     }
+    },
+    {
+     "id": "talk",
+     "label": "联系销售",
+     "target": {
+      "page": "demo"
+     }
+    }
+   ]
+  },
+  {
+   "id": "faq",
+   "type": "faq",
+   "component": "registry:faq-accordion",
+   "layout": {
+    "variant": "list",
+    "container": "narrow"
+   },
+   "feature": "F3",
+   "slots": {
+    "items": {
+     "kind": "list",
+     "count": 6
+    }
+   }
+  },
+  {
+   "id": "footer",
+   "type": "footer",
+   "component": "registry:site-footer",
+   "layout": {
+    "variant": "grid-4",
+    "mobile": "stack"
+   },
+   "slots": {
+    "links": {
+     "kind": "list"
+    }
+   }
+  }
+ ]
+}

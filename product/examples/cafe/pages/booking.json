@@ -1,0 +1,10 @@
+{
+ "schema_version": "page/0.1", "page_id": "booking",
+ "sections": [
+  {"id": "header", "type": "header", "component": "registry:site-header", "layout": {"variant": "inline"}, "slots": {"logo": {"kind": "image", "asset": "A1"}}},
+  {"id": "form", "type": "booking-form", "component": null, "layout": {"variant": "stack", "container": "narrow"}, "feature": "F1", "data": "reservation",
+   "slots": {"heading": {"kind": "text", "max_chars": 10}, "fields": {"kind": "form_fields", "fields": ["date", "slot", "party_size", "phone"]}},
+   "actions": [{"id": "submit", "label": "确认预约", "primary": true, "target": {"submit": "F1", "then": "booked"}}]},
+  {"id": "footer", "type": "footer", "component": "registry:site-footer", "layout": {"variant": "grid-3", "mobile": "stack"}, "slots": {"address": {"kind": "text"}}}
+ ]
+}

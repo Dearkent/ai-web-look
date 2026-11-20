@@ -1,0 +1,219 @@
+{
+ "schema_version": "site/0.1",
+ "id": "tally-site",
+ "brief_id": "tally-saas",
+ "default_locale": "zh-CN",
+ "locales": [
+  "zh-CN",
+  "en"
+ ],
+ "style": {
+  "style_id": "flat-design",
+  "secondary_style_ids": [
+   "glassmorphism"
+  ],
+  "motion_tier": "Standard",
+  "color_mode": "light",
+  "design_md": "design/DESIGN.md",
+  "tokens": "design/tokens.json"
+ },
+ "pages": [
+  {
+   "id": "home",
+   "title": "首页",
+   "path": "/",
+   "parent": null,
+   "kind": "home",
+   "pattern": "hero-features-cta",
+   "serves_goals": [
+    "G1",
+    "G2"
+   ],
+   "wireframe": "pages/home.json",
+   "nav": {
+    "header": true,
+    "footer": true,
+    "order": 0
+   }
+  },
+  {
+   "id": "pricing",
+   "title": "价格",
+   "path": "/pricing",
+   "parent": "home",
+   "kind": "landing",
+   "pattern": "pricing-page-cta",
+   "serves_goals": [
+    "G1"
+   ],
+   "implements_features": [
+    "F3"
+   ],
+   "wireframe": "pages/pricing.json",
+   "nav": {
+    "header": true,
+    "footer": true,
+    "order": 1
+   }
+  },
+  {
+   "id": "demo",
+   "title": "预约演示",
+   "path": "/demo",
+   "parent": "home",
+   "kind": "form",
+   "serves_goals": [
+    "G2"
+   ],
+   "implements_features": [
+    "F1"
+   ],
+   "wireframe": "pages/demo.json",
+   "nav": {
+    "header": true,
+    "footer": false,
+    "order": 2
+   },
+   "data": [
+    "demo-request"
+   ]
+  },
+  {
+   "id": "privacy",
+   "title": "隐私政策",
+   "path": "/privacy",
+   "parent": "home",
+   "kind": "legal",
+   "wireframe": "pages/privacy.json",
+   "nav": {
+    "header": false,
+    "footer": true
+   }
+  }
+ ],
+ "flows": [
+  {
+   "id": "FL1",
+   "goal": "G1",
+   "steps": [
+    "home",
+    "pricing"
+   ],
+   "completes_with": {
+    "action": "start"
+   }
+  },
+  {
+   "id": "FL2",
+   "goal": "G2",
+   "steps": [
+    "home",
+    "demo"
+   ]
+  }
+ ],
+ "data_entities": [
+  {
+   "id": "demo-request",
+   "fields": [
+    {
+     "name": "company",
+     "type": "text",
+     "required": true
+    },
+    {
+     "name": "email",
+     "type": "email",
+     "required": true
+    },
+    {
+     "name": "team_size",
+     "type": "enum"
+    }
+   ]
+  }
+ ],
+ "work_plan": [
+  {
+   "id": "W1",
+   "agent": "design-director",
+   "produces": "design/DESIGN.md"
+  },
+  {
+   "id": "W2",
+   "agent": "design-director",
+   "produces": "design/tokens.json",
+   "depends_on": [
+    "W1"
+   ]
+  },
+  {
+   "id": "W3",
+   "agent": "layout",
+   "produces": "pages/home.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W4",
+   "agent": "layout",
+   "produces": "pages/pricing.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W5",
+   "agent": "layout",
+   "produces": "pages/demo.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W6",
+   "agent": "layout",
+   "produces": "pages/privacy.json",
+   "depends_on": [
+    "W2"
+   ]
+  },
+  {
+   "id": "W7",
+   "agent": "content",
+   "produces": "content/zh-CN.json",
+   "depends_on": [
+    "W3",
+    "W4",
+    "W5",
+    "W6"
+   ]
+  },
+  {
+   "id": "W8",
+   "agent": "content",
+   "produces": "content/en.json",
+   "depends_on": [
+    "W7"
+   ]
+  },
+  {
+   "id": "W9",
+   "agent": "engineer",
+   "produces": "src/",
+   "depends_on": [
+    "W8"
+   ]
+  },
+  {
+   "id": "W10",
+   "agent": "reviewer",
+   "produces": "review/report.json",
+   "depends_on": [
+    "W9"
+   ]
+  }
+ ],
+ "base_url": "https://tally.example.com"
+}

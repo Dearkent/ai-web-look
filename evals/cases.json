@@ -1,0 +1,534 @@
+[
+ {
+  "id": "E01",
+  "card": "L001",
+  "desc": "能发现 Theatre.js 编辑器子包是 AGPL",
+  "cmd": "python3 checks/license_scan.py /home/claude/meta/theatre-js_theatre",
+  "expect": [
+   "packages/studio/LICENSE\tAGPL-3.0",
+   "根目录\tApache-2.0"
+  ]
+ },
+ {
+  "id": "E02",
+  "card": "L001",
+  "desc": "根 LICENSE 只是指向子包时跟随它，不误报（GrapesJS）",
+  "cmd": "python3 checks/license_scan.py /home/claude/meta/GrapesJS_grapesjs",
+  "expect": [
+   "根目录\tBSD（经 packages/core/LICENSE）",
+   "0 个存在比根目录更严格"
+  ]
+ },
+ {
+  "id": "E03",
+  "card": "L008",
+  "desc": "自称开源的 Easyblocks 被识别为 AGPL",
+  "cmd": "python3 checks/license_scan.py /home/claude/meta/DwareLab_easyblocks",
+  "expect": [
+   "根目录\tAGPL-3.0"
+  ]
+ },
+ {
+  "id": "E04",
+  "card": "L002",
+  "desc": "标题数量与表格行数不符时报出",
+  "cmd": "python3 checks/count_check.py evals/fixtures/bad_count.md",
+  "expect": [
+   "写 3 个，表格实有 2 行"
+  ]
+ },
+ {
+  "id": "E05",
+  "card": "L002",
+  "desc": "数量一致时不误报",
+  "cmd": "python3 checks/count_check.py evals/fixtures/good_count.md",
+  "expect": [
+   "全部一致"
+  ]
+ },
+ {
+  "id": "E06",
+  "card": "L004",
+  "desc": "元数据脚本仍使用无检出克隆",
+  "cmd": "grep -c -- '--no-checkout' checks/repo_meta.sh",
+  "expect": [
+   "1"
+  ]
+ },
+ {
+  "id": "E07",
+  "card": "L006",
+  "desc": "学习用的克隆目录里没有安装过依赖",
+  "cmd": "bash checks/no_exec_check.sh /home/claude/meta /home/claude/repos /home/claude/repos2 /home/claude/repos3",
+  "expect": [
+   "只读检查通过"
+  ]
+ },
+ {
+  "id": "E08",
+  "card": "L010",
+  "desc": "MPL-2.0 正文提到 AGPL，也不能被误判成 AGPL",
+  "cmd": "python3 -c \"import sys,subprocess; sys.path.insert(0,'checks'); import license_scan as l; t=subprocess.run(['git','-C','/home/claude/meta/GoogleChrome_lighthouse','show','HEAD:third-party/axe/LICENSE'],capture_output=True,text=True).stdout; print(l.classify(t[:6000]))\"",
+  "expect": [
+   "MPL-2.0"
+  ]
+ },
+ {
+  "id": "E09",
+  "card": "L001",
+  "desc": "Easyblocks 的核心子包是专有许可，比根目录 AGPL 更严格",
+  "cmd": "python3 checks/license_scan.py /home/claude/meta/DwareLab_easyblocks",
+  "expect": [
+   "packages/core/LICENSE.md\t专有",
+   "packages/editor/LICENSE.md\t专有"
+  ]
+ },
+ {
+  "id": "E10",
+  "card": "L011",
+  "desc": "全量扫描 157 个仓库，一个都不能少",
+  "cmd": "bash checks/sweep.sh /home/claude/meta /tmp/sweep_eval.tsv",
+  "expect": [
+   "完整：157/157"
+  ],
+  "timeout": 900
+ },
+ {
+  "id": "E11",
+  "card": "L012",
+  "desc": "读码笔记 bolt.diy 的 13 条代码事实都能在源码里找到",
+  "cmd": "python3 checks/cite_check.py evals/facts/bolt.tsv",
+  "expect": [
+   "13 条通过，0 条对不上"
+  ]
+ },
+ {
+  "id": "E12",
+  "card": "L012",
+  "desc": "读码笔记 Dyad 的 13 条代码事实都能在源码里找到",
+  "cmd": "python3 checks/cite_check.py evals/facts/dyad.tsv",
+  "expect": [
+   "13 条通过，0 条对不上"
+  ]
+ },
+ {
+  "id": "E13",
+  "card": "L013",
+  "desc": "回忆“运行时报错回读”时，产品经验前 3 名里要有 P006",
+  "cmd": "python3 -c \"import brain; cs=[x for x in brain.all_cards() if x['id'].startswith('P')]; print([c.get('id') for s,c in brain.recall('运行时报错回读', 3, quiet=True, cards=cs)])\"",
+  "expect": [
+   "P006"
+  ]
+ },
+ {
+  "id": "E14",
+  "card": "L012",
+  "desc": "读码笔记 VibeSDK 的 13 条代码事实都能在源码里找到",
+  "cmd": "python3 checks/cite_check.py evals/facts/vibesdk.tsv",
+  "expect": [
+   "13 条通过，0 条对不上"
+  ]
+ },
+ {
+  "id": "E15",
+  "card": "L002",
+  "desc": "VibeSDK 工具箱文件数仍为笔记里写的 24 个",
+  "cmd": "ls /home/claude/repos/cloudflare_vibesdk/worker/agents/tools/toolkit | wc -l",
+  "expect": [
+   "24"
+  ]
+ },
+ {
+  "id": "E16",
+  "card": "L014",
+  "desc": "折行注释的真实引用能通过（跨行匹配）",
+  "cmd": "python3 checks/cite_check.py evals/facts/uiuxpromax.tsv",
+  "expect": [
+   "13 条通过，0 条对不上",
+   "（跨行匹配）"
+  ]
+ },
+ {
+  "id": "E17",
+  "card": "L014",
+  "desc": "编造的引用必须被报出，跨行匹配不能放得太宽",
+  "cmd": "python3 checks/cite_check.py evals/fixtures/fake_quote.tsv",
+  "expect": [
+   "0 条通过，1 条对不上"
+  ]
+ },
+ {
+  "id": "E18",
+  "card": "L002",
+  "desc": "UI UX Pro Max 测试文件数仍为笔记里写的 17 个",
+  "cmd": "ls /home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill/src/ui-ux-pro-max/scripts/tests/test_*.py | wc -l",
+  "expect": [
+   "17"
+  ]
+ },
+ {
+  "id": "E19",
+  "card": "P014",
+  "desc": "三个示例（咖啡馆、SaaS、作品集）的图纸全部通过检查",
+  "cmd": "for e in cafe saas portfolio; do python3 -I product/tools/check_blueprints.py product/examples/$e | tail -1; done",
+  "expect": [
+   "错误 0，提醒 0\n图纸检查：错误 0，提醒 0\n图纸检查：错误 0，提醒 0"
+  ],
+  "timeout": 60
+ },
+ {
+  "id": "E20",
+  "card": "L015",
+  "desc": "故意改坏的 33 种图纸（含 3 种提醒级）都必须被抓到",
+  "cmd": "python3 -I -u product/tools/mutation_test.py product/examples/cafe | tail -1",
+  "expect": [
+   "变异测试：33/33 被抓到"
+  ],
+  "timeout": 100
+ },
+ {
+  "id": "E21",
+  "card": "L012",
+  "desc": "图纸参照物的 16 条代码事实仍与仓库一致",
+  "cmd": "python3 checks/cite_check.py evals/facts/blueprints.tsv | tail -1",
+  "expect": [
+   "16 条通过，0 条对不上"
+  ]
+ },
+ {
+  "id": "E22",
+  "card": "P015",
+  "desc": "知识库产品表引用解析结果与笔记一致（384 处：339 / 16 / 29）",
+  "cmd": "python3 -I product/tools/kb_scan.py /home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill/.claude/skills/ui-ux-pro-max/data",
+  "expect": [
+   "产品表引用 384 处：完全解析 339，部分解析 16，完全不能解析 29"
+  ]
+ },
+ {
+  "id": "E23",
+  "card": "P015",
+  "desc": "词表可由知识库原始数据重新生成，且数量与笔记一致",
+  "cmd": "python3 -I product/tools/gen_vocab.py /home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill/.claude/skills/ui-ux-pro-max/data e59ff37 /tmp/vocab-regen && diff -q /tmp/vocab-regen/vocab.schema.json product/schemas/vocab.schema.json && echo 一致",
+  "expect": [
+   "风格 89（可用 80）· 落地页模式 34 · 产品类型 192 · 动效类别 7 · Agent 11",
+   "一致"
+  ]
+ },
+ {
+  "id": "E24",
+  "card": "P016",
+  "desc": "修复守卫模拟：每种停不下来的修复都被刹住（含原始版本基线），正常修复不被误杀，2000 条随机序列全部按时停",
+  "cmd": "python3 -I -u product/tools/fix_guard_sim.py | tail -1",
+  "expect": [
+   "修复守卫模拟：28/28 通过"
+  ],
+  "timeout": 60
+ },
+ {
+  "id": "E25",
+  "card": "P016",
+  "desc": "逐个拆掉守卫的 12 处刹车（含原始版本基线），模拟测试都必须发现",
+  "cmd": "python3 -I -u product/tools/fix_guard_mutation.py | tail -1",
+  "expect": [
+   "守卫反向测试：12/12 被发现"
+  ],
+  "timeout": 300
+ },
+ {
+  "id": "E26",
+  "card": "L012",
+  "desc": "防死循环参照物的 18 条代码事实仍与仓库一致（含无检出克隆）",
+  "cmd": "python3 checks/cite_check.py evals/facts/loopguard.tsv | tail -1",
+  "expect": [
+   "18 条通过，0 条对不上"
+  ],
+  "timeout": 300
+ },
+ {
+  "id": "E27",
+  "card": "L016",
+  "desc": "大脑自己的脚本里没有无界循环、没有不带超时的子进程和网络命令",
+  "cmd": "python3 -I checks/loop_audit.py brain.py checks product/tools bootstrap.sh | tail -1",
+  "expect": [
+   "0 处问题"
+  ]
+ },
+ {
+  "id": "E28",
+  "card": "L016",
+  "desc": "死循环自查能抓住 5 种坏写法（反例）",
+  "cmd": "python3 -I checks/loop_audit.py evals/fixtures/loopy | tail -1",
+  "expect": [
+   "2 个脚本，5 处问题"
+  ]
+ },
+ {
+  "id": "E29",
+  "card": "L016",
+  "desc": "验证门的超时会杀掉整个进程组，卡住的孙子进程不会让它一直等",
+  "cmd": "python3 -c \"import sys,time; sys.path.insert(0,'.'); import brain; t=time.time(); o,_=brain.run_bounded(\\\"bash -c 'sleep 60; echo x' | cat\\\", 2); print('有界', o is None, time.time()-t<15)\"",
+  "expect": [
+   "有界 True True"
+  ],
+  "timeout": 30
+ },
+ {
+  "id": "E30",
+  "card": "P005",
+  "desc": "原型端到端：真实 git 仓库里修好、打转、振荡、越修越坏、越权、写到一半失败、守卫失灵 7 种情况",
+  "cmd": "python3 -I -u product/proto/proto_test.py | tail -1",
+  "expect": [
+   "原型端到端：28/28 通过"
+  ],
+  "timeout": 120
+ },
+ {
+  "id": "E31",
+  "card": "P004",
+  "desc": "逐个拆掉原型的 8 处保护措施，端到端测试都必须发现",
+  "cmd": "python3 -I -u product/proto/proto_mutation.py | tail -1",
+  "expect": [
+   "原型反向测试：8/8 被发现"
+  ],
+  "timeout": 600
+ },
+ {
+  "id": "E32",
+  "card": "P017",
+  "desc": "生成器：导航、面包屑、sitemap、路由都与网站结构一致；缺网址时不生成不合规的 sitemap；所有站内链接和资源都是相对路径（放在任何子目录都能用）",
+  "cmd": "python3 -I -u product/gen/gen_test.py 2>/dev/null | tail -1",
+  "expect": [
+   "生成器测试：16/16 通过"
+  ],
+  "timeout": 60
+ },
+ {
+  "id": "E33",
+  "card": "P018",
+  "desc": "真实浏览器检查能抓住故意做坏的网站里的 10 类问题（第九轮新增“点按区域太小”：样本里的输入框只有 21px 高）",
+  "cmd": "python3 -I product/gen/browser_check.py evals/fixtures/badsite | tail -1",
+  "expect": [
+   "浏览器检查：10 个问题"
+  ],
+  "timeout": 120
+ },
+ {
+  "id": "E34",
+  "card": "P018",
+  "desc": "三个示例由图纸生成后，在真实浏览器里 0 问题",
+  "cmd": "for e in cafe saas portfolio; do python3 -I product/gen/generate.py product/examples/$e /tmp/eval-site-$e >/dev/null && python3 -I product/gen/browser_check.py /tmp/eval-site-$e | tail -1; done",
+  "expect": [
+   "浏览器检查：0 个问题\n浏览器检查：0 个问题\n浏览器检查：0 个问题"
+  ],
+  "timeout": 240
+ },
+ {
+  "id": "E35",
+  "card": "P019",
+  "desc": "复读检测：真复读在流式中途拦下，相似但不同的正常输出不误伤",
+  "cmd": "python3 -I -u product/tools/repeat_guard_test.py | tail -1",
+  "expect": [
+   "复读检测：9/9 通过"
+  ],
+  "timeout": 60
+ },
+ {
+  "id": "E36",
+  "card": "P019",
+  "desc": "模型修复者：解析、格式错误回告、无限流被中断、网络中断不崩、没有密钥明确报错",
+  "cmd": "python3 -I -u product/proto/model_fixer_test.py | tail -1",
+  "expect": [
+   "模型修复者：13/13 通过"
+  ],
+  "timeout": 60
+ },
+ {
+  "id": "E37",
+  "card": "P018",
+  "desc": "修复回路 × 真实构建 × 真实 Chrome：修好、模型接口、模型复读、改坏图纸再改回",
+  "cmd": "python3 -I -u product/proto/real_loop_test.py | tail -1",
+  "expect": [
+   "真实构建回路：10/10 通过"
+  ],
+  "timeout": 400
+ },
+ {
+  "id": "E38",
+  "card": "L015",
+  "desc": "检查器里每个错误码都有一条反例",
+  "cmd": "python3 -I checks/code_coverage.py product/tools/check_blueprints.py product/tools/mutation_test.py",
+  "expect": [
+   "错误码反例覆盖：30/30"
+  ]
+ },
+ {
+  "id": "E39",
+  "card": "P020",
+  "desc": "文字建站评测：14 句理解全对、14 个整站图纸 0 错误且真实浏览器 0 问题；另报告留出集",
+  "cmd": "python3 -I -u product/text2site/t2s_eval.py 2>/dev/null | tail -1",
+  "expect": [
+   "文字建站评测：理解 14/14，留出 6/6，生成 14/14"
+  ],
+  "timeout": 600
+ },
+ {
+  "id": "E40",
+  "card": "P021",
+  "desc": "风格可选：三个候选观感不同、点名优先、排除生效；10 种风格 × 6 个行业对比度达标；文案不编造评价和数据",
+  "cmd": "python3 -I -u product/text2site/styles_test.py | tail -1",
+  "expect": [
+   "风格与文案：10/10 通过"
+  ],
+  "timeout": 120
+ },
+ {
+  "id": "E41",
+  "card": "L019",
+  "desc": "自己的 Python 文件不与标准库重名（含反例）",
+  "cmd": "python3 -I checks/name_check.py brain.py checks product | tail -1; python3 -I checks/name_check.py evals/fixtures/shadow | tail -1",
+  "expect": [
+   "文件名自查：0 个与标准库重名\n文件名自查：1 个与标准库重名"
+  ]
+ },
+ {
+  "id": "E42",
+  "card": "P022",
+  "desc": "工作台端到端：真实 Chrome 走完 输入 → 回答问题 → 选风格 → 看整站；选择回流让同行业推荐排第一；越权路径、非法风格、超长输入、过大请求都被拒；页面无任何加载错误；喂养（话 + 网页文件）、撤回、用到的知识标注；长英文店名撑破手机屏幕 → 自动修好 → 后台对照实验推广 → 新行业提前避开；界面：生成后前三步收起、可展开，标签页可用方向键切换",
+  "cmd": "python3 -I -u product/app/app_test.py 2>/dev/null | tail -1",
+  "expect": [
+   "工作台端到端：75/75 通过"
+  ],
+  "timeout": 600
+ },
+ {
+  "id": "E43",
+  "card": "L018",
+  "desc": "浏览器检查能发现“首屏内容看不见”（例如出现动画没触发、内容一直透明）",
+  "cmd": "python3 -I product/gen/browser_check.py evals/fixtures/badsite2 | tail -2",
+  "expect": [
+   "首屏内容看不见",
+   "浏览器检查：1 个问题"
+  ],
+  "timeout": 120
+ },
+ {
+  "id": "E44",
+  "card": "P024",
+  "desc": "喂养与自我纠错：学说法/纠正/参考网站，拒绝全局指令、代词、冲突；网页文字不保存、脚本不生效；撤回；复核正确归因；自动修好撑破屏幕；撤回有害或无效修补；失手停用；对照实验推广并提前避开",
+  "cmd": "python3 -I product/text2site/selflearn_test.py 2>/dev/null | tail -1",
+  "expect": [
+   "喂养与自我纠错：36/36 通过"
+  ],
+  "timeout": 600
+ },
+ {
+  "id": "E45",
+  "card": "P023",
+  "desc": "注入样本：喂一句全局指令和一个带恶意脚本的网页，什么指令都不生效，网页文字一个字都不保存",
+  "cmd": "python3 -I checks/feed_injection.py",
+  "expect": [
+   "注入样本：4/4 通过"
+  ],
+  "timeout": 120
+ },
+ {
+  "id": "E46",
+  "card": "L022",
+  "desc": "复核冲突归因：单独不成立的停用；和老知识矛盾的停用较新的那条；好知识不被拖下水",
+  "cmd": "python3 -I product/text2site/selflearn_test.py --no-browser 2>/dev/null | grep -c '^通过  复核'",
+  "expect": [
+   "3"
+  ],
+  "timeout": 300
+ },
+ {
+  "id": "E47",
+  "card": "L021",
+  "desc": "举一反十先做对照实验：别的两个行业 × 风格里不加修补问题出现、加了消失，才推广；推广后没见过的行业提前避开",
+  "cmd": "python3 -I product/text2site/selflearn_test.py 2>/dev/null | grep -c '^通过  举一反十'",
+  "expect": [
+   "2"
+  ],
+  "timeout": 600
+ },
+ {
+  "id": "E48",
+  "card": "P025",
+  "desc": "对话式修改：一句话拆成颜色/加去页面/换风格/改名/撤销；做不出来的不假装；看不懂的原样交回；不改原简报；目标必需的页面不删；行业层面的修改给出“教给它”的句子",
+  "cmd": "python3 -I product/text2site/edit_test.py | tail -1",
+  "expect": [
+   "对话式修改：26/26 通过"
+  ],
+  "timeout": 300
+ },
+ {
+  "id": "E49",
+  "card": "P026",
+  "desc": "视觉审查：能抓住文字对比度不够（含白底白字）、点按区域太小、字太小；指向 index.html 的链接不误报死链",
+  "cmd": "python3 -I product/gen/browser_check.py evals/fixtures/badsite3 2>/dev/null | grep -c '对比度不够\\|点按区域太小\\|字太小\\|检查：3 个问题'",
+  "expect": [
+   "4"
+  ],
+  "timeout": 120
+ },
+ {
+  "id": "E50",
+  "card": "P027",
+  "desc": "一条命令启动：自检三项、真的启动并打印地址、页面带令牌、没令牌被拒；没有 Chrome 照样生成并说明；导出时链接改成 index.html、带中文说明",
+  "cmd": "python3 -I product/app/start_test.py 2>/dev/null | tail -1",
+  "expect": [
+   "一键启动与导出：8/8 通过"
+  ],
+  "timeout": 300
+ },
+ {
+  "id": "E51",
+  "card": "P028",
+  "desc": "模型接入：两种协议的请求格式；密钥错/没填/限流/服务端错/超时/跳转/非JSON/超大/空回复都有明确处理且重试有限；错误里抹掉密钥；密钥文件 600、对外只露末四位；地址检查；按用途配置",
+  "cmd": "python3 -I product/models/models_test.py | tail -1",
+  "expect": [
+   "模型接入：35/35 通过"
+  ],
+  "timeout": 120
+ },
+ {
+  "id": "E52",
+  "card": "P029",
+  "desc": "模型版理解与文案：只收封闭字段；编的名字、清单外的值、注入都过不了；规则把握高时以规则为准；文案逐处查字数、数字、极限词、评价、网址，不合格只退那一处；出错全部退回规则；套到网站上图纸 0 错误",
+  "cmd": "python3 -I product/text2site/llm_test.py 2>/dev/null | tail -1",
+  "expect": [
+   "模型版理解与文案：21/21 通过"
+  ],
+  "timeout": 300
+ },
+ {
+  "id": "E53",
+  "card": "P030",
+  "desc": "上线前体检：生成的网站 SEO/性能/无障碍 100、合规只差待填；没填域名和备案号时列为上线时再做；做坏的样本里 12 类问题全部抓到",
+  "cmd": "python3 -I product/gen/site_audit_test.py 2>/dev/null | tail -1",
+  "expect": [
+   "上线前体检：17/17 通过"
+  ],
+  "timeout": 300
+ },
+ {
+  "id": "E54",
+  "card": "L025",
+  "desc": "旧版 Python 兼容：用本机找得到的 3.9/3.10/3.11 解析所有代码，函数签名不许裸用 X | Y（找不到旧解释器时只做第二项）",
+  "cmd": "python3 -I checks/py_compat.py | tail -1",
+  "expect": [
+   "0 个问题"
+  ],
+  "timeout": 180
+ },
+ {
+  "id": "E55",
+  "card": "P031",
+  "desc": "发布测试：从压缩包、全新虚拟环境开始：自检报缺依赖 → 自动装 → 没装 Playwright 也能生成 → 装上后完整流程带浏览器检查 → 导出；只写该写的地方；60 句压力测试不崩",
+  "cmd": "cd .. && rm -f /tmp/aisite-release.zip && zip -qr /tmp/aisite-release.zip brain -x '*/__pycache__/*' -x 'brain/runs/*' -x 'brain/knowledge/*' && python3 -I brain/product/release_test.py /tmp/aisite-release.zip python3 2>/dev/null | tail -1",
+  "expect": [
+   "发布测试：11/11 通过"
+  ],
+  "timeout": 1200
+ }
+]
