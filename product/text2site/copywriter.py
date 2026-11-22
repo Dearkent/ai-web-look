@@ -84,8 +84,15 @@ def write_copy(brief: dict, wires: dict) -> dict:
                 c = {"heading": "怎么开始", "items": [{"title": "1. 看看我们", "body": "了解提供什么。"}, {"title": "2. 联系或预约", "body": "选个方便的时间。"},
                                                     {"title": "3. 到店或开工", "body": "剩下的交给我们。"}]}
             elif t == "faq":
-                qa = [(q["question"], "默认：" + q["default_if_unanswered"]) for q in brief.get("open_questions", [])]
-                qa += [("怎么联系你们？", "页面上方有联系方式和表单。"), ("营业时间？", "（待填：营业时间）")]
+                # 给访客看的问题（D31：以前把建站时问用户的问题当成了网站上的常见问题）。答案不能替店家编，留“待填”
+                qa = []
+                if "booking" in feats:
+                    qa += [("要提前多久预约？", "（待填：例如至少提前一天）"), ("可以改约或取消吗？", "（待填：改约和取消的规则）")]
+                if any(g["kind"] == "sell" for g in brief["goals"]):
+                    qa += [("怎么付款？", "（待填：支持的付款方式）"), ("多久能收到？", "（待填：发货或交付时间）")]
+                qa += [("营业时间？", "（待填：营业时间）"),
+                       ("在哪里？怎么过来？", "“到店”页有地址和地图。" if "visit" in wires else "（待填：地址和交通）"),
+                       ("怎么联系你们？", "页面上方有联系方式和表单。" if ("contact" in wires or "booking" in wires) else "（待填：电话或邮箱）")]
                 c = {"heading": "常见问题", "items": [{"title": a, "body": b} for a, b in qa[:slots.get("items", {}).get("count", 5)]]}
             elif t == "cta":
                 c = {"heading": CTA.get(p0, "了解更多")}

@@ -22,7 +22,7 @@ for ex in ("cafe", "saas", "portfolio"):
         header = [p for p in site["pages"] if p["nav"]["header"]]
         for f in written:
             html = open(os.path.join(out, f), encoding="utf-8").read()
-            nav = re.search(r'<nav aria-label="主导航">(.*?)</nav>', html).group(1)
+            nav = re.search(r'<nav[^>]*aria-label="主导航">(.*?)</nav>', html).group(1)
             if len(re.findall(r"<a ", nav)) != len(header):
                 expect(f"{ex}：{f} 的主导航条目数与网站结构一致", False, nav)
                 break

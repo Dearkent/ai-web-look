@@ -244,6 +244,8 @@ try:
                and f"第 {v_before + 2} 版" in pg.inner_text("#checks"), pg.inner_text("#imgstatus"))
         pg.locator("#imglist li").first.get_by_role("button", name="用回插图").click()
         pg.wait_for_function("document.querySelector('#imgstatus').innerText.includes('换回了示意插图')", timeout=180000)
+        # 列表是在提示出现之后异步刷新的（先显示结果、再拉列表），等列表刷新完再看
+        pg.wait_for_function("document.querySelector('#imglist li') && document.querySelector('#imglist li').innerText.includes('示意插图')", timeout=30000)
         expect("图片（界面）：可以换回示意插图", "示意插图" in pg.locator("#imglist li").first.inner_text())
         pg.click("#editundo")
         pg.wait_for_function("document.querySelector('#editresult').innerText.includes('回到了上一版')")

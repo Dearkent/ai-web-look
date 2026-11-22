@@ -420,6 +420,11 @@
   "kind": "教训"
  },
  {
+  "source": "D31",
+  "target": "P034",
+  "kind": "教训"
+ },
+ {
   "source": "E01",
   "target": "L001",
   "kind": "验证"
@@ -697,6 +702,11 @@
  {
   "source": "E56",
   "target": "P033",
+  "kind": "验证"
+ },
+ {
+  "source": "E57",
+  "target": "P034",
   "kind": "验证"
  }
 ]

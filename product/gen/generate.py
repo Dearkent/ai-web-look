@@ -91,6 +91,31 @@ section{padding:40px 20px}
 .v-grid-4 .grid{grid-template-columns:repeat(4,1fr)}
 .has-media.v-split-left>.wrap,.has-media.v-split-right>.wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
 .v-split-left>.wrap>.media{order:-1}
+/* 参考评审（evals/facts/ui_refs.tsv）学来的通用手法，都是自己重写的 */
+.skip{position:absolute;left:8px;top:-60px;z-index:10;padding:10px 14px;background:var(--color-background,#fff);color:var(--color-link,#0b57d0);border:2px solid currentColor;border-radius:6px}
+.skip:focus{top:8px}
+:focus-visible{outline:3px solid var(--color-link,var(--color-primary,#0b57d0));outline-offset:2px}
+main:focus{outline:none}
+h1,h2,h3{text-wrap:balance}p,li{text-wrap:pretty}
+.text>p,.text>div>p{max-width:40em}
+.menu-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px;margin-left:auto;font:inherit;background:none;color:inherit;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-md,8px);cursor:pointer}
+.menu-btn[hidden]{display:none}
+.menu-btn i{display:block;width:16px;height:2px;background:currentColor;box-shadow:0 -5px 0 currentColor,0 5px 0 currentColor}
+@media (max-width:640px){header.site.js-menu nav{display:none;width:100%}header.site.js-menu[data-open] nav{display:flex;flex-direction:column}
+  header.site.js-menu[data-open] nav a{padding:12px 0;border-top:1px solid var(--color-border,#ddd);margin:0}}
+.qa-list{margin:16px 0 0;max-width:46em}
+.qa{border-bottom:1px solid var(--color-border,#ddd)}.qa:first-child{border-top:1px solid var(--color-border,#ddd)}
+.qa summary{cursor:pointer;padding:14px 0;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:16px;min-height:44px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::after{content:"+";font-weight:400;font-size:1.3em;line-height:1}.qa[open] summary::after{content:"−"}
+.qa p{margin:0 0 16px}
+.t-steps .grid{counter-reset:step}.t-steps .card::before{counter-increment:step;content:counter(step);display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;margin-bottom:8px;border-radius:50%;background:var(--color-primary,#0b57d0);color:var(--color-on-primary,#fff);font-weight:700}
+footer.site{display:grid;gap:16px 40px;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr)}
+footer.site .about strong{display:block;font-size:16px;margin-bottom:4px}footer.site .about p{margin:0;max-width:28em}
+footer.site nav{display:flex;flex-wrap:wrap;column-gap:12px;align-content:flex-start}
+footer.site .copy{grid-column:1/-1;margin:0;font-size:13px;opacity:.8}
+@media (max-width:640px){footer.site{grid-template-columns:1fr}}
 .media{margin:0}.ph{min-height:260px;padding:16px;text-align:center;font-size:14px;opacity:.85}
 .media img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius-md,8px)}
 .card img.thumb{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius-md,8px) - 2px);margin:0 0 12px}
@@ -128,6 +153,15 @@ body.fam-glass{background:linear-gradient(135deg,var(--color-band),var(--color-b
 """
 
 MOTION_JS = """(function(){
+  // 手机菜单（参考 W3C ARIA 的“折叠”模式、GOV.UK 的做法）：没有脚本时菜单照常全部显示；有脚本、屏幕窄时收进“菜单”按钮
+  var hd=document.querySelector('header.site[data-menu]'); if(!hd||!window.matchMedia){return;}
+  var btn=hd.querySelector('.menu-btn'), mq=matchMedia('(max-width: 640px)');
+  function sync(){ if(mq.matches){hd.classList.add('js-menu');btn.hidden=false;} else {hd.classList.remove('js-menu');hd.removeAttribute('data-open');btn.hidden=true;btn.setAttribute('aria-expanded','false');} }
+  btn.addEventListener('click',function(){var o=btn.getAttribute('aria-expanded')!=='true';btn.setAttribute('aria-expanded',String(o));if(o){hd.setAttribute('data-open','');}else{hd.removeAttribute('data-open');}});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&hd.hasAttribute('data-open')){btn.click();btn.focus();}});
+  if(mq.addEventListener){mq.addEventListener('change',sync);} sync();
+})();
+(function(){
   // 动效只是锦上添花：首屏内容从不隐藏；出现动画的信号收不到时，1.5 秒后全部显示（内容不能依赖动画才看得见）
   if(!window.matchMedia||matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window)){return;}
   var h=window.innerHeight||800, els=[].slice.call(document.querySelectorAll('[data-motion]')).filter(function(el){
@@ -228,6 +262,10 @@ def render_slot(name, slot, val=None, sectype="", labels=None, key="", media=Non
         return f'<figure class="media"><div class="ph"{tip}><span>{E(val or "嵌入内容待配置：" + name)}</span></div></figure>'
     if kind == "list":
         items = val if isinstance(val, list) else [{"title": f"条目 {i + 1}（待填写）", "body": ""} for i in range(slot.get("count", 3))]
+        if sectype == "faq":  # 常见问题：原生折叠（不用脚本，键盘和读屏软件都能用）
+            return '<div class="qa-list">' + "".join(
+                f'<details class="qa"><summary>{E(str(it.get("title", "")))}</summary><p>{E(str(it.get("body", "")))}</p></details>'
+                for it in items) + "</div>"
         thumb = (lambda i: picture(f"{key}/{i}", media, sizes="(max-width: 767px) 100vw, 33vw", cls="thumb", art_size=(600, 450))) \
             if slot.get("item_image") else (lambda i: "")
         cells = "".join(f'<li class="card">{thumb(i)}<h3>{E(str(it.get("title", "")))}</h3>'
@@ -408,6 +446,11 @@ def generate(project, out):
                                                 art.motif_at(motif, int(key.rsplit("/", 1)[1]) if key.rsplit("/", 1)[-1].isdigit() else None), key, w, h)}
     body_cls = f' class="fam-{E(fam)}"' if fam else ""
     written = []
+    menu_attr = ' data-menu=""' if len(header) > 4 else ""  # 导航超过 4 项，手机上收进“菜单”按钮
+    import datetime
+    year = datetime.date.today().year
+    home_desc = next((p.get("seo", {}).get("description", "") for p in site["pages"] if p["path"] == "/"), "")
+    about_html = f'<p class="muted">{E(home_desc.split("：", 1)[-1][:60])}</p>' if home_desc else ""
     for p in site["pages"]:
         wire = load(os.path.join(project, p["wireframe"]))
         crumbs, par, seen = [], p.get("parent"), {p["id"]}
@@ -443,9 +486,13 @@ def generate(project, out):
                f'<link rel="stylesheet" href="{asset("styles.css", here)}">'
                + (f'<link rel="stylesheet" href="{asset("site.css", here)}">' if has_css else "")
                + f'</head><body{body_cls}>'
-               f'<header class="site"><a href="{E(href("/", here=here))}" class="brand"><strong>{E(name)}</strong></a><nav aria-label="主导航">{nav(header)}</nav></header>'
-               f'{crumb_html}<main>{sections}</main>'
-               f'<footer class="site"><nav aria-label="页脚导航">{nav(footer)}</nav></footer>'
+               f'<a class="skip" href="#main">跳到正文</a>'
+               f'<header class="site"{menu_attr}><a href="{E(href("/", here=here))}" class="brand"><strong>{E(name)}</strong></a>'
+               + (f'<button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" hidden><i aria-hidden="true"></i>菜单</button>' if menu_attr else "")
+               + f'<nav id="site-nav" aria-label="主导航">{nav(header)}</nav></header>'
+               f'{crumb_html}<main id="main" tabindex="-1">{sections}</main>'
+               f'<footer class="site"><div class="about"><strong>{E(name)}</strong>{about_html}</div>'
+               f'<nav aria-label="页脚导航">{nav(footer)}</nav><p class="copy">© {year} {E(name)}</p></footer>'
                f'<script src="{asset("motion.js", here)}" defer></script>'
                + (f'<script src="{asset("site.js", here)}" defer></script>' if has_js else "")
                + '</body></html>\n')

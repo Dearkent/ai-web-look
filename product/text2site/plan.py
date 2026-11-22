@@ -200,7 +200,7 @@ def plan(brief: dict, style_id: str | None = None) -> dict:
         elif t == "newsletter":
             continue  # 第一版没有邮件订阅功能，不放空壳
         elif t == "faq":
-            secs.append(_sec(sid, "faq", {"items": {"kind": "list", "count": 5}}, **({"feature": fid("faq")} if fid("faq") else {})))
+            secs.append(_sec(sid, "faq", {"heading": {"kind": "text", "max_chars": 12}, "items": {"kind": "list", "count": 5}}, **({"feature": fid("faq")} if fid("faq") else {})))
         elif t in ("features", "value-props", "steps", "stats", "team", "logos", "testimonials", "pricing", "gallery", "comparison", "content"):
             secs.append(_sec(sid, t, {"heading": {"kind": "text", "max_chars": 20}, "items": {"kind": "list", "count": 3}},
                              motion=hover if t in ("features", "value-props") else None))
@@ -211,7 +211,7 @@ def plan(brief: dict, style_id: str | None = None) -> dict:
                               [{"id": "more", "label": "查看全部", "target": {"page": catalog_page}}],
                               data={"menu": "menu-item", "products": "product", "services": "service"}[catalog_page]))
     if "faq" in feats and not any(s["type"] == "faq" for s in secs):
-        secs.append(_sec("faq", "faq", {"items": {"kind": "list", "count": 5}}, feature=fid("faq")))
+        secs.append(_sec("faq", "faq", {"heading": {"kind": "text", "max_chars": 12}, "items": {"kind": "list", "count": 5}}, feature=fid("faq")))
     if not any(s["type"] == "cta" for s in secs) and hero_acts:
         secs.append(_sec("cta", "cta", {"heading": {"kind": "text"}}, [dict(hero_acts[0], id="cta-go")]))
     home_feats = [fid("faq")] if any(s.get("feature") == fid("faq") for s in secs) and fid("faq") else []

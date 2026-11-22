@@ -1,0 +1,34 @@
+# 30 个开源 UI 参考评审（2026-11-23）。只读公开文档、演示站和第三方统计页，没有克隆或运行任何代码。
+# 星数注明来源；没在本次查到的写“未核实”（GitHub 页面直接读取需要用户批准，用户当时不在）。
+# 处理：学 = 学它的手法，用自己的代码在生成器里重新实现；只看 = 许可证有限制（GPL、附加条款），只看公开演示里的设计思路，不看代码；参考 = 规范/文档类，学原则。
+编号	仓库	网址	类别	星数（来源）	许可证	处理	值得学的手法	用到我们哪里
+R01	markmead/hyperui	https://github.com/markmead/hyperui	营销区块合集	约 1.19 万（adminlte 2026-09）	MIT	学	区块按用途分类（首屏/特色/CTA/页脚/FAQ）；纯 HTML 无需构建；每个区块都有手机版	区块类型清单对照；页脚分栏（图标徽章没做：不知道每张卡片讲什么时，图标只是装饰）
+R02	themesberg/flowbite	https://github.com/themesberg/flowbite	组件库	约 9.2k（star-history 2026-05）	MIT（名字和标志是商标）	学	区块级“blocks”；暗色模式成对配色；交互组件少量 JS	FAQ 折叠；不引入它的 JS
+R03	htmlstreamofficial/preline	https://github.com/htmlstreamofficial/preline	组件库	约 6.4k（GitHub 页面摘要）	MIT + Preline Fair Use License（附加限制；Pro 条款明确限制“生成器”类用途）	只看	可访问性文档写得细	不学代码：我们就是生成器，附加条款风险大
+R04	merakiui/merakiui	https://github.com/merakiui/merakiui	营销区块合集	未核实	MIT（第三方页面）	学	简洁的首屏和页脚、RTL 支持	页脚品牌简介+导航分栏
+R05	TailGrids/tailwind-ui-components	https://github.com/TailGrids/tailwind-ui-components	组件与区块	约 1k（TailGrids 组织页）	核心版免费开源（具体许可证未核实）	只看	600+ 区块的分类方式	只参考分类，不看代码（许可证未核实）
+R06	saadeghi/daisyui	https://github.com/saadeghi/daisyui	主题化组件库	约 4.1 万（daisyui.com 2026-06）	MIT	学	语义化主题变量（主色/次色/强调/底色/内容色成对出现）；零依赖	我们的令牌已是成对色（主色+主色上的字）；验证了这条路对
+R07	magicuidesign/magicui	https://github.com/magicuidesign/magicui	动效组件	约 2.1 万（star-history 2026-06）	MIT	学（只学克制）	落地页动效集中在一个地方	只保留一处入场动效，不加满屏特效（和我们的动效档位一致）
+R08	shadcn-ui/ui	https://github.com/shadcn-ui/ui	组件分发	约 11.8 万（daisyui.com 对比页）	MIT	学	“代码交给用户、不锁定依赖”；组件可访问性默认做好	导出的网站不依赖任何外部库（已做到）
+R09	arthelokyo/astrowind（原 onwidget/astrowind）	https://github.com/arthelokyo/astrowind	整站模板	约 5.4k（adminlte 2026-09）	MIT	学	零 JS 静态站；内容和区块分离；左右交替的图文区块	关于页图文分栏；以后的“图文交替”版式
+R10	cruip/open-react-template	https://github.com/cruip/open-react-template	落地页模板	约 4.6k（adminlte）	GPL	只看	首屏信息层级清楚	只看公开演示，不看代码（GPL）
+R11	leoMirandaa/shadcn-landing-page	https://github.com/leoMirandaa/shadcn-landing-page	落地页模板	约 2.0k（GitHub 页面摘要）	MIT	学	手机侧边菜单、区块齐全的单页结构	手机导航折叠
+R12	mearashadowfax/ScrewFast	https://github.com/mearashadowfax/ScrewFast	整站模板	约 1.4k（Vercel 模板页）	MIT	学	站点级常量集中配置；结构化数据、sitemap、robots 一起管	SEO 已有；以后加 JSON-LD
+R13	satnaing/astro-paper	https://github.com/satnaing/astro-paper	博客模板	2k+（ecosyste.ms 2024）	MIT	学	可访问性优先：跳到正文链接、键盘可用、对比度	“跳到正文”链接
+R14	surjithctly/astroship	https://github.com/surjithctly/astroship	落地页模板	约 1.76k（ecosyste.ms）	GPL-3.0	只看	初创落地页结构	不看代码（GPL）
+R15	themesberg/landwind	https://github.com/themesberg/landwind	落地页模板	约 958（ecosyste.ms）	MIT	学	首屏→特色→评价→价格→FAQ→页脚前 CTA 的标准顺序	区块顺序对照；评价和数字我们坚持不编，留待填
+R16	creativetimofficial/notus-nextjs	https://github.com/creativetimofficial/notus-nextjs	UI 套件	未核实	MIT	参考	展示页与后台共用一套视觉	以后做账号后台（F3）时参考
+R17	StartBootstrap/startbootstrap-agency	https://github.com/StartBootstrap/startbootstrap-agency	一页式模板	未核实（老牌）	MIT	学	一页式：服务、作品、团队、联系；锚点导航	单页小店的锚点导航思路
+R18	tailwindtoolbox/Landing-Page	https://github.com/tailwindtoolbox/Landing-Page	落地页模板	约 1.36k（ecosyste.ms）	MIT	参考	单文件即可上线	和我们“压缩包双击就能看”一致
+R19	picocss/pico	https://github.com/picocss/pico	无类名 CSS	约 1.68 万（star-history 2026-08）	MIT	学	只靠语义标签就好看；details/summary 折叠；正文限宽	FAQ 用原生折叠；正文行宽限制
+R20	argyleink/open-props	https://github.com/argyleink/open-props	设计令牌	约 5.1k（作者主页）	MIT	学	一套变量管尺寸、缓动、圆角、阴影	我们的令牌已覆盖；补“流式字号”思路
+R21	alphagov/govuk-frontend	https://github.com/alphagov/govuk-frontend	政府设计系统	约 1.4k（GitHub 页面摘要）	MIT	学	跳到正文；焦点样式醒目；不用 JS 也能用；表单错误写清楚	跳到正文、焦点样式、手机导航不依赖脚本
+R22	uswds/uswds	https://github.com/uswds/uswds	政府设计系统	未核实	以官方 LICENSE 为准（未核实）	参考	内容先行、可访问性检查清单	体检清单对照
+R23	carbon-design-system/carbon	https://github.com/carbon-design-system/carbon	企业设计系统	未核实	Apache-2.0（未在本次核实）	参考	2x 网格、间距阶梯	间距阶梯对照
+R24	primer/css	https://github.com/primer/css	GitHub 设计系统	未核实	MIT（未在本次核实）	参考	功能色命名（前景/背景/边框成组）	令牌命名对照
+R25	radix-ui/primitives	https://github.com/radix-ui/primitives	无样式可访问组件	约 1.7–1.8 万（bestofjs / stackshare）	MIT	学	交互组件的键盘与读屏行为	折叠、菜单的键盘行为
+R26	ibelick/motion-primitives	https://github.com/ibelick/motion-primitives	动效组件	约 6.5k（osrepos 2026-10）	MIT	参考	动效只做强调	和 R07 同一结论
+R27	twbs/bootstrap	https://github.com/twbs/bootstrap	老牌框架	未核实（十几万量级）	MIT（未在本次核实）	参考	响应式断点、导航折叠的通用做法	断点对照
+R28	jgthms/bulma	https://github.com/jgthms/bulma	CSS 框架	未核实	MIT（未在本次核实）	参考	纯 CSS、无 JS 的组件	不依赖脚本
+R29	ant-design/ant-design	https://github.com/ant-design/ant-design	企业组件库	未核实	MIT（未在本次核实）	参考	中文排版细节（字号、行高、中英文间距）	中文正文行高、字号阶梯对照
+R30	w3c/aria-practices	https://github.com/w3c/aria-practices	无障碍模式指南	未核实	W3C 软件与文档许可（未在本次核实）	学	折叠（disclosure）、菜单按钮的标准写法	FAQ 折叠和手机菜单按这里的模式做
