@@ -124,7 +124,7 @@ def _sig(xs) -> str:
 
 
 def run(brief: dict, style_id: str, out: str, run_browser: bool = True, learn: bool = True, use_memory: bool = True,
-        copy_overlay: dict | None = None, tweaks: dict | None = None) -> dict:
+        copy_overlay: dict | None = None, tweaks: dict | None = None, photos: dict | None = None) -> dict:
     """带自我纠错的构建。返回最后一版（或报错最少的一版）的构建结果，外加 "selffix" 报告。"""
     t0 = time.time()
     pre = prevent(brief, style_id) if use_memory else []
@@ -132,7 +132,7 @@ def run(brief: dict, style_id: str, out: str, run_browser: bool = True, learn: b
     guard = FixGuard(Policy(max_attempts=4, max_seconds=240))
     rounds, unknown_all, credited, reverted = [], [], {}, []
     detail = {}
-    r = build_one(brief, style_id, os.path.join(out, "r0"), run_browser, fixes, detail, copy_overlay, tweaks)
+    r = build_one(brief, style_id, os.path.join(out, "r0"), run_browser, fixes, detail, copy_overlay, tweaks, photos)
     problems = r["blueprint_errors"] + r["browser_problems"]
     rounds.append({"round": 0, "fixes": list(fixes), "problems": problems})
     guard.baseline(problems, snapshot="r0", code_state=_sig(fixes))
@@ -151,7 +151,7 @@ def run(brief: dict, style_id: str, out: str, run_browser: bool = True, learn: b
         before = {category(p) for p in problems}
         cand = fixes + add
         prev_detail, detail = detail, {}
-        r2 = build_one(brief, style_id, os.path.join(out, f"r{n}"), run_browser, cand, detail, copy_overlay, tweaks)
+        r2 = build_one(brief, style_id, os.path.join(out, f"r{n}"), run_browser, cand, detail, copy_overlay, tweaks, photos)
         p2 = r2["blueprint_errors"] + r2["browser_problems"]
         after = {category(p) for p in p2}
         rounds.append({"round": n, "fixes": list(cand), "added": add, "problems": p2})

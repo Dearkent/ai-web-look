@@ -80,7 +80,8 @@ def main(pkg: str, base_py: str):
     expect("包里没有密钥文件、没有缓存", not any(n.endswith("models.json") or "__pycache__" in n for n in names))
     ver = subprocess.run([py, "-c", "import sys;print(sys.version.split()[0])"], capture_output=True, text=True).stdout.strip()
     r = subprocess.run([py, "-I", os.path.join(brain, "product/app/start.py"), "--check"], capture_output=True, text=True, env=env, timeout=60)
-    expect(f"干净的 Python {ver}：自检报出缺 jsonschema，给出带引号、能直接复制的安装命令", r.returncode == 2 and "'jsonschema>=4.18'" in r.stdout, r.stdout)
+    expect(f"干净的 Python {ver}：自检报出缺 jsonschema、Pillow，给出带引号、能直接复制的安装命令",
+           r.returncode == 2 and "'jsonschema>=4.18'" in r.stdout and "'Pillow>=10'" in r.stdout, r.stdout)
 
     # 第一次启动：只有 --setup 自动装的 jsonschema，没装 Playwright → 照样能生成，并说明跳过了浏览器检查
     p, url, log = start(py, brain, env, root)
@@ -104,6 +105,16 @@ def main(pkg: str, base_py: str):
         pv = call("/api/preview", {"session": v["session"]})
         c = call("/api/choose", {"session": v["session"], "style": v["options"][0]["id"]})
         e = call("/api/edit", {"session": v["session"], "text": "按钮换成绿色，字大一点，标题改成 下班后，来巷口坐坐"})
+        import base64
+        import io as _io
+        from PIL import Image as _Img  # 测试脚本自己的 Python 里的 Pillow，只用来造一张照片
+        _b = _io.BytesIO()
+        _Img.new("RGB", (1400, 1000), (120, 80, 40)).save(_b, "JPEG")
+        slots = call("/api/images", {"session": v["session"]})["slots"]
+        ph = call("/api/image/upload", {"session": v["session"], "key": slots[0]["key"], "data": base64.b64encode(_b.getvalue()).decode(),
+                                        "alt": "店门口"})
+        expect("新环境里换照片：自动装的 Pillow 能处理照片，出新版本、检查无问题",
+               not ph["edit"]["kept"] and ph["version"] == 3 and not ph["browser_problems"], (ph.get("edit"), ph.get("browser_problems")))
         with urllib.request.urlopen(url.rstrip("/") + f"/api/export?session={v['session']}&token={token}", timeout=60) as resp:
             zbytes = resp.read()
         expect("新环境里走完：一句话 → 三个预览 → 选定 → 对话修改 → 导出",

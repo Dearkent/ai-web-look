@@ -425,5 +425,19 @@
   "status": "done",
   "done_at": "2026-11-23T00:55+08:00",
   "note": "Dearkent/ai-web-look（公开，用户确认）；推送前扫过密钥；.gitignore 排除 models.json/.env/压缩包"
+ },
+ {
+  "id": "T62",
+  "title": "C9 图片：示意插图、照片处理、工作台换图、图片检查",
+  "status": "done",
+  "done_at": "2026-11-23T01:50+08:00",
+  "note": "images_test 26/26，工作台 85/85，发布测试 12/12，验证门 38/38；缺陷 D30，经验 P033"
+ },
+ {
+  "id": "T63",
+  "title": "找 30 个开源成熟 UI 参考：评审价值，学到的手法在生成器里重新实现",
+  "status": "doing",
+  "done_at": "",
+  "note": ""
  }
 ]

@@ -103,7 +103,7 @@ def fake(script):
     """script：按轮给出问题列表；按当前修补决定问题。"""
     calls = []
 
-    def build(brief, style, out, run_browser=True, fixes=(), detail=None, copy_overlay=None, tweaks=None):
+    def build(brief, style, out, run_browser=True, fixes=(), detail=None, copy_overlay=None, tweaks=None, photos=None):
         probs = script(list(fixes))
         calls.append(list(fixes))
         if detail is not None and any("横向溢出" in p for p in probs):

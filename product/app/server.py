@@ -36,6 +36,8 @@ import config as model_config  # noqa: E402
 import llm_copy  # noqa: E402
 import site_audit  # noqa: E402
 import llm_understand  # noqa: E402
+import generate as gen_site  # noqa: E402
+import photos as photo_lib  # noqa: E402
 from plan import plan as _plan  # noqa: E402
 import edit  # noqa: E402
 import feed  # noqa: E402
@@ -47,6 +49,7 @@ from understand import apply_answers, understand  # noqa: E402
 
 MAX_BODY = 16 * 1024
 MAX_FEED_BODY = 600 * 1024  # 喂网页源码用；只有 /api/feed 允许这么大
+MAX_IMAGE_BODY = 21 * 1024 * 1024  # 上传照片（base64 后约 15MB 原图）；只有 /api/image/upload 允许这么大
 KID = re.compile(r"\bK\d{3}\b")
 MAX_TEXT = 500
 SID = re.compile(r"^[0-9a-f]{12}$")
@@ -161,8 +164,9 @@ class App:
             overlay = json.loads(json.dumps(self._copy(s, brief, style) or {}))
             for sec, fields in (extras.get("copy") or {}).items():  # 用户亲手写的文字最优先
                 overlay.setdefault(sec, {}).update(fields)
+            pics = {"dir": os.path.join(self.work, s["sid"], "photos"), "map": extras.get("images") or {}}
             r = autofix.run(brief, style, os.path.join(d, "rounds"), run_browser=True,  # 检查出问题会自己修，有刹车
-                            copy_overlay=overlay or None, tweaks=extras.get("tweaks") or None)
+                            copy_overlay=overlay or None, tweaks=extras.get("tweaks") or None, photos=pics if pics["map"] else None)
             for part in ("project", "site"):  # 最终版本放到固定位置，静态路由只认这一个
                 shutil.move(r[part], os.path.join(d, part))
                 r[part] = os.path.join(d, part)
@@ -223,6 +227,95 @@ class App:
         s["history"] = s["history"][-20:]
         self._save(s)
         return dict(out, edit={"done": done, "refused": refused, "unknown": unknown, "kept": False}, teach=edit.teach(nb, ops, done))
+
+    # ---------- 图片 ----------
+    def _cur_site(self, s):
+        cur = (s.get("history") or [None])[-1]
+        if not cur:
+            raise ValueError("先选一个风格生成网站，再来换图片")
+        m = re.match(r"^/s/([0-9a-f]{12})/([a-z0-9-]+--\d+)/$", cur["result"]["url"])
+        return cur, m.group(2), os.path.join(self.work, s["sid"], m.group(2))
+
+    def images(self, body):
+        """当前版本里所有放图的位置，每个位置现在是照片还是示意插图，带缩略图地址。"""
+        s = self._load(body.get("session"))
+        cur, name, d = self._cur_site(s)
+        mine = (cur.get("extras") or {}).get("images") or {}
+        base = f"/s/{s['sid']}/{name}/assets/"
+        out = []
+        for x in gen_site.image_slots(os.path.join(d, "project")):
+            ph = mine.get(x["key"])
+            out.append(dict(x, kind="photo" if ph else "art", alt=(ph or {}).get("alt", ""),
+                            thumb=base + (f'photos/{ph["base"]}-{ph["widths"][0]}.webp' if ph else "art/" + gen_site.art_name(x["key"]))))
+        return {"session": s["sid"], "slots": out}
+
+    def _with_images(self, s, change, what):
+        """改图片也是出一个新版本（能撤销、能导出旧版），走和对话修改一样的保护：改完更糟就保留上一版。"""
+        cur, _, d = self._cur_site(s)
+        keys = {x["key"] for x in gen_site.image_slots(os.path.join(d, "project"))}
+        extras = json.loads(json.dumps(cur.get("extras") or {}))
+        imgs = extras.setdefault("images", {})
+        change(imgs, keys)
+        out, r = self._build(s, cur["brief"], cur["style"], extras)
+        before = len(cur["result"]["blueprint_errors"]) + len(cur["result"]["browser_problems"])
+        after = len(out["blueprint_errors"]) + len(out["browser_problems"])
+        if after > before:
+            self._save(s)
+            return dict(cur["result"], edit={"done": [], "refused": ["换完图片后检查出了问题，所以保留了上一版："
+                                                                     + "；".join((out["blueprint_errors"] + out["browser_problems"])[:2])],
+                                             "unknown": [], "kept": True}, teach=[])
+        out["version"] = cur["result"]["version"] + 1
+        s["history"].append({"brief": cur["brief"], "style": cur["style"], "result": out, "extras": extras})
+        s["history"] = s["history"][-20:]
+        self._save(s)
+        return dict(out, edit={"done": [what], "refused": [], "unknown": [], "kept": False}, teach=[])
+
+    def image_upload(self, body):
+        import base64
+        import binascii
+        s = self._load(body.get("session"))
+        key = str(body.get("key", ""))
+        try:
+            data = base64.b64decode(str(body.get("data", "")), validate=True)
+        except (binascii.Error, ValueError):
+            raise ValueError("照片内容不对，请重新选择文件")
+        _, _, d = self._cur_site(s)
+        if key not in {x["key"] for x in gen_site.image_slots(os.path.join(d, "project"))}:
+            raise ValueError("没有这个放图的位置")
+        try:
+            meta = photo_lib.ingest(data, os.path.join(self.work, s["sid"], "photos"))
+        except photo_lib.PhotoError as e:
+            raise ValueError(str(e))
+        label = next(x["label"] for x in gen_site.image_slots(os.path.join(d, "project")) if x["key"] == key)
+        meta["alt"] = photo_lib.clean_alt(body.get("alt")) or label.split(" · ")[0] + "的照片"
+
+        def change(imgs, keys):
+            imgs[key] = meta
+        return self._with_images(s, change, f"{label} 换成了你的照片（已去掉拍摄地点等信息、压缩到网页大小）")
+
+    def image_alt(self, body):
+        s = self._load(body.get("session"))
+        key, alt = str(body.get("key", "")), photo_lib.clean_alt(body.get("alt"))
+        cur, _, _ = self._cur_site(s)
+        if key not in ((cur.get("extras") or {}).get("images") or {}):
+            raise ValueError("这个位置还没有换成照片")
+        if not alt:
+            raise ValueError("写一句这张照片拍的是什么（看不见图片的人靠它了解内容）")
+
+        def change(imgs, keys):
+            imgs[key] = dict(imgs[key], alt=alt)
+        return self._with_images(s, change, f"照片说明改成了：{alt}")
+
+    def image_reset(self, body):
+        s = self._load(body.get("session"))
+        key = str(body.get("key", ""))
+        cur, _, _ = self._cur_site(s)
+        if key not in ((cur.get("extras") or {}).get("images") or {}):
+            raise ValueError("这个位置本来就是示意插图")
+
+        def change(imgs, keys):
+            imgs.pop(key, None)
+        return self._with_images(s, change, "这个位置换回了示意插图")
 
     # ---------- 模型 ----------
     def _conn(self, role, s):
@@ -461,7 +554,8 @@ EXPORT_README = """这是 AI 建站工作台生成的静态网站。
 上线前请注意：
   1. 页面里写着“（待填：…）”的地方，是不能替你编的真实信息（评价、价格、团队、地址等），请换成真实内容。
   2. 预约、联系表单目前只会跳到“已收到”页，不会真的把内容发给你。需要接一个表单服务（例如腾讯问卷、Formspree）或自己的后台后才能收到。
-  3. 图片是占位图，请换成真实照片。
+  3. 没换成你照片的位置用的是示意插图（一看就是插图，不会被当成实拍），可以直接上线；想换成真实照片，在工作台右边“图片”里上传。
+     上传的照片已经去掉了拍摄地点、手机型号等信息，并压缩成网页大小。
   4. 在中国大陆的服务器上线：先办 ICP 备案（导出时填上备案号会自动加到每页页脚），开通后 30 天内办公安联网备案。
   5. 隐私政策页里的“待填”要按实际情况写清楚（收集什么、用来做什么、保存多久、怎么联系删除），最好请专业人士看一下。
   6. 导出时填了域名，会附带 sitemap.xml 和每页的规范网址，上线后可以提交到百度、必应等搜索引擎的站长平台。
@@ -544,8 +638,9 @@ def make_handler(app: App, token: str = "", port_ref: list | None = None):
             if not self._token_ok():
                 return self._send(403, {"error": "缺少或错误的令牌（请从工作台页面操作）"})
             n = int(self.headers.get("Content-Length") or 0)
-            if n > (MAX_FEED_BODY if urlparse(self.path).path == "/api/feed" else MAX_BODY):
-                return self._send(413, {"error": "请求太大"})
+            lim = {"/api/feed": MAX_FEED_BODY, "/api/image/upload": MAX_IMAGE_BODY}.get(urlparse(self.path).path, MAX_BODY)
+            if n > lim:
+                return self._send(413, {"error": "照片太大，最大 15MB" if lim == MAX_IMAGE_BODY else "请求太大"})
             try:
                 body = json.loads(self.rfile.read(n) or b"{}")
                 if not isinstance(body, dict):
@@ -553,7 +648,8 @@ def make_handler(app: App, token: str = "", port_ref: list | None = None):
                 route = {"/api/start": app.start, "/api/answer": app.answer, "/api/preview": app.preview,
                          "/api/choose": app.choose, "/api/feed": app.feed, "/api/undo": app.undo,
                          "/api/edit": app.edit, "/api/models/save": app.models_save, "/api/models/test": app.models_test,
-                         "/api/models/list": app.models_list}.get(urlparse(self.path).path)
+                         "/api/models/list": app.models_list, "/api/images": app.images, "/api/image/upload": app.image_upload,
+                         "/api/image/alt": app.image_alt, "/api/image/reset": app.image_reset}.get(urlparse(self.path).path)
                 if not route:
                     return self._send(404, {"error": "没有这个接口"})
                 return self._send(200, route(body))

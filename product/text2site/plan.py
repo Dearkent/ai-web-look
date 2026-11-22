@@ -131,7 +131,7 @@ def plan(brief: dict, style_id: str | None = None) -> dict:
                  "target": {"page": next_page[0]}}] if next_page else []
         gids = [g["id"] for g in goals if g["kind"] in ("sell", "inform")]
         page(pid, title, f"/{pid}", "home", "listing",
-             [_sec("list", "menu" if pid == "menu" else "gallery", {"items": {"kind": "list", "count": 8}}, data=ent,
+             [_sec("list", "menu" if pid == "menu" else "gallery", {"items": {"kind": "list", "count": 8, **({} if pid == "menu" else {"item_image": True})}}, data=ent,
                    feature=feats["catalog"]["id"], motion=[{"category": "Stagger List", "tier": tier}]),
               _sec("cta", "cta", {"heading": {"kind": "text", "max_chars": 14}}, acts)],
              header=True, footer=True, order=1, serves_goals=gids, implements_features=[feats["catalog"]["id"]], data=[ent])
@@ -144,7 +144,7 @@ def plan(brief: dict, style_id: str | None = None) -> dict:
         gids = [g["id"] for g in goals if g["kind"] == "showcase"]
         nxt = targets.get("contact")
         page("work", "作品", "/work", "home", "listing",
-             [_sec("grid", "gallery", {"items": {"kind": "list", "count": 9}}, data="work", feature=fid("gallery"), motion=reveal),
+             [_sec("grid", "gallery", {"items": {"kind": "list", "count": 9, "item_image": True}}, data="work", feature=fid("gallery"), motion=reveal),
               _sec("cta", "cta", {"heading": {"kind": "text"}},
                    [{"id": "next", "label": "联系我", "primary": True, "target": {"page": nxt[0]}}] if nxt else None)],
              header=True, footer=True, order=1, serves_goals=gids, implements_features=[fid("gallery")], data=["work"])
@@ -159,9 +159,10 @@ def plan(brief: dict, style_id: str | None = None) -> dict:
         page("blog", "动态", "/blog", "home", "blog_index",
              [_sec("posts", "blog-list", {"items": {"kind": "list", "count": 6}}, data="post", feature=fid("blog"))],
              header=True, footer=True, order=5, implements_features=[fid("blog")], data=["post"])
-    page("about", "关于", "/about", "home", "about",
-         [_sec("story", "content", {"heading": {"kind": "text"}, "body": {"kind": "rich_text", "brief": f"{name}的故事"}})],
-         footer=True, order=6)
+    story = _sec("story", "content", {"heading": {"kind": "text"}, "body": {"kind": "rich_text", "brief": f"{name}的故事"},
+                                      "photo": {"kind": "image", "brief": "店面、团队或工作中的样子"}})
+    story["layout"] = {"variant": "split-left", "mobile": "stack"}
+    page("about", "关于", "/about", "home", "about", [story], footer=True, order=6)
     if any(p["kind"] == "form" for p in pages):
         page("privacy", "隐私政策", "/privacy", "home", "legal",
              [_sec("body", "content", {"body": {"kind": "rich_text", "brief": "收集哪些信息、怎么用、怎么删除"}})], footer=True, order=9)
@@ -205,7 +206,8 @@ def plan(brief: dict, style_id: str | None = None) -> dict:
                              motion=hover if t in ("features", "value-props") else None))
     if catalog_page and not any(s["type"] == "menu" for s in secs):
         pos = 2 if len(secs) > 2 else len(secs)
-        secs.insert(pos, _sec("catalog-teaser", "menu" if catalog_page == "menu" else "gallery", {"items": {"kind": "list", "count": 4}},
+        secs.insert(pos, _sec("catalog-teaser", "menu" if catalog_page == "menu" else "gallery",
+                              {"items": {"kind": "list", "count": 4, **({} if catalog_page == "menu" else {"item_image": True})}},
                               [{"id": "more", "label": "查看全部", "target": {"page": catalog_page}}],
                               data={"menu": "menu-item", "products": "product", "services": "service"}[catalog_page]))
     if "faq" in feats and not any(s["type"] == "faq" for s in secs):

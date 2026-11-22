@@ -14,6 +14,7 @@ import json
 import posixpath
 import os
 import re
+import hashlib
 import shutil
 import sys
 
@@ -91,6 +92,8 @@ section{padding:40px 20px}
 .has-media.v-split-left>.wrap,.has-media.v-split-right>.wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
 .v-split-left>.wrap>.media{order:-1}
 .media{margin:0}.ph{min-height:260px;padding:16px;text-align:center;font-size:14px;opacity:.85}
+.media img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius-md,8px)}
+.card img.thumb{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--radius-md,8px) - 2px);margin:0 0 12px}
 .actions{margin-top:20px}.t-cta{text-align:center}.t-cta h2{margin:0 0 8px}
 .t-hero{padding:72px 20px}.t-hero p{font-size:18px;max-width:34em}
 .card{color:var(--color-foreground,#222);background:var(--color-card-surface,var(--color-card,#fafafa));border:var(--border-width,1px) solid var(--color-border,#eee);border-radius:var(--radius-md,8px);padding:16px;box-shadow:var(--shadow-card,none);backdrop-filter:blur(var(--surface-blur,0px))}
@@ -105,7 +108,7 @@ footer.site{padding:24px 20px;border-top:1px solid var(--color-border,#ddd);font
 .fam-block h1,.fam-block h2{font-weight:800;letter-spacing:-.01em}
 .fam-block section:nth-of-type(even){background:var(--color-band);color:var(--color-band-ink)}
 .fam-block section:nth-of-type(even) a:not(.primary){color:inherit}.fam-block section:nth-of-type(even) .btn:not(.primary){border-color:currentColor}
-.fam-block .card,.fam-block .btn,.fam-block .ph{border:3px solid var(--color-foreground);box-shadow:4px 4px 0 var(--color-foreground)}
+.fam-block .card,.fam-block .btn,.fam-block .ph,.fam-block .media img{border:3px solid var(--color-foreground);box-shadow:4px 4px 0 var(--color-foreground)}
 .fam-block header.site{border-bottom:3px solid var(--color-foreground)}
 .fam-soft .btn{border-radius:999px}.fam-soft .card{border:none;border-radius:var(--radius-lg,20px)}
 .fam-soft section:nth-of-type(even){background:var(--color-band)}.fam-soft .ph{border-radius:var(--radius-lg,20px);background-color:var(--color-band)}
@@ -160,21 +163,76 @@ def asset(name: str, here: str) -> str:
 MEDIA = ("image", "video", "embed")
 
 
-def render_slot(name, slot, val=None, sectype="", labels=None):
-    """val 来自文案文件 content/<语言>.json；没有就用一眼能看出的占位。"""
+def art_name(key: str) -> str:
+    """某个位置的示意插图文件名（按位置算，重新生成也不变）。"""
+    return "a-" + hashlib.sha256(key.encode("utf-8")).hexdigest()[:12] + ".svg"
+
+
+SEC_ZH = {"hero": "首屏大图", "content": "配图", "gallery": "", "menu": ""}
+
+
+def image_slots(project: str) -> list[dict]:
+    """这个网站里所有放图的位置：[{"key": "页面/区块/槽位[/序号]", "label": "首页 · 首屏大图"}]，按页面顺序。"""
+    site = load(os.path.join(project, "site.json"))
+    lang = site.get("default_locale", "zh-CN")
+    cfile = os.path.join(project, "content", f"{lang}.json")
+    content = load(cfile) if os.path.exists(cfile) else {}
+    out = []
+    for p in site["pages"]:
+        wire = load(os.path.join(project, p["wireframe"]))
+        for sec in wire["sections"]:
+            for n, sl in sec.get("slots", {}).items():
+                key = f'{p["id"]}/{sec["id"]}/{n}'
+                if sl.get("kind") == "image" and sec["type"] not in ("header", "footer"):
+                    out.append({"key": key, "label": f'{p["title"]} · {SEC_ZH.get(sec["type"]) or "配图"}'})
+                elif sl.get("kind") == "list" and sl.get("item_image"):
+                    val = (content.get(p["id"], {}).get(sec["id"], {}) or {}).get(n)
+                    cnt = len(val) if isinstance(val, list) else sl.get("count", 3)
+                    out += [{"key": f"{key}/{i}", "label": f'{p["title"]} · 第 {i + 1} 张'} for i in range(cnt)]
+    return out
+
+
+def picture(key, media, sizes="(max-width: 767px) 100vw, 50vw", eager=False, cls="", art_size=(800, 600)):
+    """一张图：用户给了照片就用照片（多尺寸、带说明），没给就画一张示意插图（装饰用，alt 留空）。
+    media 为 None 时（单独渲染一个区块、没有网站上下文）退回占位框。"""
+    load = ' loading="eager" fetchpriority="high"' if eager else ' loading="lazy"'
+    cl = f' class="{cls}"' if cls else ""
+    if media is None:
+        return f'<div class="ph"{cl} role="img" aria-label="图片"><span>图片</span></div>'
+    ph = media["images"].get(key)
+    here = media["here"]
+    if ph:
+        ws = ph["widths"]
+        src = lambda w: asset(f'assets/photos/{ph["base"]}-{w}.webp', here)
+        srcset = ", ".join(f"{E(src(w))} {w}w" for w in ws)
+        media["used_photos"].add(ph["base"])
+        return (f'<img{cl} src="{E(src(ws[0]))}" srcset="{srcset}" sizes="{sizes}" width="{int(ph["w"])}" height="{int(ph["h"])}" '
+                f'alt="{E(ph.get("alt", ""))}" decoding="async"{load}>')
+    fn = art_name(key)
+    if fn not in media["arts"]:
+        w, h = art_size
+        media["arts"][fn] = media["draw"](key, w, h)
+    w, h = art_size
+    return (f'<img{cl} src="{E(asset("assets/art/" + fn, here))}" width="{w}" height="{h}" alt="" data-art="{E(key)}" '
+            f'decoding="async"{load}>')
+
+
+def render_slot(name, slot, val=None, sectype="", labels=None, key="", media=None):
+    """val 来自文案文件 content/<语言>.json；没有就用一眼能看出的占位。key 是这个槽位在整站里的位置（页面/区块/槽位）。"""
     kind, brief = slot.get("kind"), slot.get("brief", "")
     tip = f' data-brief="{E(brief)}"' if brief else ""
     if kind == "image":
-        alt = brief or name
-        return (f'<figure class="media"><div class="ph" role="img" aria-label="{E(alt)}"{tip}>'
-                f'<span>图片待生成：{E(alt)}</span></div></figure>')
+        return f'<figure class="media">{picture(key, media, eager=sectype == "hero")}</figure>'
+
     if kind == "embed":
         return f'<figure class="media"><div class="ph"{tip}><span>{E(val or "嵌入内容待配置：" + name)}</span></div></figure>'
     if kind == "list":
         items = val if isinstance(val, list) else [{"title": f"条目 {i + 1}（待填写）", "body": ""} for i in range(slot.get("count", 3))]
-        cells = "".join(f'<li class="card"><h3>{E(str(it.get("title", "")))}</h3>'
+        thumb = (lambda i: picture(f"{key}/{i}", media, sizes="(max-width: 767px) 100vw, 33vw", cls="thumb", art_size=(600, 450))) \
+            if slot.get("item_image") else (lambda i: "")
+        cells = "".join(f'<li class="card">{thumb(i)}<h3>{E(str(it.get("title", "")))}</h3>'
                         + (f'<p class="muted">{E(str(it.get("body", "")))}</p>' if it.get("body") else "") + "</li>"
-                        for it in items)
+                        for i, it in enumerate(items))
         return f'<ul class="grid items">{cells}</ul>'
     if kind == "form_fields":
         lab = labels or {}
@@ -186,17 +244,17 @@ def render_slot(name, slot, val=None, sectype="", labels=None):
     return f'<{tag} class="todo"{tip}>【{E(name)}待写】{E(brief)}</{tag}>'
 
 
-def render_section(s, pages, content=None, here=None):
+def render_section(s, pages, content=None, here=None, page_id="", media=None):
     content = content or {}
     variant = s["layout"]["variant"]
     mobile = " m-stack" if s["layout"].get("mobile") == "stack" else ""
     motion = ' data-motion="1"' if s.get("motion") else ""
     if s["type"] in ("header", "footer"):
         return ""  # 页头页脚统一由网站结构生成
-    text, media = [], []
+    text, figs = [], []
     for n, sl in s.get("slots", {}).items():
-        html_ = render_slot(n, sl, content.get(n), s["type"], content.get("labels"))
-        (media if sl.get("kind") in MEDIA else text).append(html_)
+        html_ = render_slot(n, sl, content.get(n), s["type"], content.get("labels"), key=f'{page_id}/{s["id"]}/{n}', media=media)
+        (figs if sl.get("kind") in MEDIA else text).append(html_)
     acts = []
     form_open = form_close = ""
     for a in s.get("actions", []):
@@ -223,8 +281,8 @@ def render_section(s, pages, content=None, here=None):
         body = form_open + body + form_close
     if acts:
         body += f'<div class="actions">{"".join(acts)}</div>'
-    inner = f'<div class="text">{body}</div>' + "".join(media)
-    return (f'<section id="{E(s["id"])}" class="t-{E(s["type"])} v-{E(variant)}{mobile}{" has-media" if media else ""}"{motion}>'
+    inner = f'<div class="text">{body}</div>' + "".join(figs)
+    return (f'<section id="{E(s["id"])}" class="t-{E(s["type"])} v-{E(variant)}{mobile}{" has-media" if figs else ""}"{motion}>'
             f'<div class="wrap">{inner}</div></section>')
 
 
@@ -329,6 +387,25 @@ def generate(project, out):
     cfile = os.path.join(project, "content", f"{lang}.json")
     content = load(cfile) if os.path.exists(cfile) else {}
     fam = (load(tok).get("$extensions", {}).get("aisite", {}).get("family", "") if os.path.exists(tok) else "")
+    # 图片：用户照片（images.json + assets/photos/），没有的位置画示意插图
+    _here = os.path.dirname(os.path.abspath(__file__))
+    if _here not in sys.path:
+        sys.path.insert(0, _here)
+    import art  # noqa: E402  同目录的插图模块
+    colors = art.colors_from_tokens(load(tok) if os.path.exists(tok) else {})
+    ptype = (brief.get("product_type") or {}).get("value", "")
+    motif = art.motif_for(ptype)
+    imf = os.path.join(project, "images.json")
+    images = {}
+    if os.path.exists(imf):
+        for k, v in (load(imf) or {}).items():  # 只认结构对的条目（文件名只能是 p-十六进制）
+            if isinstance(v, dict) and re.fullmatch(r"p-[0-9a-f]{16}", str(v.get("base", ""))) and v.get("widths") \
+                    and all(isinstance(w, int) and 0 < w <= 4000 for w in v["widths"]) \
+                    and all(os.path.exists(os.path.join(project, "assets", "photos", f'{v["base"]}-{w}.webp')) for w in v["widths"]):
+                images[k] = v
+    media = {"images": images, "arts": {}, "used_photos": set(), "here": "/",
+             "draw": lambda key, w, h: art.draw(colors, fam or "soft",
+                                                art.motif_at(motif, int(key.rsplit("/", 1)[1]) if key.rsplit("/", 1)[-1].isdigit() else None), key, w, h)}
     body_cls = f' class="fam-{E(fam)}"' if fam else ""
     written = []
     for p in site["pages"]:
@@ -348,7 +425,8 @@ def generate(project, out):
         desc = seo.get("description", "")
         robots = '<meta name="robots" content="noindex">' if seo.get("index") is False else ""
         here = p["path"]
-        sections = "".join(render_section(s, pages, content.get(p["id"], {}).get(s["id"]), here) for s in wire["sections"])
+        media["here"] = here
+        sections = "".join(render_section(s, pages, content.get(p["id"], {}).get(s["id"]), here, p["id"], media) for s in wire["sections"])
         if "<h1" not in sections:  # 每页要有且只有一个一级标题（上线体检发现：D23）
             if "<h2" in sections:  # 有区块标题：第一个升为一级，后面的层级下面统一理顺（不重复显示页面名）
                 sections = re.sub(r"<h2([ >])(.*?)</h2>", r"<h1\1\2</h1>", sections, count=1, flags=re.S)
@@ -361,7 +439,7 @@ def generate(project, out):
                f'<title>{E(title)}</title><meta name="description" content="{E(desc)}">{robots}'
                f'<meta property="og:type" content="website"><meta property="og:title" content="{E(title)}">'
                f'<meta property="og:description" content="{E(desc)}"><meta property="og:locale" content="{E(lang.replace("-", "_"))}">'
-               f'<link rel="icon" href="data:,">'
+               f'<link rel="icon" href="{asset("assets/favicon.svg", here)}" type="image/svg+xml">'
                f'<link rel="stylesheet" href="{asset("styles.css", here)}">'
                + (f'<link rel="stylesheet" href="{asset("site.css", here)}">' if has_css else "")
                + f'</head><body{body_cls}>'
@@ -375,6 +453,15 @@ def generate(project, out):
         os.makedirs(os.path.dirname(f), exist_ok=True)
         open(f, "w", encoding="utf-8").write(doc)
         written.append(out_file(p["path"]))
+    os.makedirs(os.path.join(out, "assets", "art"), exist_ok=True)
+    for fn, svg in media["arts"].items():
+        open(os.path.join(out, "assets", "art", fn), "w", encoding="utf-8").write(svg)
+    open(os.path.join(out, "assets", "favicon.svg"), "w", encoding="utf-8").write(art.favicon(colors, name[:1]))
+    if media["used_photos"]:
+        os.makedirs(os.path.join(out, "assets", "photos"), exist_ok=True)
+        for b in sorted(media["used_photos"]):
+            for w in next(v["widths"] for v in images.values() if v["base"] == b):
+                shutil.copy(os.path.join(project, "assets", "photos", f"{b}-{w}.webp"), os.path.join(out, "assets", "photos"))
     base = site.get("base_url", "").rstrip("/")
     if base:  # sitemap 标准要求完整网址
         urls = "".join(f"<url><loc>{E(base + href(p['path']))}</loc></url>" for p in site["pages"]

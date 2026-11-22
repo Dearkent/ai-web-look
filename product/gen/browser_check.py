@@ -3,7 +3,7 @@
 
 查这些（每条都写成“浏览器·类别：页面 → 细节”，给修复回路当报错用）：
   脚本报错（控制台 error 和未捕获异常）、加载失败（4xx/5xx、请求失败）、站内死链和锚点不存在、
-  缺 <title>、缺 lang、图片缺替代文字、输入框没有标签、手机宽度（375px）横向溢出、首屏内容看不见；
+  缺 <title>、缺 lang、图片缺替代文字、图片打不开、图片没写宽高、输入框没有标签、手机宽度（375px）横向溢出、首屏内容看不见；
   视觉审查（手机宽度）：文字对比度不够（正文 4.5:1、大字 3:1）、点按区域太小（< 24×24px）、字太小（< 12px）。
 所有等待都有超时（经验 L016）；服务器和浏览器在 finally 里关掉。
 
@@ -72,7 +72,9 @@ DOM_PROBE = """() => {
     if (b.width === 0 || b.right <= W + 1 || r.wide.length >= 5) return;
     if ([...e.children].some(c => c.getBoundingClientRect().right > W + 1)) return;  // 只要最深的
     const tag = e.tagName.toLowerCase(), own = [...e.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('');
-    const kind = ['img','video','iframe','svg','canvas','embed','object'].includes(tag) ? 'media'
+    // 图片只在比它的容器还宽时才算病因；和容器一样宽，说明是容器被别的东西（比如长单词）撑宽了，图片是被连累的（D30）
+    const pw = e.parentElement ? e.parentElement.getBoundingClientRect().width : W;
+    const kind = ['img','video','iframe','svg','canvas','embed','object'].includes(tag) ? (b.width > pw + 1 ? 'media' : 'box')
       : (e.closest('table') ? 'table' : (e.closest('pre') ? 'pre' : (new RegExp('[A-Za-z0-9_.@:/-]{15,}').test(own) ? 'text' : 'box')));
     r.wide.push({tag: tag, kind: kind});
   });
@@ -106,7 +108,9 @@ DOM_PROBE = """() => {
     if (b.top < window.innerHeight && b.bottom > 0 && b.height > 0 && (parseFloat(cs.opacity) < 0.1 || cs.visibility === 'hidden'))
       r.hidden.push(s.id || s.className);
   });
-  document.querySelectorAll('img').forEach(i => { if (!(i.getAttribute('alt') || '').trim()) r.noAlt.push(i.getAttribute('src') || '?'); });
+  // 没有 alt 属性算缺；alt="" 只允许纯装饰图（示意插图 data-art、role=presentation）
+  document.querySelectorAll('img').forEach(i => { const deco = i.hasAttribute('data-art') || i.getAttribute('role') === 'presentation';
+    if (!i.hasAttribute('alt') || (!deco && !(i.getAttribute('alt') || '').trim())) r.noAlt.push(i.getAttribute('src') || '?'); });
   document.querySelectorAll('[role=img]').forEach(i => { if (!(i.getAttribute('aria-label') || '').trim()) r.noAlt.push('[role=img]'); });
   document.querySelectorAll('input,select,textarea').forEach(f => {
     if (f.type === 'hidden' || f.type === 'submit') return;
@@ -114,6 +118,17 @@ DOM_PROBE = """() => {
     if (!ok) r.noLabel.push(f.name || f.id || f.type);
   });
   return r;
+}"""
+
+
+# 图片：把懒加载的也立刻加载，最多等 4 秒；返回打不开的、没写宽高（加载时页面会跳）的
+IMG_PROBE = """async () => {
+  const imgs = [...document.querySelectorAll('img')];
+  imgs.forEach(i => { i.loading = 'eager'; });
+  await Promise.race([Promise.all(imgs.map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))),
+                      new Promise(r => setTimeout(r, 4000))]);
+  return {broken: imgs.filter(i => !i.complete || i.naturalWidth === 0).map(i => i.getAttribute('src') || '?'),
+          noSize: imgs.filter(i => !i.getAttribute('width') || !i.getAttribute('height')).map(i => i.getAttribute('src') || '?')};
 }"""
 
 
@@ -146,6 +161,8 @@ def check(root: str, detail: dict | None = None) -> list[str]:
                             page.goto(base + path, wait_until="load", timeout=PAGE_TIMEOUT_MS)
                             page.wait_for_timeout(300)  # 首屏内容 0.3 秒内就该看得见；更久才出现的空白对用户同样是问题
                             probe = page.evaluate(DOM_PROBE)
+                            if width == 1280:
+                                probe["img"] = page.evaluate(IMG_PROBE)
                         except Exception as e:  # 超时或崩溃也是一种报错
                             errors.append(f"浏览器·打不开：{path} → {str(e).splitlines()[0][:160]}")
                             page.close()
@@ -189,6 +206,10 @@ def check(root: str, detail: dict | None = None) -> list[str]:
             errors.append(f"浏览器·首屏内容看不见：{path} → 区块 {sec}（透明或隐藏，可能是动画没触发）")
         if not pr["lang"]:
             errors.append(f"浏览器·缺 lang：{path}")
+        for src in dict.fromkeys((pr.get("img") or {}).get("broken", [])):
+            errors.append(f"浏览器·图片打不开：{path} → {src}")
+        for src in dict.fromkeys((pr.get("img") or {}).get("noSize", [])):
+            errors.append(f"浏览器·图片没写宽高（加载时页面会跳）：{path} → {src}")
         for src in dict.fromkeys(pr["noAlt"]):
             errors.append(f"浏览器·图片缺替代文字：{path} → {src}")
         for name in dict.fromkeys(pr["noLabel"]):

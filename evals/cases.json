@@ -305,10 +305,10 @@
  {
   "id": "E33",
   "card": "P018",
-  "desc": "真实浏览器检查能抓住故意做坏的网站里的 10 类问题（第九轮新增“点按区域太小”：样本里的输入框只有 21px 高）",
+  "desc": "真实浏览器检查能抓住故意做坏的网站里的 10 类问题（第九轮新增“点按区域太小”：样本里的输入框只有 21px 高）；第十三轮新增“图片打不开”“图片没写宽高”：样本里 logo.png 不存在、也没写宽高",
   "cmd": "python3 -I product/gen/browser_check.py evals/fixtures/badsite | tail -1",
   "expect": [
-   "浏览器检查：10 个问题"
+   "浏览器检查：12 个问题"
   ],
   "timeout": 120
  },
@@ -393,10 +393,10 @@
  {
   "id": "E42",
   "card": "P022",
-  "desc": "工作台端到端：真实 Chrome 走完 输入 → 回答问题 → 选风格 → 看整站；选择回流让同行业推荐排第一；越权路径、非法风格、超长输入、过大请求都被拒；页面无任何加载错误；喂养（话 + 网页文件）、撤回、用到的知识标注；长英文店名撑破手机屏幕 → 自动修好 → 后台对照实验推广 → 新行业提前避开；界面：生成后前三步收起、可展开，标签页可用方向键切换",
+  "desc": "工作台端到端：真实 Chrome 走完 输入 → 回答问题 → 选风格 → 看整站；选择回流让同行业推荐排第一；越权路径、非法风格、超长输入、过大请求都被拒；页面无任何加载错误；喂养（话 + 网页文件）、撤回、用到的知识标注；长英文店名撑破手机屏幕 → 自动修好 → 后台对照实验推广 → 新行业提前避开；界面：生成后前三步收起、可展开，标签页可用方向键切换；图片：换成自己的照片（去掉拍摄信息）、写说明、换回插图、撤销找回，改名的 SVG 不收；图片接口只认清单位置、要令牌、限大小；照片跟着导出",
   "cmd": "python3 -I -u product/app/app_test.py 2>/dev/null | tail -1",
   "expect": [
-   "工作台端到端：75/75 通过"
+   "工作台端到端：85/85 通过"
   ],
   "timeout": 600
  },
@@ -524,11 +524,21 @@
  {
   "id": "E55",
   "card": "P031",
-  "desc": "发布测试：从压缩包、全新虚拟环境开始：自检报缺依赖 → 自动装 → 没装 Playwright 也能生成 → 装上后完整流程带浏览器检查 → 导出；只写该写的地方；60 句压力测试不崩",
-  "cmd": "cd .. && rm -f /tmp/aisite-release.zip && zip -qr /tmp/aisite-release.zip brain -x '*/__pycache__/*' -x 'brain/runs/*' -x 'brain/knowledge/*' && python3 -I brain/product/release_test.py /tmp/aisite-release.zip python3 2>/dev/null | tail -1",
+  "desc": "发布测试：从压缩包、全新虚拟环境开始：自检报缺依赖 → 自动装 → 没装 Playwright 也能生成 → 装上后完整流程带浏览器检查 → 导出；只写该写的地方；60 句压力测试不崩；新环境里换照片（自动装的 Pillow）",
+  "cmd": "cd .. && rm -f /tmp/aisite-release.zip && zip -qr /tmp/aisite-release.zip brain -x '*/__pycache__/*' -x 'brain/runs/*' -x 'brain/.git/*' -x 'brain/knowledge/*' && python3 -I brain/product/release_test.py /tmp/aisite-release.zip python3 2>/dev/null | tail -1",
   "expect": [
-   "发布测试：11/11 通过"
+   "发布测试：12/12 通过"
   ],
   "timeout": 1200
+ },
+ {
+  "id": "E56",
+  "card": "P033",
+  "desc": "图片：6 种风格 × 15 种图案的插图都是只有图形的合法 SVG；照片去掉 GPS/手机/时间、方向摆正、出多尺寸 WebP；SVG/HTML/GIF/空/超大/太小/损坏/解压炸弹都拒绝；生成器宽高、懒加载、首屏优先、alt；乱写的照片条目退回插图；体检提醒插图、抓大图；浏览器抓坏图、缺宽高、缺 alt",
+  "cmd": "python3 -I product/gen/images_test.py 2>/dev/null | tail -1",
+  "expect": [
+   "图片：26/26 通过"
+  ],
+  "timeout": 600
  }
 ]

@@ -105,6 +105,11 @@
   "kind": "产出"
  },
  {
+  "source": "T62",
+  "target": "P033",
+  "kind": "产出"
+ },
+ {
   "source": "T03",
   "target": "L001",
   "kind": "用上"
@@ -410,6 +415,11 @@
   "kind": "教训"
  },
  {
+  "source": "D30",
+  "target": "P033",
+  "kind": "教训"
+ },
+ {
   "source": "E01",
   "target": "L001",
   "kind": "验证"
@@ -682,6 +692,11 @@
  {
   "source": "E55",
   "target": "P031",
+  "kind": "验证"
+ },
+ {
+  "source": "E56",
+  "target": "P033",
   "kind": "验证"
  }
 ]

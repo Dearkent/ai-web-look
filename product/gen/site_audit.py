@@ -12,6 +12,7 @@ from __future__ import annotations
 import html.parser
 import json
 import os
+import posixpath
 import re
 import sys
 
@@ -120,8 +121,27 @@ def audit(site: str, browser_problems: list[str] | None = None, domain: str = ""
     heaviest = max((sizes.get(u, 0) for u in pages), default=0) + shared
     add("性能", heaviest <= 200_000, f"最重的页面（含样式和脚本）{heaviest // 1024} KB，不超过 200 KB" if heaviest <= 200_000 else f"最重的页面 {heaviest // 1024} KB，偏重",
         "减少脚本和大图")
-    reqs = max((len(p.scripts) + len(p.styles) + len(p.imgs) for p in pages.values()), default=0)
-    add("性能", reqs <= 8, f"每页最多 {reqs} 个额外请求" if reqs <= 8 else f"有页面要发 {reqs} 个请求", "合并样式和脚本")
+    # 打开页面时立刻要发的请求：样式、脚本、不懒加载的图片（懒加载的图片滚到附近才下载，不算）
+    reqs = max((len(p.scripts) + len(p.styles) + sum(1 for i in p.imgs if i.get("loading") != "lazy") for p in pages.values()), default=0)
+    add("性能", reqs <= 8, f"打开每页最多立刻发 {reqs} 个请求" if reqs <= 8 else f"有页面一打开就要发 {reqs} 个请求", "合并样式和脚本，图片用懒加载")
+    # 图片体积：每张最大的那份不超过 400 KB；每页图片（按默认的 src 算）合计不超过 1.5 MB
+    def img_files(u, i):
+        out = []
+        for part in [i.get("src", "")] + [c.strip().split(" ")[0] for c in (i.get("srcset") or "").split(",") if c.strip()]:
+            if part and not part.startswith(("http:", "https:", "//", "data:")):
+                out.append(posixpath.normpath(posixpath.join(posixpath.dirname(u), part)))
+        return out
+    big, page_img = [], 0
+    for u, p in pages.items():
+        tot = 0
+        for i in p.imgs:
+            fs = img_files(u, i)
+            if fs:
+                tot += sizes.get(fs[0], 0)
+            big += [f for f in fs if sizes.get(f, 0) > 400_000]
+        page_img = max(page_img, tot)
+    add("性能", not big and page_img <= 1_500_000, f"图片都压缩过（单张不超过 400 KB，每页合计 {page_img // 1024} KB）" if not big and page_img <= 1_500_000
+        else (f"有图片太大：{big[0]}" if big else f"有页面图片合计 {page_img // 1024} KB，偏重"), "照片从工作台上传会自动压缩；直接放进来的大图先压缩")
     blocking = [s["src"] for p in pages.values() for s in p.scripts if not s["defer"]]
     add("性能", not blocking, "脚本都延后加载，不挡首屏" if not blocking else f"有脚本会挡住首屏：{blocking[0]}", "给脚本加 defer")
     ext = sorted({x for p in pages.values() for x in p.ext})
@@ -163,6 +183,9 @@ def audit(site: str, browser_problems: list[str] | None = None, domain: str = ""
     todo = alltext.count("待填")
     add("合规", todo == 0, "没有待填内容" if todo == 0 else f"还有 {todo} 处“待填”（评价、价格、地址、故事、隐私政策细节等）",
         "上线前换成真实内容；这些是系统不能替你编的", pending=False)
+    arts = sum(1 for p in pages.values() for i in p.imgs if i.get("data-art") is not None)
+    add("合规", arts == 0, "图片都是你自己的照片" if arts == 0 else f"还有 {arts} 处用的是示意插图（不是实拍）",
+        "在工作台右边“图片”里换成你自己的照片；插图本身可以直接上线，只是不能当成店里的真实样子", pending=arts > 0)
     beian = "beian.miit.gov.cn" in "".join(lk["href"] for p in pages.values() for lk in p.links)
     add("合规", beian, "页脚有 ICP 备案号" if beian else "页脚还没有 ICP 备案号",
         "在中国大陆服务器上线需要先备案，导出时填上备案号就会加到页脚；境外服务器可忽略", pending=not beian)

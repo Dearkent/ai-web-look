@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """工作台端到端测试：真实 Chrome 点完整流程；选择回流学习；安全检查。
 用法：timeout 400 python3 -I -u app_test.py"""
-import json, os, shutil, sys, tempfile, threading, urllib.error, urllib.parse, urllib.request
+import json, os, re, shutil, sys, tempfile, threading, urllib.error, urllib.parse, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 os.environ["AISITE_MODELS"] = os.path.join(tempfile.mkdtemp(prefix="app-models-"), "models.json")  # 不碰真实的模型设置
@@ -199,6 +199,56 @@ try:
         home = pg.evaluate("fetch(document.querySelector('#site').src).then(r => r.text())")
         expect("对话修改（界面）：字大一点、改标题（以前在待学清单里的要求）都生效", "下班后，来撸猫" in home and "0 个问题" in pg.inner_text("#checks"),
                pg.inner_text("#checks"))
+        # 图片（界面）：换成自己的照片（自动去掉拍摄地点）、写说明、换回插图、撤销
+        import io as _io
+        from PIL import Image as _Image
+        _ex = _Image.Exif()
+        _ex[0x9286] = "ZZGPSHOMEZZ"
+        _ex[0x8825] = {1: "N", 2: (1.0, 17.0, 0.0), 3: "E", 4: (103.0, 51.0, 0.0)}
+        _b = _io.BytesIO()
+        _Image.new("RGB", (1800, 1200), (60, 110, 170)).save(_b, "JPEG", exif=_ex.tobytes())
+        photo_path = os.path.join(tempfile.mkdtemp(prefix="ph-"), "店门口.jpg")
+        open(photo_path, "wb").write(_b.getvalue())
+        fake_path = os.path.join(os.path.dirname(photo_path), "其实是svg.jpg")
+        open(fake_path, "wb").write(b'<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>')
+        pg.wait_for_function("!document.querySelector('#imgpanel').hidden && document.querySelectorAll('#imglist li').length > 0")
+        expect("图片（界面）：列出每个放图的位置，说明还有几处是示意插图", "示意插图" in pg.inner_text("#imgsum")
+               and pg.locator("#imglist li").count() >= 3, pg.inner_text("#imgsum"))
+        v_before = int(re.search(r"第 (\d+) 版", pg.inner_text("#checks")).group(1))
+        with pg.expect_file_chooser() as fc:
+            pg.locator("#imglist li").first.get_by_role("button", name="换成我的照片").click()
+        fc.value.set_files(photo_path)
+        pg.wait_for_function("document.querySelector('#imgstatus').innerText.includes('换成了你的照片')", timeout=180000)
+        home = pg.evaluate("fetch(document.querySelector('#site').src).then(r => r.text())")
+        hero = re.search(r"<img\b[^>]*fetchpriority[^>]*>", home).group(0)
+        first = pg.locator("#imglist li").first.inner_text()
+        expect("图片（界面）：首屏换成了照片，出了新版本，列表里标成“你的照片”",
+               ".webp" in hero and "1600w" in hero and "你的照片" in first and f"第 {v_before + 1} 版" in pg.inner_text("#checks"), (hero, first))
+        webp = pg.evaluate("(src) => fetch(new URL(src, document.querySelector('#site').src)).then(r => r.arrayBuffer())"
+                           ".then(b => Array.from(new Uint8Array(b)).map(c => String.fromCharCode(c)).join(''))",
+                           re.search(r'src="([^"]+)"', hero).group(1))
+        expect("图片（界面）：网站里的照片不带拍摄地点等信息", "ZZGPSHOMEZZ" not in webp and webp.startswith("RIFF") and "WEBP" in webp[:16], webp[:40])
+        pg.locator("#imglist li").first.locator("input").fill("巷口咖啡的门口，傍晚")
+        pg.locator("#imglist li").first.get_by_role("button", name="保存说明").click()
+        pg.wait_for_function("document.querySelector('#imgstatus').innerText.includes('照片说明改成了')", timeout=180000)
+        home = pg.evaluate("fetch(document.querySelector('#site').src).then(r => r.text())")
+        expect("图片（界面）：照片说明写进网页（看不见图片的人靠它）", 'alt="巷口咖啡的门口，傍晚"' in home)
+        n_err = len(errors)
+        with pg.expect_file_chooser() as fc:
+            pg.locator("#imglist li").nth(1).get_by_role("button", name="换成我的照片").click()
+        fc.value.set_files(fake_path)
+        pg.wait_for_function("document.querySelector('#imgstatus').innerText.includes('只支持')", timeout=60000)
+        pg.wait_for_timeout(200)
+        del errors[n_err:]  # 这一步故意传错文件：浏览器会把服务器的 400 记成一条控制台错误，属于预期
+        expect("图片（界面）：改了扩展名的 SVG 不收，说清原因，网站不变", "只支持" in pg.inner_text("#imgstatus")
+               and f"第 {v_before + 2} 版" in pg.inner_text("#checks"), pg.inner_text("#imgstatus"))
+        pg.locator("#imglist li").first.get_by_role("button", name="用回插图").click()
+        pg.wait_for_function("document.querySelector('#imgstatus').innerText.includes('换回了示意插图')", timeout=180000)
+        expect("图片（界面）：可以换回示意插图", "示意插图" in pg.locator("#imglist li").first.inner_text())
+        pg.click("#editundo")
+        pg.wait_for_function("document.querySelector('#editresult').innerText.includes('回到了上一版')")
+        pg.wait_for_function("document.querySelector('#imglist li') && document.querySelector('#imglist li').innerText.includes('你的照片')")
+        expect("图片（界面）：撤销能把照片找回来（换图也是一个版本）", "你的照片" in pg.locator("#imglist li").first.inner_text())
         expect("喂养与纠错（界面）：没有脚本报错", not errors, errors[:3])
         b.close()
 
@@ -274,6 +324,36 @@ try:
     expect("导出：双击 index.html 离线打开，点导航能跳到别的页面、样式在、无报错",
            landed.endswith("/index.html") and landed != "file://" + os.path.join(out, root, "index.html") and css_ok and not errs,
            (landed, errs[:2]))
+
+    # 图片接口：只接受清单里的位置、要令牌、限大小；换上的照片跟着导出，压缩包里没有拍摄信息
+    import base64
+    from PIL import Image as _Img
+    _e = _Img.Exif()
+    _e[0x9286] = "ZZGPSHOMEZZ"
+    _bb = io.BytesIO()
+    _Img.new("RGB", (1000, 700), (90, 140, 90)).save(_bb, "JPEG", exif=_e.tobytes())
+    b64 = base64.b64encode(_bb.getvalue()).decode()
+    code, lst = post("/api/images", {"session": ve["session"]})
+    hero_key = next(x["key"] for x in lst["slots"] if x["key"].startswith("home/hero/"))
+    c1, r1 = post("/api/image/upload", {"session": ve["session"], "key": "home/../../etc/passwd", "data": b64})
+    c2, _ = post("/api/image/upload", {"session": ve["session"], "key": hero_key, "data": b64}, token=False)
+    try:  # 服务器看到超大就直接回 413 并断开，不读完；客户端可能收到 413，也可能因为还在发而断线——两种都是“拒绝了”
+        c3, r3 = post("/api/image/upload", {}, raw=b"{" + b" " * (22 * 1024 * 1024) + b"}")
+    except urllib.error.URLError:
+        c3, r3 = 413, {"error": "照片太大，最大 15MB（连接被服务器断开）"}
+    c4, r4 = post("/api/image/upload", {"session": ve["session"], "key": hero_key, "data": "不是base64!!"})
+    expect("图片接口：位置不在清单里、没令牌、超过大小、内容不是 base64 都拒绝",
+           c1 == 400 and "位置" in r1["error"] and c2 == 403 and c3 == 413 and "15MB" in r3["error"] and c4 == 400, (c1, r1, c2, c3, r3, c4, r4))
+    c5, r5 = post("/api/image/upload", {"session": ve["session"], "key": hero_key, "data": b64, "alt": "店里的绿植角"})
+    expect("图片接口：换上照片 → 新版本，检查无问题", c5 == 200 and not r5["edit"]["kept"] and not r5["browser_problems"]
+           and r5["version"] == rce["version"] + 1, (c5, r5.get("edit"), r5.get("browser_problems")))
+    with urllib.request.urlopen(base + f"/api/export?session={ve['session']}&token={app.token}", timeout=60) as r:
+        z2 = zipfile.ZipFile(io.BytesIO(r.read()))
+    ph = [n for n in z2.namelist() if "/assets/photos/" in n and n.endswith(".webp")]
+    idx = z2.read(next(n for n in z2.namelist() if n.endswith("/index.html") and n.count("/") == 1)).decode("utf-8")
+    expect("导出：照片跟着压缩包走，网页引用得到，里面没有拍摄信息；说明里讲了插图和照片",
+           ph and all(b"ZZGPSHOMEZZ" not in z2.read(n) for n in ph) and 'alt="店里的绿植角"' in idx
+           and "示意插图" in z2.read(next(n for n in z2.namelist() if n.endswith("说明.txt"))).decode("utf-8"), ph)
 
     # 7. 模型设置与模型版理解、文案（本机假服务扮演模型）
     sys.path.insert(0, os.path.join(HERE, "..", "models"))

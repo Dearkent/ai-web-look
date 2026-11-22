@@ -70,7 +70,7 @@
     "asset": {"type": "string", "pattern": "^A[0-9]+$", "description": "引用需求简报里的素材"},
     "brief": {"type": "string", "description": "给文案 / 图片 Agent 的一句话说明"},
     "max_chars": {"type": "integer", "minimum": 1},
-    "count": {"type": "integer", "minimum": 1, "description": "列表类槽位的条目数"},
+    "count": {"type": "integer", "minimum": 1, "description": "列表类槽位的条目数"}, "item_image": {"type": "boolean", "description": "列表的每一项带一张图（作品、商品、服务）"},
     "fields": {"type": "array", "items": {"type": "string"}, "description": "表单字段名"}
    }
   },

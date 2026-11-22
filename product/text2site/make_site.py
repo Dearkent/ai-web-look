@@ -32,8 +32,9 @@ FEAT_ZH = {"booking": "预约表单", "contact_form": "联系表单", "map": "�
            "newsletter": "邮件订阅", "membership": "会员", "search": "搜索"}
 
 
-def build_one(brief, style_id, out, run_browser=True, fixes=(), detail=None, copy_overlay=None, tweaks=None):
-    """fixes：自我纠错选用的修补名（generate.FIX_CSS 里的）；detail：传空字典进来拿浏览器诊断。"""
+def build_one(brief, style_id, out, run_browser=True, fixes=(), detail=None, copy_overlay=None, tweaks=None, photos=None):
+    """fixes：自我纠错选用的修补名（generate.FIX_CSS 里的）；detail：传空字典进来拿浏览器诊断。
+    photos：用户的照片 {"dir": 处理好的照片所在目录, "map": {位置: {"base","w","h","widths","alt"}}}（photos.ingest 的结果）。"""
     import copy
     b = copy.deepcopy(brief)
     res = plan(b, style_id)
@@ -46,6 +47,18 @@ def build_one(brief, style_id, out, run_browser=True, fixes=(), detail=None, cop
         json.dump(list(fixes), open(os.path.join(proj, "fixes.json"), "w", encoding="utf-8"), ensure_ascii=False)
     if tweaks:
         json.dump(dict(tweaks), open(os.path.join(proj, "tweaks.json"), "w", encoding="utf-8"), ensure_ascii=False)
+    if photos and photos.get("map"):
+        import shutil
+        dst = os.path.join(proj, "assets", "photos")
+        os.makedirs(dst, exist_ok=True)
+        keep = {}
+        for k, v in photos["map"].items():
+            files = [os.path.join(photos["dir"], f'{v["base"]}-{w}.webp') for w in v.get("widths", [])]
+            if files and all(os.path.isfile(f) for f in files):
+                for f in files:
+                    shutil.copy(f, dst)
+                keep[k] = v
+        json.dump(keep, open(os.path.join(proj, "images.json"), "w", encoding="utf-8"), ensure_ascii=False)
     skipped = ""
     ok, why = browser_check.ready() if run_browser else (True, "")
     if not ok:  # 本机缺 Chrome 或 Playwright：照样生成，但说清楚没做浏览器检查

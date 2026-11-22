@@ -133,6 +133,12 @@ a#download:hover{background:#2E3833}
 code{font-size:13px;background:var(--bg);padding:1px 5px;border-radius:4px;word-break:break-all}
 
 section,.panel{scroll-margin-top:68px}
+.imgs{list-style:none;margin:8px 0 0;padding:0;max-height:340px;overflow:auto}
+.imgs li{display:grid;grid-template-columns:72px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--line-2)}
+.imgs li:first-child{border-top:0}.imgs img{width:72px;height:54px;object-fit:cover;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--bg)}
+.imgs .lab{font-size:14px;margin:0}.imgs .kind{font-size:12px;color:var(--muted)}.imgs .kind.photo{color:var(--ok)}
+.imgs .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.imgs .acts button{font-size:13px;padding:4px 10px}
+.imgs .alt{display:flex;gap:6px;margin-top:6px}.imgs .alt input{flex:1;min-width:0;font-size:13px;padding:4px 8px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .filebtn{display:inline-block;border:1px solid var(--line);border-radius:var(--r-sm);padding:7px 14px;background:var(--surface);cursor:pointer;font-size:14px;color:var(--ink)}
 .filebtn:hover{border-color:var(--ink)}#feedfile:focus-visible+.filebtn{outline:2px solid var(--accent);outline-offset:2px}
@@ -225,6 +231,14 @@ section,.panel{scroll-margin-top:68px}
             <div class="hints" id="hints"></div>
             <div class="note" id="editresult" hidden></div>
           </div>
+        </div>
+
+        <div class="panel" id="imgpanel" hidden>
+          <h3>图片</h3>
+          <p class="muted small" id="imgsum"></p>
+          <ul class="imgs" id="imglist"></ul>
+          <input type="file" id="imgfile" class="vh" accept="image/jpeg,image/png,image/webp" tabindex="-1" aria-hidden="true">
+          <p id="imgstatus" class="small muted" role="status" aria-live="polite" style="margin:6px 0 0;min-height:1.4em"></p>
         </div>
 
         <div class="panel" id="audit" hidden></div>
@@ -412,7 +426,7 @@ section,.panel{scroll-margin-top:68px}
 
   function start() {
     var text = $('text').value.trim(); if (!text) { say('先写一句话', true); $('text').focus(); return; }
-    S.version = null; $('step-site').hidden = true; $('tab-build').classList.remove('has-site', 'show-pick');
+    S.version = null; $('step-site').hidden = true; $('imgpanel').hidden = true; $('tab-build').classList.remove('has-site', 'show-pick');
     busy(true); say('正在理解你的需求……');
     api('/api/start', {text: text}).then(function (v) { showUnderstood(v); say('正在生成三种风格的预览……');
       return api('/api/preview', {session: v.session}); })
@@ -454,8 +468,58 @@ section,.panel{scroll-margin-top:68px}
     S.version = r.version; setDownload();
     dl = $('download'); dl.textContent = '下载第 ' + r.version + ' 版（压缩包）'; dl.hidden = false;
     showAudit(r.audit);
-    showSelffix(r.selffix); loadKnowledge();
+    showSelffix(r.selffix); loadKnowledge(); loadImages();
   }
+  // ---------- 图片：每个放图的位置，可以换成自己的照片、写说明、用回插图
+  function loadImages() {
+    if (!S.session) return;
+    api('/api/images', {session: S.session}).then(function (r) {
+      var ul = $('imglist'); ul.replaceChildren();
+      var arts = r.slots.filter(function (x) { return x.kind === 'art'; }).length;
+      $('imgsum').textContent = r.slots.length ? ('共 ' + r.slots.length + ' 处放图，' + (arts ? arts + ' 处还是示意插图（一看就是插图，可以直接上线），换成你自己的照片会更真实。'
+        : '都换成了你的照片。')) + '照片支持 JPG、PNG、WebP，最大 15MB；上传时会去掉拍摄地点等信息并压缩。' : '这个网站没有放图的位置。';
+      r.slots.forEach(function (x) {
+        var li = el('li'); var th = el('img'); th.src = x.thumb; th.alt = ''; th.width = 72; th.height = 54;
+        var d = el('div'); d.append(el('p', x.label, 'lab'), el('span', x.kind === 'photo' ? '你的照片' : '示意插图', 'kind' + (x.kind === 'photo' ? ' photo' : '')));
+        var acts = el('div', null, 'acts');
+        var up = el('button', x.kind === 'photo' ? '换一张' : '换成我的照片', 'ghost'); up.type = 'button';
+        up.addEventListener('click', function () { S.imgKey = x.key; $('imgfile').value = ''; $('imgfile').click(); });
+        acts.append(up);
+        if (x.kind === 'photo') {
+          var back = el('button', '用回插图', 'ghost'); back.type = 'button';
+          back.addEventListener('click', function () { imgCall('/api/image/reset', {key: x.key}, '正在换回插图……'); });
+          acts.append(back);
+          var row = el('div', null, 'alt'); var inp = el('input'); inp.type = 'text'; inp.maxLength = 120; inp.value = x.alt;
+          inp.setAttribute('aria-label', x.label + '：这张照片拍的是什么');
+          var save = el('button', '保存说明', 'ghost'); save.type = 'button';
+          save.addEventListener('click', function () { imgCall('/api/image/alt', {key: x.key, alt: inp.value}, '正在保存说明……'); });
+          row.append(inp, save); d.append(acts, row);
+        } else { d.append(acts); }
+        li.append(th, d); ul.append(li);
+      });
+      $('imgpanel').hidden = false;
+    }).catch(function (er) { $('imgstatus').textContent = er.message; });
+  }
+  function imgSay(t, bad) { var x = $('imgstatus'); x.textContent = t; x.className = 'small ' + (bad ? 'bad' : 'muted'); }
+  function imgCall(path, body, wait) {
+    body.session = S.session; busy(true); imgSay(wait);
+    document.querySelectorAll('#imglist button').forEach(function (b) { b.disabled = true; });
+    api(path, body).then(function (r) {
+      var e = r.edit;
+      if (!e.kept) showSite(r); else loadImages();
+      imgSay(e.kept ? (e.refused[0] || '这次没有改动') : (e.done[0] + '。现在是第 ' + r.version + ' 版'), e.kept);
+    }).catch(function (er) { imgSay(er.message, true); loadImages(); }).finally(function () { busy(false); });
+  }
+  $('imgfile').addEventListener('change', function () {
+    var f = this.files[0]; if (!f || !S.imgKey) return;
+    if (f.type && !/^image\/(jpeg|png|webp)$/.test(f.type)) { imgSay('只支持 JPG、PNG、WebP 格式的照片', true); return; }
+    if (f.size > 15 * 1024 * 1024) { imgSay('照片太大（超过 15MB），请先压缩一下', true); return; }
+    var rd = new FileReader();
+    rd.onload = function () { var data = String(rd.result).split(',')[1] || '';
+      imgCall('/api/image/upload', {key: S.imgKey, data: data, alt: ''}, '正在处理照片并重新检查网站……'); };
+    rd.onerror = function () { imgSay('读不了这个文件', true); };
+    rd.readAsDataURL(f);
+  });
   var dl;
   function setDownload() {
     $('download').href = '/api/export?session=' + encodeURIComponent(S.session) + '&version=' + S.version + '&token=' + encodeURIComponent(TOKEN)
