@@ -74,10 +74,10 @@
   "phase": "学习大脑",
   "item": "跨会话持久化（放进 GitHub 仓库）",
   "weight": 2,
-  "status": "未做",
-  "earned": 0.0,
+  "status": "完成",
+  "earned": 2.0,
   "evidence": "",
-  "note": "需要你提供仓库"
+  "note": "已放进 GitHub：Dearkent/ai-web-look（公开，用户确认）；CLAUDE.md 写明下一次对话怎么接着干；每轮结束提交并推送"
  },
  {
   "id": "B6",
