@@ -149,6 +149,30 @@ body.fam-glass{background:linear-gradient(135deg,var(--color-band),var(--color-b
 .fam-editorial section{border-top:1px solid var(--color-foreground)}
 .fam-editorial .card{color:inherit;border:none;border-left:2px solid var(--color-foreground);border-radius:0;background:transparent;box-shadow:none}
 .fam-editorial .btn{border-radius:0}
+/* ===== 第十五轮“大师审稿”：少，但更好（Rams）；一个页面一个主要动作（乔布斯）；字号阶梯和网格（Vignelli） ===== */
+body{font-size:17px;line-height:1.7}
+.wrap{max-width:1120px;padding:0 24px}
+section{padding:clamp(56px,8vw,104px) 20px}
+.t-hero{padding:clamp(64px,10vw,128px) 20px}
+section h2{font-size:clamp(26px,3.2vw,36px);line-height:1.2;margin:0 0 clamp(20px,3vw,32px);letter-spacing:-.01em}
+.t-hero h1,.t-hero h2{font-size:clamp(36px,5.6vw,64px);line-height:1.1;letter-spacing:-.02em;margin:0 0 20px}
+.t-hero p{font-size:clamp(18px,1.6vw,20px);color:var(--color-muted);margin:0 0 32px}
+header.site{padding:16px 24px}a.brand strong{font-size:17px}
+header.site nav a{font-size:15px;color:inherit;opacity:.78;margin-right:18px}header.site nav a[aria-current],header.site nav a:hover{opacity:1}
+.btn{padding:12px 22px;font-weight:600;font-size:16px}
+/* 首屏只有一个主要按钮；第二个动作降为文字链接 */
+.t-hero .btn:not(.primary){border-color:transparent;background:none;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px;padding-left:8px;padding-right:8px}
+/* 特色、理由：去掉盒子，用一道细线和留白分组（框是给可以点的东西用的） */
+body:not(.fam-block) :is(.t-features,.t-value-props) .card{background:none;border:0;border-top:2px solid var(--color-primary);border-radius:0;box-shadow:none;padding:20px 0 0}
+:is(.t-features,.t-value-props) .grid{gap:24px 40px}
+:is(.t-features,.t-value-props) .card h3{font-size:19px;margin-bottom:8px}
+/* 菜单：价目单排版，名字在左、价格在右，细线分隔；不再一格一盒 */
+body:not(.fam-block) .t-menu .card{background:none;border:0;border-bottom:1px solid var(--color-border);border-radius:0;box-shadow:none;padding:16px 0;
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.t-menu .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 56px}
+.t-menu .card h3{font-weight:500;font-size:18px}.t-menu .card p:empty{display:none}
+.card p:empty{display:none}
+@media (max-width:640px){body{font-size:16px}.t-menu .grid{grid-template-columns:1fr}}
 /* 科技感（第十四轮）：深墨蓝底、首屏网格 + 光束是唯一的“亮点”，其余都克制：细线分隔、细线卡片、紧凑的大标题 */
 body.fam-tech{--grid:color-mix(in srgb,var(--color-foreground) 8%,transparent);-webkit-font-smoothing:antialiased}
 .fam-tech header.site{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--color-background) 78%,transparent);
@@ -303,8 +327,32 @@ def render_slot(name, slot, val=None, sectype="", labels=None, key="", media=Non
     return f'<{tag} class="todo"{tip}>【{E(name)}待写】{E(brief)}</{tag}>'
 
 
+# 这些区块没有真实内容就不上页面（评价、数字、标志、团队、对比……编不出来，空着只是噪音）；记进“待补内容”
+HIDE_IF_EMPTY = {"testimonials", "stats", "logos", "team", "comparison", "content"}
+SEC_LABEL = {"testimonials": "顾客评价", "stats": "数字", "logos": "合作伙伴", "team": "团队", "comparison": "对比", "content": "介绍"}
+
+
+def _only_placeholders(content) -> bool:
+    if not content:
+        return True
+    texts = []
+    for k, v in content.items():
+        if k in ("labels", "heading"):  # 标题是系统写的（“大家怎么说”），算不上内容；看正文和条目
+            continue
+        if isinstance(v, list):
+            texts += [str(x.get("title", "")) + str(x.get("body", "")) for x in v if isinstance(x, dict)]
+        else:
+            texts.append(str(v))
+    texts = [t for t in texts if t.strip()]
+    return all("（待填" in t for t in texts)
+
+
 def render_section(s, pages, content=None, here=None, page_id="", media=None):
     content = content or {}
+    if s["type"] in HIDE_IF_EMPTY and _only_placeholders(content) and page_id not in ("privacy", "about") and not page_id.endswith("-done"):
+        if media is not None:
+            media.setdefault("hidden", []).append({"page": page_id, "section": s["id"], "label": SEC_LABEL.get(s["type"], s["type"])})
+        return ""
     variant = s["layout"]["variant"]
     mobile = " m-stack" if s["layout"].get("mobile") == "stack" else ""
     motion = ' data-motion="1"' if s.get("motion") else ""
@@ -367,7 +415,7 @@ def tweaks_css(t: dict) -> str:
         f = float(f)
         if not 0.8 <= f <= 1.4:
             raise ValueError("字号倍数超出范围")
-        out.append(f"body{{font-size:{16 * f:.1f}px!important}}.t-hero p{{font-size:{18 * f:.1f}px!important}}"
+        out.append(f"body{{font-size:{17 * f:.1f}px!important}}.t-hero p{{font-size:{19 * f:.1f}px!important}}"
                    f".grid .card h3{{font-size:{17 * f:.1f}px!important}}footer.site{{font-size:{14 * f:.1f}px!important}}"
                    f".t-hero h1,.t-hero h2{{font-size:clamp({28 * f:.0f}px,{5 * f:.1f}vw,{48 * f:.0f}px)!important}}")
     r = t.get("radius")
@@ -470,8 +518,11 @@ def generate(project, out):
     menu_attr = ' data-menu=""' if len(header) > 4 else ""  # 导航超过 4 项，手机上收进“菜单”按钮
     import datetime
     year = datetime.date.today().year
-    home_desc = next((p.get("seo", {}).get("description", "") for p in site["pages"] if p["path"] == "/"), "")
-    about_html = f'<p class="muted">{E(home_desc.split("：", 1)[-1][:60])}</p>' if home_desc else ""
+    # 页脚一句话：用首屏副标题（给访客看的话），不用 SEO 描述里的内部目标名（以前会出现“注册或报名。欢迎了解。”）
+    home_id = next((p["id"] for p in site["pages"] if p["path"] == "/"), "home")
+    blurb = next((str(v.get("body", "")) for v in (content.get(home_id) or {}).values() if isinstance(v, dict) and v.get("body")
+                  and "（待填" not in str(v.get("body"))), "")
+    about_html = f'<p class="muted">{E(blurb[:60])}</p>' if blurb else ""
     for p in site["pages"]:
         wire = load(os.path.join(project, p["wireframe"]))
         crumbs, par, seen = [], p.get("parent"), {p["id"]}
@@ -521,6 +572,9 @@ def generate(project, out):
         os.makedirs(os.path.dirname(f), exist_ok=True)
         open(f, "w", encoding="utf-8").write(doc)
         written.append(out_file(p["path"]))
+    hidden = media.get("hidden", [])
+    with open(os.path.join(project, "hidden.json"), "w", encoding="utf-8") as f:  # 等内容的区块（工作台和体检会提醒）
+        json.dump(hidden, f, ensure_ascii=False)
     os.makedirs(os.path.join(out, "assets", "art"), exist_ok=True)
     for fn, svg in media["arts"].items():
         open(os.path.join(out, "assets", "art", fn), "w", encoding="utf-8").write(svg)

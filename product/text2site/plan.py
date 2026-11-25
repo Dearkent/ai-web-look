@@ -207,7 +207,9 @@ def plan(brief: dict, style_id: str | None = None) -> dict:
     if catalog_page and not any(s["type"] == "menu" for s in secs):
         pos = 2 if len(secs) > 2 else len(secs)
         secs.insert(pos, _sec("catalog-teaser", "menu" if catalog_page == "menu" else "gallery",
-                              {"items": {"kind": "list", "count": 4, **({} if catalog_page == "menu" else {"item_image": True})}},
+                              {"heading": {"kind": "text", "max_chars": 12},  # 第十五轮：首页的菜单/作品预览要有标题，访客才知道这是什么
+                               # 带图的预览三列排，放 3 张（4 张会剩一张孤零零换到下一行）；菜单是两列价目单，放 4 行
+                               "items": {"kind": "list", "count": 4 if catalog_page == "menu" else 3, **({} if catalog_page == "menu" else {"item_image": True})}},
                               [{"id": "more", "label": "查看全部", "target": {"page": catalog_page}}],
                               data={"menu": "menu-item", "products": "product", "services": "service"}[catalog_page]))
     if "faq" in feats and not any(s["type"] == "faq" for s in secs):

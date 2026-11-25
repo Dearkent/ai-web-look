@@ -53,8 +53,8 @@ _, _, _, _, ex = edit.apply(b, "soft-ui-evolution", P("字大一点，字大一�
 r = build_one(b, "soft-ui-evolution", tempfile.mkdtemp(), run_browser=True, copy_overlay=ex["copy"], tweaks=ex["tweaks"])
 css = open(os.path.join(r["site"], "styles.css"), encoding="utf-8").read()
 html = open(os.path.join(r["site"], "index.html"), encoding="utf-8").read()
-expect("生成：字号×1.25、直角、紧凑都写进样式最后一层，标题换成用户的话，浏览器检查 0 问题",
-       "font-size:20.0px" in css and "border-radius:0px" in css and "padding-top:24px" in css and "下班后，来巷口喝一杯" in html
+expect("生成：字号×1.25（正文 17px → 21.2px）、直角、紧凑都写进样式最后一层，标题换成用户的话，浏览器检查 0 问题",
+       "font-size:21.2px" in css and "border-radius:0px" in css and "padding-top:24px" in css and "下班后，来巷口喝一杯" in html
        and not r["browser_problems"] and not r["blueprint_errors"], (r["browser_problems"][:2], r["blueprint_errors"][:2]))
 expect("一次加两个", P("加上地图和动态")[0] == [{"op": "add_feature", "kind": "map"}, {"op": "add_feature", "kind": "blog"}])
 

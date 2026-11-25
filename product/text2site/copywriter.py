@@ -12,6 +12,10 @@ FOOD = {"Bakery/Cafe", "Restaurant/Food Service", "Brewery/Winery"}
 TAGLINE = {"booking": "提前约好，到了就有位置", "sell": "喜欢就带回家", "leads": "说出你的需求，我们来想办法", "signup": "现在报名，马上开始",
            "showcase": "让作品替我们说话", "inform": "先来认识一下我们", "community": "和志同道合的人一起", "recruit": "我们在找你",
            "download": "装上就能用"}
+# 首屏副标题：一句话说清访客能得到什么（第十五轮“大师审稿”：不再把功能名堆成一串）
+SUB = {"booking": "在线选好时间，来了不用等。", "sell": "看得清、挑得快，下单就送到。", "leads": "把情况告诉我们，很快给你答复。",
+       "signup": "几分钟填完，马上就能开始。", "showcase": "做过的作品都在这里，你自己判断。", "inform": "我们是谁、做什么、在哪里，一页看完。",
+       "community": "一群想法相近的人，在这里认识彼此。", "recruit": "想把一件事做好的人，我们一起。", "download": "下载安装，打开就能用。"}
 CTA = {"booking": "现在就预约", "sell": "挑一件喜欢的", "leads": "聊聊你的需求", "signup": "马上报名", "showcase": "看看更多作品",
        "inform": "了解更多", "community": "加入我们", "recruit": "投递简历", "download": "立即下载"}
 FEATURE_COPY = {"booking": ("在线预约", "选好时间和人数，一步提交，不用打电话排队。"),
@@ -48,6 +52,7 @@ def _group(ptype):
 
 def write_copy(brief: dict, wires: dict) -> dict:
     name, aud = brief.get("site_name", "我的网站"), brief["audience"]["primary"]
+    named = name not in ("", "我的网站")  # 没给名字时，标题里不写“我的网站”这种占位名
     ptype = brief["product_type"]["value"]
     p0 = brief["goals"][0]["kind"]
     feats = [f["kind"] for f in brief["features"]]
@@ -59,20 +64,21 @@ def write_copy(brief: dict, wires: dict) -> dict:
             t, c = s["type"], {}
             slots = s.get("slots", {})
             if t == "hero":
-                c = {"heading": f"{name}：{TAGLINE.get(p0, '欢迎')}", "body": f"为{aud}准备。" + "、".join(
-                    FEATURE_COPY[f][0] for f in feats if f in FEATURE_COPY)[:40] + "，都在这里。"}
+                # 标题只说一个承诺（名字在页头和网页标题里已经有了）；副标题一句话说好处
+                c = {"heading": TAGLINE.get(p0, "欢迎"), "body": SUB.get(p0, "")}
             elif t in ("value-props", "features"):
                 items = [FEATURE_COPY[f] for f in feats if f in FEATURE_COPY][:3] if t == "features" else []
                 items = (items + benefits)[:slots.get("items", {}).get("count", 3)]
-                c = {"heading": "为什么选" + name if t == "value-props" else "你能在这里做什么",
+                c = {"heading": ("为什么选" + (name if named else "我们")) if t == "value-props" else "你能在这里做什么",
                      "items": [{"title": a, "body": b} for a, b in items]}
             elif t == "menu":
                 names = FOOD_ITEMS.get(ptype, [f"项目 {i + 1}" for i in range(8)])
                 n = slots.get("items", {}).get("count", 4)
-                c = {"heading": "菜单" if ptype in FOOD else "项目", "items": [{"title": x, "body": "价格待填"} for x in names[:n]]}
+                # 价格不知道就不写（不在每一行挂“价格待填”）；待补的在体检里提醒
+                c = {"heading": "菜单" if ptype in FOOD else "项目", "items": [{"title": x, "body": ""} for x in names[:n]]}
             elif t == "gallery":
                 n = slots.get("items", {}).get("count", 6)
-                c = {"heading": "作品" if _group(ptype) == "creative" else "看看", "items": [{"title": f"（待填：作品 {i + 1}）", "body": ""} for i in range(n)]}
+                c = {"heading": {"creative": "作品", "food": "店里", "tech": "产品"}.get(_group(ptype), "案例"), "items": [{"title": f"（待填：作品 {i + 1}）", "body": ""} for i in range(n)]}
             elif t in ("testimonials", "stats", "team", "logos", "pricing", "comparison"):
                 label = {"testimonials": "真实顾客评价", "stats": "真实数据", "team": "团队成员", "logos": "合作伙伴标志",
                          "pricing": "价格方案", "comparison": "对比内容"}[t]
@@ -112,7 +118,7 @@ def write_copy(brief: dict, wires: dict) -> dict:
                                   "你的权利：可以随时查询、更正、删除你的信息，或撤回同意，请联系（待填：电话或邮箱）。"
                                   "更新日期：（待填）。上线前请找专业人士确认本说明。")}
                 elif pid == "about":
-                    c = {"heading": f"关于{name}", "body": f"（待填：{name}的故事——为什么开始、想为{aud}做什么）"}
+                    c = {"heading": f"关于{name}" if named else "关于我们", "body": f"（待填：{name if named else '你'}的故事——为什么开始、想为{aud}做什么）"}
                 else:
                     c = {"heading": "（待填）"}
             page[s["id"]] = c

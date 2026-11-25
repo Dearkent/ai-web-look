@@ -187,7 +187,20 @@ class App:
                             "remembered": [f"{x['id']}：{x['what']}" + ("（先只用于同行业同风格，验证后再推广）" if x["scope"] == "narrow" else "")
                                            for x in rep["learned"]]},
                 "used_learning": self._used(tmp), "copy_by": s.get("copy_by", {"how": "rules"}),
-                "audit": site_audit.audit(r["site"], r["browser_problems"])}, r
+                "audit": self._audit(r)}, r
+
+    @staticmethod
+    def _audit(r):
+        """上线前体检；再加一条：哪些区块因为没有真实内容先不显示（生成器记在 hidden.json）。"""
+        a = site_audit.audit(r["site"], r["browser_problems"])
+        hf = os.path.join(r["project"], "hidden.json")
+        hid = json.load(open(hf, encoding="utf-8")) if os.path.exists(hf) else []
+        if hid:
+            labels = "、".join(dict.fromkeys(h["label"] for h in hid))
+            a["items"].append({"cat": "合规", "ok": False, "pending": True,
+                               "msg": f"有 {len(hid)} 个区块先不显示，等你的真实内容：{labels}",
+                               "fix": "这些内容系统不能替你编；有了真实的评价、数字、团队介绍再加上，空着不如不放"})
+        return a
 
     # ---------- 对话式修改 ----------
     def edit(self, body):
