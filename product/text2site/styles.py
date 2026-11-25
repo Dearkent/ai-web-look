@@ -21,6 +21,7 @@ from understand import KB_DIR  # noqa: E402
 
 SERIF_ZH = ['"Noto Serif SC"', '"Songti SC"', '"SimSun"', "serif"]
 SANS_ZH = ['"PingFang SC"', '"Microsoft YaHei"', '"Noto Sans SC"', "system-ui", "sans-serif"]
+TECH_STYLE = "ai-native-ui"
 DIVERSE = ["minimalism-and-swiss-style", "soft-ui-evolution", "neubrutalism", "dark-mode-oled",
            "glassmorphism", "editorial-grid-magazine", "claymorphism", "flat-design"]
 
@@ -74,6 +75,7 @@ def _mix(h, other, t):
 
 # ---------------- 风格家族：决定“看起来像什么” ----------------
 FAMILY_WORDS = [
+    ("tech", ["ai-native", "high-tech"]),  # 第十四轮：用户要“科技感、高端”。深色精密：网格 + 光束首屏、细线卡片
     ("dark", ["dark", "cyberpunk", "hud", "terminal", "oled", "cinema", "vaporwave", "retro-futurism", "chromatic"]),
     ("glass", ["glass", "aurora", "gradient", "liquid", "spatial", "dimensional", "3d"]),
     ("block", ["brutal", "vibrant", "memphis", "bauhaus", "y2k", "maximalism", "pixel", "pop", "flat"]),
@@ -81,7 +83,7 @@ FAMILY_WORDS = [
     ("minimal", ["minimal", "swiss", "monochrome", "zero-interface", "accessible", "inclusive", "apple"]),
     ("soft", ["soft", "neumorph", "clay", "organic", "nature", "biophilic", "tactile", "biomimetic"]),
 ]
-FAMILY_ZH = {"block": "大色块", "soft": "柔和圆润", "minimal": "极简", "glass": "毛玻璃渐变", "dark": "深色", "editorial": "杂志排版"}
+FAMILY_ZH = {"tech": "科技感", "block": "大色块", "soft": "柔和圆润", "minimal": "极简", "glass": "毛玻璃渐变", "dark": "深色", "editorial": "杂志排版"}
 
 
 def _zh_type(pt: str) -> str:
@@ -155,7 +157,19 @@ def palette(product_type: str, dark: bool, fam: str = "soft", hexes: list[str] |
     anchor = p["primary"]
     light = _near_brand([h for h in (hexes or []) if _lum(h) > 0.35 and h not in ("#FFFFFF",)], anchor)
     vivid = _near_brand([h for h in (hexes or []) if 0.04 < _lum(h) < 0.75 and h not in ("#000000", "#FFFFFF")], anchor)
-    if fam == "dark" or dark:
+    if fam == "tech":
+        # 深墨蓝底（带一点行业主色的色调），细线边框，主色提亮到深底上够亮
+        canvas = _mix(p["primary"], "#05070D", 0.93)
+        p.update(background=canvas, card=_mix(canvas, "#FFFFFF", 0.045), foreground="#E8ECF4", muted="#9AA6B8",
+                 border=_mix(canvas, "#FFFFFF", 0.13))
+        p["band"], p["band-2"] = _mix(canvas, "#FFFFFF", 0.025), canvas
+        for _ in range(8):
+            if contrast(p["primary"], canvas) >= 4.5:
+                break
+            p["primary"] = _mix(p["primary"], "#FFFFFF", 0.2)
+        if contrast(p["accent"], canvas) < 3:
+            p["accent"] = _mix(p["accent"], "#FFFFFF", 0.45)
+    elif fam == "dark" or dark:
         p.update(background="#0E1116", card="#171B22", foreground="#E9EDF2", muted="#A4AEBB", border="#2A313C")
         p["band"], p["band-2"] = "#141922", "#0E1116"
     elif fam == "block":
@@ -176,8 +190,10 @@ def palette(product_type: str, dark: bool, fam: str = "soft", hexes: list[str] |
         p["band"], p["band-2"] = "#F1EEE7", "#FBFAF7"
     else:  # soft
         base = light[0] if light else p["primary"]
-        p.update(background=_mix(base, "#FFFFFF", 0.82), card="#FFFFFF", border=_mix(base, "#FFFFFF", 0.6))
-        p["band"], p["band-2"] = _mix(base, "#FFFFFF", 0.65), _mix(base, "#FFFFFF", 0.9)
+        # 第十四轮：用户觉得粉色“不够高端”——底色先去掉一半饱和度再冲淡，只留一点暖意，不再整页粉/整页蓝
+        base = _mix(base, "#8C8A86", 0.55)
+        p.update(background=_mix(base, "#FFFFFF", 0.93), card="#FFFFFF", border=_mix(base, "#FFFFFF", 0.72))
+        p["band"], p["band-2"] = _mix(base, "#FFFFFF", 0.85), _mix(base, "#FFFFFF", 0.96)
     for _ in range(6):  # 有界：主色在背景上至少 3:1，最多调 6 次
         if contrast(p["primary"], p["background"]) >= 3:
             break
@@ -252,6 +268,8 @@ def options(brief: dict, n: int = 3, learned=None) -> list[dict]:
 
     avoided_fams = {family(a) for a in avoided if a in _STYLES}  # 说了“不要暗黑”，整个深色家族都排除
     avoided_fams |= {a.split("：", 1)[1].split("（", 1)[0] for a in brief.get("brand", {}).get("avoid", []) if a.startswith("家族：")}
+    if "dark" in avoided_fams:  # 科技感也是深色底：说了不要暗黑，就一起不要
+        avoided_fams.add("tech")
     ptype = brief["product_type"]["value"]
 
     def add(sid, why):
@@ -277,6 +295,11 @@ def options(brief: dict, n: int = 3, learned=None) -> list[dict]:
             continue
         elif family(sid) not in looks:  # 同一家族只留一个，三个选项要看得出区别
             add(sid, f"适合{_zh_type(brief['product_type']['value'])}这类网站")
+    # 每次都给一个“科技感”选项（用户 11-25 要求）：没有的话，放在知识库推荐之后、换个感觉之前
+    if "tech" not in looks and "tech" not in avoided_fams:
+        if len(out) >= n and out[-1]["why"].startswith(("适合", "换个感觉")):
+            looks.discard(family(out.pop()["id"]))
+        add(TECH_STYLE, "科技感：深色精密，适合想显得专业、高端的网站")
     for sid in DIVERSE:  # 补齐时优先挑观感不同的，让三个选项真的有差别
         if len(out) < n and look(sid) not in looks:
             add(sid, "换个感觉：和前面的不一样")

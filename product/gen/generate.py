@@ -149,6 +149,27 @@ body.fam-glass{background:linear-gradient(135deg,var(--color-band),var(--color-b
 .fam-editorial section{border-top:1px solid var(--color-foreground)}
 .fam-editorial .card{color:inherit;border:none;border-left:2px solid var(--color-foreground);border-radius:0;background:transparent;box-shadow:none}
 .fam-editorial .btn{border-radius:0}
+/* 科技感（第十四轮）：深墨蓝底、首屏网格 + 光束是唯一的“亮点”，其余都克制：细线分隔、细线卡片、紧凑的大标题 */
+body.fam-tech{--grid:color-mix(in srgb,var(--color-foreground) 8%,transparent);-webkit-font-smoothing:antialiased}
+.fam-tech header.site{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--color-background) 78%,transparent);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--color-border)}
+.fam-tech header.site nav a{color:var(--color-muted);font-size:15px}.fam-tech header.site nav a:hover,.fam-tech header.site nav a[aria-current]{color:var(--color-foreground)}
+.fam-tech h1,.fam-tech h2{letter-spacing:-.03em;font-weight:700}.fam-tech h3{letter-spacing:-.01em}
+.fam-tech .t-hero{position:relative;isolation:isolate;overflow:hidden}
+.fam-tech .t-hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 0%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 0%,#000 30%,transparent 100%)}
+.fam-tech .t-hero::after{content:"";position:absolute;z-index:-1;pointer-events:none;left:50%;top:-40%;width:min(960px,130%);height:80%;transform:translateX(-50%);
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--color-primary) 38%,transparent),color-mix(in srgb,var(--color-accent) 14%,transparent) 55%,transparent);opacity:.9}
+.fam-tech .t-hero h1{font-size:clamp(38px,6vw,76px);line-height:1.06}
+.fam-tech section+section{border-top:1px solid var(--color-border)}
+.fam-tech .card{background:var(--color-card);border:1px solid var(--color-border);border-radius:14px;box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 6%,transparent)}
+.fam-tech .card:hover{border-color:color-mix(in srgb,var(--color-primary) 45%,var(--color-border))}
+.fam-tech .btn{border-radius:10px}
+.fam-tech .btn.primary{box-shadow:0 10px 30px -10px color-mix(in srgb,var(--color-primary) 80%,transparent)}
+.fam-tech .media img,.fam-tech .card img.thumb{border:1px solid var(--color-border);border-radius:14px}
+.fam-tech .t-steps .card::before{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;border-radius:8px}
+.fam-tech .qa{border-color:var(--color-border)}
 @media (prefers-reduced-motion:no-preference){.reveal{opacity:0;transform:translateY(12px);transition:opacity .4s ease-out,transform .4s ease-out}.reveal.in{opacity:1;transform:none}}
 """
 

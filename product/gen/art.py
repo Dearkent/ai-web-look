@@ -203,6 +203,19 @@ def draw(colors: dict, family: str, motif: str, seed: str, w: int = 800, h: int 
         body += (f'<rect x="{cx - cw / 2:.0f}" y="{cy - ch / 2:.0f}" width="{cw:.0f}" height="{ch:.0f}" rx="{m * .06:.0f}" '
                  f'fill="#FFFFFF" fill-opacity=".45" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="2"/>')
         body += _place(_motif(motif, mix(pri, "#000000", .35), "#FFFFFF", 6, True), cx, cy, cw * .78)
+    elif family == "tech":
+        # 深底 + 细网格（中间亮、四周淡出）+ 一道主色光 + 发光线条图案
+        defs += f'<filter id="b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="{m * .08:.0f}"/></filter>'
+        defs += (f'<radialGradient id="fade" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".9"/>'
+                 f'<stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient><mask id="m"><rect width="{w}" height="{h}" fill="url(#fade)"/></mask>')
+        defs += f'<linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{mix(pri, "#FFFFFF", .35)}"/><stop offset="1" stop-color="{mix(acc, "#FFFFFF", .3)}"/></linearGradient>'
+        base_c = bg if lum(bg) < 0.08 else mix(pri, "#05070D", .93)
+        body += f'<rect width="{w}" height="{h}" fill="{base_c}"/>'
+        body += f'<ellipse cx="{cx:.0f}" cy="{cy:.0f}" rx="{m * .42:.0f}" ry="{m * .3:.0f}" fill="{pri}" opacity=".45" filter="url(#b)"/>'
+        step = max(28, round(m / 14))
+        grid = "".join(f'<path d="M{x} 0V{h}"/>' for x in range(step, w, step)) + "".join(f'<path d="M0 {y}H{w}"/>' for y in range(step, h, step))
+        body += f'<g stroke="{mix(base_c, "#FFFFFF", .16)}" stroke-width="1" mask="url(#m)">{grid}</g>'
+        body += _place(_motif(motif, "url(#s)", "none", 4.5, False), cx, cy, m * .58)
     elif family == "dark":
         defs += f'<filter id="b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="{m * .06:.0f}"/></filter>'
         body += f'<rect width="{w}" height="{h}" fill="{mix(bg, "#000000", .2)}"/>'

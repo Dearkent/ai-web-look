@@ -38,11 +38,11 @@ def jpeg(w, h, color=(180, 120, 60), exif=None, quality=90):
 
 # ---------- 示意插图
 SAFE_TAGS = {"svg", "defs", "rect", "circle", "ellipse", "path", "g", "filter", "feGaussianBlur", "linearGradient",
-             "radialGradient", "stop", "pattern", "text"}
+             "radialGradient", "stop", "pattern", "text", "mask"}
 cols = {"primary": "#92400E", "secondary": "#B45309", "accent": "#F59E0B", "background": "#FEF3C7", "foreground": "#78350F",
         "card": "#FFFFFF", "border": "#FDE68A", "band": "#FDE7B0", "band-2": "#FEF3C7"}
 motifs = [m for m, _ in art.MOTIF_WORDS] + ["spark"]
-fams = ["block", "soft", "minimal", "glass", "dark", "editorial"]
+fams = ["block", "soft", "minimal", "glass", "dark", "editorial", "tech"]
 probs = []
 for f in fams:
     for m in motifs:
@@ -57,7 +57,7 @@ for f in fams:
         low = svg.lower()
         if any(x in low for x in ("<script", "href", "url(http", "javascript:", "onload", "<image", "<foreignobject")):
             probs.append((f, m, "外部引用或脚本"))
-expect(f"插图：6 种风格 × {len(motifs)} 种图案都是合法 SVG，只有图形元素，没有脚本、外链、文字", not probs, probs[:3])
+expect(f"插图：7 种风格 × {len(motifs)} 种图案都是合法 SVG，只有图形元素，没有脚本、外链、文字", not probs, probs[:3])
 expect("插图：同一个位置每次画得一样，不同位置不一样",
        art.draw(cols, "soft", "cup", "a/b/c") == art.draw(cols, "soft", "cup", "a/b/c") != art.draw(cols, "soft", "cup", "a/b/d"))
 expect("插图：一组卡片轮换三种相近图案，不会九张全一样",
