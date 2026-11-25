@@ -23,3 +23,8 @@
 - 看板（任务、沟通、进度）：https://claude.ai/artifact/GiWcZu6fZEud83sev3eGYE
 - 演示页：https://claude.ai/artifact/UH7YqYkknY8EvPPsi9gM9s
 - 调研档案：https://claude.ai/artifact/Vsr9WLssTvJjvPNaMTagdP
+- 实况回放（真实记录）：https://claude.ai/artifact/87uPy5EGrw2xH9yuZLHJqY；本机实况：启动工作台后打开 /live
+
+## 喂设计（2026-11-25 加）
+- `brain.py feed-design 仓库/网址/文件夹 [--for 行业]` 喂；`--refresh` 提取器改进后整批重读；`brain.py priors build|trial|show` 提炼、试跑、查看。
+- 来源清单在 product/learn/sources/；语料只存数字和类别（product/learn/corpus/）。

@@ -16,9 +16,10 @@ import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-for p in (HERE, os.path.join(HERE, "..", "tools"), os.path.join(HERE, "..", "gen")):
+for p in (HERE, os.path.join(HERE, "..", "tools"), os.path.join(HERE, "..", "gen"), os.path.join(HERE, "..", "app")):
     sys.path.insert(0, p)
 import browser_check  # noqa: E402
+import events  # noqa: E402
 import check_blueprints  # noqa: E402
 import generate  # noqa: E402
 import styles  # noqa: E402
@@ -35,9 +36,16 @@ FEAT_ZH = {"booking": "预约表单", "contact_form": "联系表单", "map": "�
 def build_one(brief, style_id, out, run_browser=True, fixes=(), detail=None, copy_overlay=None, tweaks=None, photos=None):
     """fixes：自我纠错选用的修补名（generate.FIX_CSS 里的）；detail：传空字典进来拿浏览器诊断。
     photos：用户的照片 {"dir": 处理好的照片所在目录, "map": {位置: {"base","w","h","widths","alt"}}}（photos.ingest 的结果）。"""
+    with events.run("build", 行业=brief.get("product_type", {}).get("value", ""), 风格=style_id):
+        return _build_one(brief, style_id, out, run_browser, fixes, detail, copy_overlay, tweaks, photos)
+
+
+def _build_one(brief, style_id, out, run_browser, fixes, detail, copy_overlay, tweaks, photos):
     import copy
     b = copy.deepcopy(brief)
-    res = plan(b, style_id)
+    with events.stage("plan", 风格=style_id, 修补=len(fixes)) as st:
+        res = plan(b, style_id)
+        st.out(pages=sum(1 for k in res.get("files", {}) if "pages/" in str(k)), prior=res["notes"].get("design_prior", ""))
     if copy_overlay:  # 模型改写过、校验通过的文案（llm_copy），按区块类型套上
         from llm_copy import apply_overlay
         res["files"] = apply_overlay(res["files"], copy_overlay)
@@ -63,10 +71,18 @@ def build_one(brief, style_id, out, run_browser=True, fixes=(), detail=None, cop
     ok, why = browser_check.ready() if run_browser else (True, "")
     if not ok:  # 本机缺 Chrome 或 Playwright：照样生成，但说清楚没做浏览器检查
         run_browser, skipped = False, "跳过了浏览器检查：" + why
-    rep = check_blueprints.check(proj)
-    errors = [f"{i['code']} {i['where']} {i['msg']}" for i in rep.errors]
-    pages = generate.generate(proj, site) if not errors else []
-    browser = browser_check.check(site, detail) if pages and run_browser else []
+    with events.stage("blueprint") as st:
+        rep = check_blueprints.check(proj)
+        errors = [f"{i['code']} {i['where']} {i['msg']}" for i in rep.errors]
+        st.out(errors=len(errors), warnings=sum(1 for i in rep.items if i["level"] != "错误"))
+    with events.stage("generate") as st:
+        pages = generate.generate(proj, site) if not errors else []
+        st.out(pages=len(pages), kb=round(sum(os.path.getsize(os.path.join(dp, f)) for dp, _, fs in os.walk(site) for f in fs) / 1024) if pages else 0)
+    browser = []
+    if pages and run_browser:
+        with events.stage("browser") as st:
+            browser = browser_check.check(site, detail)
+            st.out(problems=len(browser), kinds=sorted({x.split(" ")[0][:16] for x in browser})[:6])
     return {"style": style_id, "project": proj, "site": site, "pages": pages, "blueprint_errors": errors,
             "blueprint_warnings": [f"{i['code']} {i['msg']}" for i in rep.items if i["level"] != "错误"],
             "browser_problems": browser, "notes": dict(res["notes"], **({"browser_skipped": skipped} if skipped else {}))}

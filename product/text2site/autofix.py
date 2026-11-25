@@ -35,6 +35,7 @@ import learned  # noqa: E402
 from fix_guard import Attempt, FixGuard, Policy  # noqa: E402
 from generate import FIX_CSS  # noqa: E402
 from make_site import build_one  # noqa: E402
+import events  # noqa: E402  （make_site 已把 app 目录加进路径）
 
 LONG_WORD = re.compile(r"[A-Za-z0-9_\-.@/:]{15,}")
 
@@ -126,6 +127,16 @@ def _sig(xs) -> str:
 def run(brief: dict, style_id: str, out: str, run_browser: bool = True, learn: bool = True, use_memory: bool = True,
         copy_overlay: dict | None = None, tweaks: dict | None = None, photos: dict | None = None) -> dict:
     """带自我纠错的构建。返回最后一版（或报错最少的一版）的构建结果，外加 "selffix" 报告。"""
+    ev = events.run("autofix", 行业=brief.get("product_type", {}).get("value", ""), 风格=style_id)
+    with ev:
+        r = _run(brief, style_id, out, run_browser, learn, use_memory, copy_overlay, tweaks, photos)
+        rep = r["selffix"]
+        ev.result = {"problems": len(rep["remaining"]), "rounds": len(rep["rounds"]) - 1, "fixed": len(rep["fixed"]),
+                     "reverted": len(rep["reverted"]), "stop": rep["stop"]}
+    return r
+
+
+def _run(brief, style_id, out, run_browser, learn, use_memory, copy_overlay, tweaks, photos):
     t0 = time.time()
     pre = prevent(brief, style_id) if use_memory else []
     fixes = [p["fix"] for p in pre]
@@ -148,6 +159,7 @@ def run(brief: dict, style_id: str, out: str, run_browser: bool = True, learn: b
             break
         n += 1
         tried |= set(add)
+        events.emit("fix.try", round=n, fixes=add, before=len(problems))
         before = {category(p) for p in problems}
         cand = fixes + add
         prev_detail, detail = detail, {}
@@ -160,9 +172,11 @@ def run(brief: dict, style_id: str, out: str, run_browser: bool = True, learn: b
         harmful, useless = after - before, not (before - after) and len(p2) >= len(problems)
         if harmful or useless:  # 带来新问题或没效果：撤回，不拿新问题换旧问题，也不留没用的修补
             reverted.append({"fixes": add, "why": "带来新问题：" + "、".join(sorted(harmful)) if harmful else "没有效果"})
+            events.emit("fix.revert", round=n, fixes=add, why="带来新问题" if harmful else "没有效果")
             detail = prev_detail
             if d.verdict == "stop":
                 stop_reason = f"刹车 {d.code}：{d.reason}"
+                events.emit("guard.stop", round=n, code=d.code)
                 break
             continue
         for c in before - after:
@@ -175,6 +189,7 @@ def run(brief: dict, style_id: str, out: str, run_browser: bool = True, learn: b
             break
         if d.verdict == "stop":
             stop_reason = f"刹车 {d.code}：{d.reason}"
+            events.emit("guard.stop", round=n, code=d.code)
             break
     if problems and best[0] < len(problems):
         _, r, fixes = best
@@ -185,7 +200,9 @@ def run(brief: dict, style_id: str, out: str, run_browser: bool = True, learn: b
         report["fixed"].append({"category": c, "zh": CATEGORY_ZH.get(c, c), "fixes": fx,
                                 "how": "；".join(FIX_CSS[x][0] for x in fx)})
     if learn:
-        _learn(brief, style_id, report)
+        with events.stage("learn") as st:
+            _learn(brief, style_id, report)
+            st.out(fixed=len(report["fixed"]), unknown=len(unknown_all))
     r = dict(r)
     r["selffix"] = report
     return r

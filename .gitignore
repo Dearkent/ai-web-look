@@ -11,3 +11,9 @@ models.json
 *.tmp
 .venv/
 venv/
+# 实况事件（本机运行记录，不进仓库）
+runs/events.jsonl*
+product/learn/corpus/errors.jsonl
+product/learn/corpus/*.bak
+knowledge/fix_memory.json
+runs/choices.jsonl

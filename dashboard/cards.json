@@ -556,5 +556,32 @@
   "hits": 0,
   "codified": "是",
   "created": "2026-11-25"
+ },
+ {
+  "id": "P037",
+  "title": "喂网站设计：只当数据静态读，存数字不存原文，只算页面真用到的 CSS，读错了能整批重读",
+  "kind": "产品经验",
+  "status": "verified",
+  "hits": 0,
+  "codified": "是",
+  "created": "2026-11-25"
+ },
+ {
+  "id": "P038",
+  "title": "设计先验：样本够、同行一致、试跑不变差才用；指纹没变不重试，防试拒循环",
+  "kind": "产品经验",
+  "status": "verified",
+  "hits": 0,
+  "codified": "是",
+  "created": "2026-11-25"
+ },
+ {
+  "id": "P039",
+  "title": "实况：每一步记真实事件，页面只画事件；记事件永远不能让正事失败",
+  "kind": "产品经验",
+  "status": "verified",
+  "hits": 0,
+  "codified": "是",
+  "created": "2026-11-25"
  }
 ]

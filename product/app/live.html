@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>建站大脑 · 实况</title>
+<style>
+:root{
+  --bg:#05070d; --panel:#0a0f1a; --panel2:#0d1422; --line:#1b2638; --dim:#5d6b82; --txt:#d7e1f0; --hi:#ffffff;
+  --c0:#38d9f5; --c1:#f5b83d; --c2:#f0509a; --c3:#4be08a; --c4:#a779ff; --c5:#5b8cff; --bad:#ff5a6a;
+  --mono: "JetBrains Mono","SFMono-Regular",ui-monospace,Menlo,Consolas,"PingFang SC","Microsoft YaHei",monospace;
+  --sans: "Inter","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:13px/1.4 var(--sans);overflow:hidden}
+body{background:
+  radial-gradient(1200px 500px at 70% -10%, rgba(91,140,255,.10), transparent 60%),
+  radial-gradient(900px 400px at 10% 110%, rgba(240,80,154,.07), transparent 60%), var(--bg)}
+.app{display:grid;grid-template-rows:auto auto 1fr 196px auto;gap:10px;height:100vh;padding:12px 14px}
+.panel{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:10px;position:relative}
+.mono{font-family:var(--mono)}
+/* ---------- 顶栏 ---------- */
+.top{display:grid;grid-template-columns:minmax(260px,1.2fr) auto minmax(380px,1.6fr) auto;gap:22px;align-items:center;padding:14px 18px}
+.title h1{margin:0;font:800 24px/1.1 var(--sans);letter-spacing:.02em;color:var(--hi)}
+.title .sub{margin-top:6px;color:var(--dim);font:12px var(--mono)}
+.title .now{margin-top:6px;font:12px var(--mono);color:var(--c0);min-height:16px}
+.segs{display:flex;gap:4px;margin-top:9px}.segs i{height:3px;flex:1;background:var(--line);border-radius:2px}.segs i.on{background:var(--c0);box-shadow:0 0 8px var(--c0)}
+.rings{display:flex;gap:16px}
+.ring{width:74px;text-align:center}
+.ring svg{width:64px;height:64px;display:block;margin:0 auto}
+.ring .v{font:700 15px var(--mono);fill:var(--hi)}
+.ring .l{font:11px var(--mono);color:var(--dim);margin-top:2px;white-space:nowrap}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 18px}
+.tile .k{font:11px var(--mono);color:var(--dim);white-space:nowrap}
+.tile .n{font:700 18px var(--mono);color:var(--hi)}
+.tile svg{width:100%;height:18px;display:block}
+.live-badge{display:flex;flex-direction:column;align-items:flex-end;gap:8px;font:11px var(--mono);color:var(--dim)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);margin-right:6px;vertical-align:middle}
+.dot.on{background:var(--c3);box-shadow:0 0 10px var(--c3);animation:blink 1.6s infinite}
+.dot.replay{background:var(--c1);box-shadow:0 0 10px var(--c1)}
+@keyframes blink{50%{opacity:.35}}
+button{font:12px var(--mono);color:var(--txt);background:#111a2b;border:1px solid var(--line);border-radius:6px;padding:5px 10px;cursor:pointer}
+button:hover{border-color:var(--c0);color:var(--hi)}
+button:focus-visible{outline:2px solid var(--c0);outline-offset:2px}
+/* ---------- 阶段条 ---------- */
+.stages{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.st{padding:9px 12px;font:12px var(--mono);display:flex;justify-content:space-between;align-items:center;color:var(--dim);border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.st b{font-weight:700;letter-spacing:.04em}
+.st .pc{opacity:.8}
+.st.active{color:var(--hi);border-color:var(--sc);box-shadow:0 0 0 1px var(--sc) inset,0 0 18px -6px var(--sc)}
+.st.active b::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--sc);margin-right:8px;box-shadow:0 0 8px var(--sc)}
+.st.done b::before{content:"✓ ";color:var(--sc)}
+/* ---------- 主区 ---------- */
+.main{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:10px;min-height:0}
+.col{position:relative;display:flex;flex-direction:column;gap:9px;min-height:0;overflow:hidden;padding:2px}
+.col .empty{margin:auto 0;text-align:center;color:#2d3a50;font:12px var(--mono)}
+canvas.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.card{position:relative;z-index:1;border:1px solid color-mix(in srgb,var(--c) 70%,transparent);border-radius:8px;background:rgba(8,12,22,.86);
+  box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 22px -10px var(--c);padding:8px 10px 7px;flex:none;animation:pop .45s ease-out}
+.card.bad{--c:var(--bad)!important}
+.card.dimmed{opacity:.5}
+@keyframes pop{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+.card .h{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--hi)}
+.card .h b{font-weight:700}.card .h b::before{content:"■ ";color:var(--c)}
+.card .h span{color:var(--c)}
+.card .body{display:flex;gap:10px;align-items:center;margin-top:6px;min-height:34px}
+.card .meta{display:flex;justify-content:space-between;font:10.5px var(--mono);color:var(--dim);margin-top:5px;border-top:1px dashed #1d293d;padding-top:4px}
+.kv{font:11px var(--mono);color:#9fb0c8;line-height:1.5;flex:1;min-width:0}
+.kv em{font-style:normal;color:var(--hi)}
+.bar{height:6px;background:#121b2b;border-radius:3px;overflow:hidden;margin:2px 0 4px}.bar i{display:block;height:100%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}.chip{font:10.5px var(--mono);padding:1px 6px;border-radius:4px;border:1px solid color-mix(in srgb,var(--c) 60%,transparent);color:var(--c)}
+.code{font:11px var(--mono);color:#b9c6da;white-space:pre;overflow:hidden;line-height:1.45}
+.code .ln{color:#3a4860;margin-right:8px}.code .add{color:var(--c3)}.code .del{color:var(--bad);text-decoration:line-through}
+.sw{display:flex;gap:3px}.sw i{width:16px;height:16px;border-radius:3px;border:1px solid rgba(255,255,255,.15)}
+.strip{display:flex;gap:2px;height:16px;margin-top:5px}.strip i{flex:1;border-radius:2px;opacity:.9}
+.grid{display:grid;grid-template-columns:repeat(15,1fr);gap:2px;flex:1}.grid i{aspect-ratio:1;border-radius:2px;background:#16202f}
+.grid i.ok{background:var(--c3);box-shadow:0 0 5px var(--c3)}.grid i.no{background:var(--bad);box-shadow:0 0 5px var(--bad)}
+/* ---------- 底部 ---------- */
+.bottom{display:grid;grid-template-columns:1.25fr 1.35fr 1fr;gap:10px;min-height:0}
+.bottom .panel{padding:10px 12px;display:flex;flex-direction:column;min-height:0}
+.ph{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--hi);margin-bottom:6px}
+.ph b::before{content:"◆ ";color:var(--c0)}.ph span{color:var(--dim)}
+.log{font:11.5px/1.55 var(--mono);overflow:hidden;flex:1;color:#9fb0c8;display:flex;flex-direction:column;justify-content:flex-end}
+.log div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log .t{color:#3e4c63}.log .tag{display:inline-block;min-width:44px;font-weight:700}
+.log div:last-child{color:var(--hi)}
+.log div:last-child::after{content:"▍";color:var(--c0);animation:blink 1s infinite}
+canvas.agents,canvas.chart{flex:1;width:100%;min-height:0}
+.foot{display:flex;justify-content:space-between;font:11px var(--mono);color:#3e4c63}
+@media (max-width:1100px){.top{grid-template-columns:1fr 1fr}.tiles{grid-column:1/-1}.main{grid-template-columns:repeat(3,1fr)}.bottom{grid-template-columns:1fr}.app{grid-template-rows:auto auto 1fr auto auto;overflow:auto}html,body{overflow:auto}}
+@media (prefers-reduced-motion:reduce){.card{animation:none}.dot.on{animation:none}.log div:last-child::after{animation:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="panel top">
+    <div class="title">
+      <h1>建站大脑 · 实况</h1>
+      <div class="sub">读懂 → 规划 → 生成 → 检查 → 修复 → 学习</div>
+      <div class="now" id="now">等待任务</div>
+      <div class="segs" id="segs"></div>
+    </div>
+    <div class="rings" id="rings"></div>
+    <div class="tiles" id="tiles"></div>
+    <div class="live-badge">
+      <div><span class="dot" id="dot"></span><span id="mode">连接中</span></div>
+      <button id="replayBtn" type="button">回放最近一次</button>
+    </div>
+  </header>
+  <nav class="stages" id="stages" aria-label="流水线阶段"></nav>
+  <main class="main" id="main" aria-live="off">
+    <canvas class="links" id="links" aria-hidden="true"></canvas>
+  </main>
+  <section class="bottom">
+    <div class="panel"><div class="ph"><b>一次任务的经过</b><span id="logn">0 条</span></div><div class="log mono" id="log" role="log" aria-live="polite"></div></div>
+    <div class="panel"><div class="ph"><b>角色网络</b><span id="agentn">—</span></div><canvas class="agents" id="agents" aria-label="角色网络：哪个角色正在干活"></canvas></div>
+    <div class="panel"><div class="ph"><b>最近的任务</b><span>耗时 · 问题数</span></div><canvas class="chart" id="chart" aria-label="最近任务的耗时和问题数"></canvas></div>
+  </section>
+  <footer class="foot"><span>只画真实发生的事件；没有任务在跑时可以回放最近一次</span><span id="clock"></span></footer>
+</div>
+<script>
+(() => {
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const css = getComputedStyle(document.documentElement);
+const COL = [0,1,2,3,4,5].map((i) => css.getPropertyValue("--c" + i).trim());
+const BAD = css.getPropertyValue("--bad").trim();
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const STAGES = [["01","读懂"],["02","规划"],["03","生成"],["04","检查"],["05","修复"],["06","学习与交付"]];
+const STAGE_COL = {understand:0, plan:1, blueprint:1, generate:2, browser:3, gate:3, fix:4, learn:5, deliver:5, feed:5, distill:5, trial:5};
+const STAGE_ZH = {understand:"读懂需求", plan:"规划图纸", blueprint:"图纸检查", generate:"生成网页", browser:"浏览器检查", gate:"验证门",
+  fix:"修复", learn:"记住教训", deliver:"交付", feed:"喂设计", distill:"提炼先验", trial:"试跑先验"};
+const WHAT_ZH = {build:"建站", autofix:"建站（带自我纠错）", site:"生成网站", preview:"三种风格预览", understand:"读懂需求",
+  feed:"喂网站设计", gate:"验证门", trial:"试跑设计先验"};
+const SEC_COL = {hero:"#38d9f5", features:"#f5b83d", "value-props":"#f5b83d", gallery:"#f0509a", menu:"#f0509a", testimonials:"#4be08a",
+  pricing:"#a779ff", faq:"#5b8cff", cta:"#ff8a3d", content:"#6b7a92", team:"#62e3c9", stats:"#e5e86a", logos:"#9aa5b8", steps:"#c48bff",
+  "contact-form":"#3dd6a0", "blog-list":"#7fb3ff", map:"#3dd6a0", newsletter:"#ff8a3d"};
+const FAM_ZH = {block:"大色块", soft:"柔和", minimal:"极简", glass:"玻璃", dark:"深色", editorial:"杂志", tech:"科技感"};
+
+// ---------------- 状态 ----------------
+const S = {runs:new Map(), cur:null, cols:[], counts:[0,0,0,0,0,0], links:[], log:[], seq:0, events:[], stats:{},
+  recent:[], beam:{col:-1, t:0}, agents:{}, packets:[], lastAgent:{}, feedN:0, mode:"connecting"};
+
+// ---------------- 顶栏 ----------------
+function ring(label, value, frac, color){
+  const r = 26, c = 2*Math.PI*r, f = Math.max(0, Math.min(1, frac ?? 0));
+  return `<div class="ring"><svg viewBox="0 0 64 64" role="img" aria-label="${esc(label)} ${esc(value)}">
+    <circle cx="32" cy="32" r="${r}" fill="none" stroke="#16202f" stroke-width="5"/>
+    <circle cx="32" cy="32" r="${r}" fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round"
+      stroke-dasharray="${(c*f).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 32 32)" style="filter:drop-shadow(0 0 4px ${color})"/>
+    <text x="32" y="37" text-anchor="middle" class="v">${esc(value)}</text></svg><div class="l">${esc(label)}</div></div>`;
+}
+function renderRings(){
+  const st = S.stats || {};
+  const g = st.gate;
+  $("rings").innerHTML =
+    ring("完成度", st.completion != null ? Math.round(st.completion) + "%" : "—", (st.completion || 0)/100, COL[0]) +
+    ring("验证门", g ? g.ok + "/" + g.n : "—", g ? g.ok/g.n : 0, COL[3]) +
+    ring("学过的网站", st.specimens ?? "—", Math.min(1, (st.specimens || 0)/200), COL[2]) +
+    ring("经验卡片", st.cards ?? "—", Math.min(1, (st.cards || 0)/80), COL[1]);
+}
+function spark(vals, color){
+  if (!vals.length) return `<svg viewBox="0 0 100 18"></svg>`;
+  const mx = Math.max(...vals, 1), n = vals.length;
+  const pts = vals.map((v, i) => `${(n === 1 ? 100 : i*100/(n-1)).toFixed(1)},${(16 - v/mx*14).toFixed(1)}`).join(" ");
+  return `<svg viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.4" vector-effect="non-scaling-stroke"/></svg>`;
+}
+function renderTiles(){
+  const now = Date.now()/1000, ev = S.events;
+  const buckets = Array(20).fill(0);
+  for (const e of ev) { const k = Math.floor((now - e.t)/30); if (k >= 0 && k < 20) buckets[19-k]++; }
+  const runs = S.recent.slice(-20);
+  const tile = (k, n, vals, color) => `<div class="tile"><div class="k">${esc(k)}</div><div class="n">${esc(n)}</div>${spark(vals, color)}</div>`;
+  const last = runs[runs.length-1];
+  $("tiles").innerHTML =
+    tile("事件 / 10 分钟", buckets.reduce((a,b)=>a+b,0), buckets, COL[0]) +
+    tile("最近一次耗时", last ? (last.ms/1000).toFixed(1) + " s" : "—", runs.map(r=>r.ms), COL[1]) +
+    tile("最近一次问题", last ? (last.problems ?? 0) : "—", runs.map(r=>r.problems||0), COL[2]) +
+    tile("记录里的任务", S.runs.size, runs.map((r,i)=>i+1), COL[5]) +
+    tile("自我修补轮数", runs.reduce((a,r)=>a+(r.rounds||0),0), runs.map(r=>r.rounds||0), COL[4]) +
+    tile("记录里收下的网站（次）", S.feedN, [], COL[3]);
+}
+function renderStages(active){
+  $("stages").innerHTML = STAGES.map(([n, zh], i) => {
+    const cls = i === active ? "active" : (S.counts[i] ? "done" : "");
+    return `<div class="st ${cls}" style="--sc:${COL[i]}"><b>${n} / ${zh}</b><span class="pc">${S.counts[i] || ""}</span></div>`;
+  }).join("");
+  $("segs").innerHTML = STAGES.map((_, i) => `<i class="${i <= active && active >= 0 ? "on" : ""}" style="${i <= active && active >= 0 ? `background:${COL[i]};box-shadow:0 0 8px ${COL[i]}` : ""}"></i>`).join("");
+}
+
+// ---------------- 卡片 ----------------
+function setupCols(){
+  const main = $("main");
+  for (let i = 0; i < 6; i++) {
+    const c = document.createElement("div");
+    c.className = "col"; c.dataset.col = i;
+    c.innerHTML = `<div class="empty">${STAGES[i][1]}<br>还没有事件</div>`;
+    main.appendChild(c); S.cols.push(c);
+  }
+}
+const fmtMs = (ms) => ms == null ? "" : ms < 1000 ? ms + " ms" : (ms/1000).toFixed(1) + " s";
+const bar = (frac) => `<div class="bar"><i style="width:${Math.round(Math.max(.03, Math.min(1, frac))*100)}%"></i></div>`;
+function miniRing(frac, label, color){
+  const r = 15, c = 2*Math.PI*r;
+  return `<svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="${r}" fill="none" stroke="#16202f" stroke-width="4"/>
+  <circle cx="20" cy="20" r="${r}" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(c*Math.max(0,Math.min(1,frac))).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 20 20)"/>
+  <text x="20" y="24" text-anchor="middle" style="font:700 11px var(--mono);fill:#fff">${esc(label)}</text></svg>`;
+}
+function cardFor(e){
+  const k = e.kind, st = e.stage;
+  let col, title, right = "", body = "", meta = "", bad = false, dim = false;
+  if (k === "stage.end") {
+    col = STAGE_COL[st] ?? 5; title = STAGE_ZH[st] || st; right = fmtMs(e.ms);
+    if (st === "understand") body = `<div class="kv">行业 <em>${esc(e["行业"]||"—")}</em><br>要确认的问题 <em>${e.questions ?? 0}</em> 个 · ${e.by === "model" ? "模型" : "规则"}读懂</div>`;
+    else if (st === "plan") body = `<div class="kv">页面 <em>${e.pages ?? "—"}</em> 张 · 修补 <em>${e["修补"] ?? 0}</em>${bar((e.pages||0)/8)}${e.prior ? `<div class="chips"><span class="chip">${esc(e.prior)}</span></div>` : ""}</div>`;
+    else if (st === "blueprint") { bad = e.errors > 0; body = miniRing(e.errors ? 0.25 : 1, e.errors ? e.errors : "✓", e.errors ? BAD : COL[3]) + `<div class="kv">错误 <em>${e.errors}</em> · 提醒 <em>${e.warnings ?? 0}</em><br>${e.errors ? "图纸不合格，不生成" : "图纸合格"}</div>`; }
+    else if (st === "generate") body = `<div class="kv">网页 <em>${e.pages}</em> 张 · <em>${e.kb ?? 0}</em> KB${bar((e.kb||0)/120)}</div>`;
+    else if (st === "browser") { bad = e.problems > 0; body = miniRing(e.problems ? Math.max(.15, 1 - e.problems/10) : 1, e.problems || "✓", e.problems ? BAD : COL[3]) + `<div class="kv">问题 <em>${e.problems}</em> 个<div class="chips">${(e.kinds||[]).map(x=>`<span class="chip">${esc(x)}</span>`).join("")}</div></div>`; }
+    else if (st === "learn") body = `<div class="kv">修好并记住 <em>${e.fixed ?? 0}</em> 类 · 还不会修 <em>${e.unknown ?? 0}</em> 类${bar(((e.fixed||0)+.2)/((e.fixed||0)+(e.unknown||0)+.2))}</div>`;
+    else if (st === "deliver") { bad = e.problems > 0; body = miniRing(1, e.problems ? e.problems : "✓", e.problems ? BAD : COL[5]) + `<div class="kv">第 <em>${e.version ?? "?"}</em> 版交付<br>剩余问题 <em>${e.problems ?? 0}</em></div>`; }
+    else if (st === "distill") body = `<div class="kv">标本 <em>${e["标本"]}</em> · 行业 <em>${e["行业"]}</em><br>候选 <em>${e["候选"] ?? 0}</em> · 已采纳 <em>${e["采纳"] ?? 0}</em></div>`;
+    else if (st === "feed") return null; // 喂设计由 feed.specimen 卡片表示
+    else body = `<div class="kv">${esc(JSON.stringify(e).slice(0, 80))}</div>`;
+    if (e.ok === false) { bad = true; meta = "这一步出错了"; }
+  } else if (k === "fix.try") {
+    col = 4; title = `修复 · 第 ${e.round} 轮`; right = `${e.before} 个问题`;
+    body = `<div class="code">${(e.fixes||[]).slice(0,4).map((f,i)=>`<span class="ln">${String(i+1).padStart(2,"0")}</span><span class="add">+ ${esc(f)}</span>`).join("\n")}</div>`;
+  } else if (k === "fix.revert") {
+    col = 4; title = `撤回 · 第 ${e.round} 轮`; right = esc(e.why); bad = true;
+    body = `<div class="code">${(e.fixes||[]).slice(0,4).map((f,i)=>`<span class="ln">${String(i+1).padStart(2,"0")}</span><span class="del">${esc(f)}</span>`).join("\n")}</div>`;
+  } else if (k === "guard.stop") {
+    col = 4; title = "刹车"; right = esc(e.code); bad = true;
+    body = `<div class="kv">修了 <em>${e.round}</em> 轮还没好，自动停下<br>不进入“报错 ↔ 修复”死循环</div>`;
+  } else if (k === "feed.specimen" || k === "feed.skip") {
+    col = 5; title = k === "feed.specimen" ? "收下一个网站设计" : "跳过"; dim = k === "feed.skip";
+    right = esc((e["来源"]||"").split("/").slice(-1)[0]);
+    if (k === "feed.specimen") {
+      S.feedN++;
+      const secs = (e.sections||[]);
+      body = `<div class="kv">${esc(e["行业"]||"行业没猜出")} · <em>${esc(FAM_ZH[e["家族"]]||e["家族"]||"")}</em>
+        <div class="strip">${secs.map(t=>`<i title="${esc(t)}" style="background:${SEC_COL[t]||"#40506a"}"></i>`).join("")}</div></div>
+        <div class="sw">${e.accent ? `<i style="background:${esc(e.accent)}"></i>` : ""}</div>`;
+    } else body = `<div class="kv">${esc(e.why)}</div>`;
+  } else if (k === "run.end") {
+    col = 5; title = (WHAT_ZH[e.what] || e.what) + " · 结束"; right = fmtMs(e.ms); bad = e.ok === false || (e.problems > 0);
+    body = e.what === "gate"
+      ? miniRing((e.cards_ok||0)/(e.cards||1), `${e.cards_ok}/${e.cards}`, COL[3]) + `<div class="kv">经验卡片验证<br>通过 <em>${e.cards_ok}</em> / ${e.cards}</div>`
+      : `<div class="kv">${e.problems != null ? `剩余问题 <em>${e.problems}</em> · 修补 <em>${e.rounds ?? 0}</em> 轮<br>` : ""}${esc(e.stop || (e.ok === false ? "出错：" + (e.error||"") : "完成"))}</div>`;
+  } else return null;
+  return {col, title, right, body, meta, bad, dim};
+}
+function addCard(e, c){
+  const colEl = S.cols[c.col];
+  const empty = colEl.querySelector(".empty"); if (empty) empty.remove();
+  const el = document.createElement("div");
+  el.className = "card" + (c.bad ? " bad" : "") + (c.dim ? " dimmed" : "");
+  el.style.setProperty("--c", COL[c.col]);
+  const id = ++S.seq;
+  const tm = new Date(e.t*1000).toLocaleTimeString("zh-CN", {hour12:false});
+  el.innerHTML = `<div class="h"><b>${esc(c.title)}</b><span>${c.right || ""}</span></div><div class="body">${c.body}</div>
+    <div class="meta"><span>#${id} · ${esc(e.run)}</span><span>${c.meta ? esc(c.meta) : tm}</span></div>`;
+  colEl.prepend(el);
+  S.counts[c.col]++;
+  // 列满了：把最老的（最下面的）移走
+  while (colEl.children.length > 1 && colEl.scrollHeight > colEl.clientHeight + 4) colEl.lastElementChild.remove();
+  return el;
+}
+function gateCard(e){
+  let r = S.runs.get(e.run);
+  if (!r) return;
+  if (!r.gateEl || !r.gateEl.isConnected) {
+    r.gateEl = addCard(e, {col:3, title:"验证门", right:"", body:`<div class="grid"></div>`, meta:""});
+    link(r, r.gateEl, 3);
+  }
+  const grid = r.gateEl.querySelector(".grid");
+  const i = document.createElement("i"); i.className = e.ok ? "ok" : "no"; i.title = `${e.id} ${e.ok ? "通过" : "失败"}`;
+  grid.appendChild(i);
+  const n = grid.children.length, ok = grid.querySelectorAll(".ok").length;
+  r.gateEl.querySelector(".h span").textContent = `${ok}/${n}`;
+  if (!e.ok) r.gateEl.classList.add("bad");
+}
+function link(r, el, col){
+  if (r && r.last && r.last.isConnected && r.last !== el) {
+    S.links.push({a:r.last, b:el, c:COL[col], from:r.lastCol, born:performance.now(), seed:Math.random()});
+    if (S.links.length > 70) S.links.shift();
+  }
+  if (r) { r.last = el; r.lastCol = col; }
+}
+
+// ---------------- 角色网络 ----------------
+const AGENTS = [
+  {id:"read", zh:"读懂", col:0, x:.07, y:.42}, {id:"plan", zh:"规划", col:1, x:.22, y:.75}, {id:"gen", zh:"生成", col:2, x:.38, y:.32},
+  {id:"check", zh:"检查", col:3, x:.54, y:.72}, {id:"fix", zh:"修复", col:4, x:.68, y:.30}, {id:"guard", zh:"刹车", col:4, x:.80, y:.78},
+  {id:"learn", zh:"学习", col:5, x:.93, y:.40}, {id:"feed", zh:"喂料", col:5, x:.86, y:.10}];
+const AGENT_OF = {understand:"read", plan:"plan", blueprint:"plan", generate:"gen", browser:"check", gate:"check", "fix.try":"fix", "fix.revert":"fix",
+  "guard.stop":"guard", learn:"learn", deliver:"learn", feed:"feed", distill:"learn", trial:"learn", "feed.specimen":"feed", "feed.skip":"feed"};
+function agentHit(e){
+  const id = AGENT_OF[e.stage] || AGENT_OF[e.kind];
+  if (!id) return;
+  S.agents[id] = performance.now();
+  const prev = S.lastAgent[e.run];
+  if (prev && prev !== id) { S.packets.push({from:prev, to:id, born:performance.now()}); if (S.packets.length > 40) S.packets.shift(); }
+  S.lastAgent[e.run] = id;
+  $("agentn").textContent = "正在：" + AGENTS.find(a=>a.id===id).zh;
+}
+
+// ---------------- 日志 ----------------
+function logLine(e){
+  let tag = "", txt = "", col = 0;
+  if (e.kind === "run.start") { tag = "开始"; txt = (WHAT_ZH[e.what]||e.what) + (e["行业"] ? " · " + e["行业"] : "") + (e["风格"] ? " · " + e["风格"] : "") + (e["数量"] ? ` · ${e["数量"]} 个来源` : ""); col = 0; }
+  else if (e.kind === "run.end") { tag = "结束"; txt = (WHAT_ZH[e.what]||e.what) + " · " + fmtMs(e.ms) + (e.problems != null ? ` · 剩余问题 ${e.problems}` : "") + (e.stop ? " · " + e.stop : ""); col = 5; }
+  else if (e.kind === "stage.start") return;
+  else if (e.kind === "stage.end") { col = STAGE_COL[e.stage] ?? 5; tag = STAGES[col][1].slice(0,2); txt = (STAGE_ZH[e.stage]||e.stage) + " · " + fmtMs(e.ms) +
+      (e.errors != null ? ` · 错误 ${e.errors}` : "") + (e.problems != null ? ` · 问题 ${e.problems}` : "") + (e.pages != null ? ` · ${e.pages} 页` : "") + (e["来源"] ? " · " + e["来源"].split("/").slice(-1)[0] : ""); }
+  else if (e.kind === "fix.try") { tag = "修复"; col = 4; txt = `第 ${e.round} 轮：试 ${(e.fixes||[]).join("、")}`; }
+  else if (e.kind === "fix.revert") { tag = "撤回"; col = 4; txt = `第 ${e.round} 轮的修补${e.why}，撤回`; }
+  else if (e.kind === "guard.stop") { tag = "刹车"; col = 4; txt = `第 ${e.round} 轮停下（${e.code}）`; }
+  else if (e.kind === "feed.specimen") { tag = "收下"; col = 5; txt = `${(e["来源"]||"").split("/").slice(-2).join("/")} · ${e["行业"]||"?"} · ${FAM_ZH[e["家族"]]||""}`; }
+  else if (e.kind === "feed.skip") { tag = "跳过"; col = 5; txt = `${(e["来源"]||"").split("/").slice(-2).join("/")} · ${e.why}`; }
+  else if (e.kind === "gate.case") { if (e.ok) return; tag = "失败"; col = 3; txt = `验证门 ${e.id}（${e.card}）没过`; }
+  else return;
+  const tm = new Date(e.t*1000).toLocaleTimeString("zh-CN", {hour12:false});
+  const line = `<span class="t">${tm}</span> <span class="tag" style="color:${COL[col]}">${esc(tag)}</span> ${esc(txt)}`;
+  S.log.push(line); if (S.log.length > 60) S.log.shift();
+}
+function renderLog(){
+  const box = $("log");
+  const rows = Math.max(3, Math.floor(box.clientHeight / 18));
+  box.innerHTML = S.log.slice(-rows).map((l) => `<div>${l}</div>`).join("");
+  $("logn").textContent = S.log.length + " 条";
+}
+
+// ---------------- 事件入口 ----------------
+function handle(e, quiet){
+  S.events.push(e); if (S.events.length > 3000) S.events.splice(0, 1000);
+  let r = S.runs.get(e.run);
+  if (e.kind === "run.start") {
+    r = {what:e.what, t0:e.t, last:null, lastCol:-1}; S.runs.set(e.run, r); S.cur = e.run;
+    $("now").textContent = "现在：" + (WHAT_ZH[e.what] || e.what) + (e["行业"] ? " · " + e["行业"] : "");
+  }
+  if (!r) { r = {what:"?", t0:e.t, last:null, lastCol:-1}; S.runs.set(e.run, r); }
+  if (e.kind === "stage.start") { const c = STAGE_COL[e.stage] ?? 5; S.beam = {col:c, t:performance.now()}; renderStages(c); agentHit(e); }
+  if (e.kind === "gate.case") { gateCard(e); S.beam = {col:3, t:performance.now()}; agentHit(e); }
+  const c = cardFor(e);
+  if (c) {
+    const el = addCard(e, c);
+    link(r, el, c.col);
+    if (e.kind !== "stage.end") agentHit(e);
+    if (!quiet) renderStages(c.col);
+  }
+  if (e.kind === "run.end") {
+    if (e.what !== "build") S.recent.push({ms:e.ms||0, problems:e.problems, rounds:e.rounds, what:e.what});
+    if (S.recent.length > 40) S.recent.shift();
+    if (S.cur === e.run) $("now").textContent = "刚完成：" + (WHAT_ZH[e.what] || e.what) + " · " + fmtMs(e.ms);
+  }
+  logLine(e);
+  if (!quiet) { renderLog(); renderTiles(); }
+}
+
+// ---------------- 动画 ----------------
+const linksCv = $("links"), agentsCv = $("agents"), chartCv = $("chart");
+function fit(cv){ const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1;
+  if (cv.width !== Math.round(r.width*d) || cv.height !== Math.round(r.height*d)) { cv.width = Math.round(r.width*d); cv.height = Math.round(r.height*d); }
+  const x = cv.getContext("2d"); x.setTransform(d,0,0,d,0,0); return [x, r.width, r.height]; }
+function bez(p0,p1,p2,p3,t){ const u = 1-t; return [u*u*u*p0[0]+3*u*u*t*p1[0]+3*u*t*t*p2[0]+t*t*t*p3[0], u*u*u*p0[1]+3*u*u*t*p1[1]+3*u*t*t*p2[1]+t*t*t*p3[1]]; }
+function drawLinks(now){
+  const [x, w, h] = fit(linksCv);
+  x.clearRect(0,0,w,h);
+  const base = linksCv.getBoundingClientRect();
+  S.links = S.links.filter((l) => l.a.isConnected && l.b.isConnected);
+  x.lineCap = "round";
+  for (const l of S.links) {
+    const a = l.a.getBoundingClientRect(), b = l.b.getBoundingClientRect();
+    const fwd = b.left >= a.right - 2;
+    const p0 = fwd ? [a.right - base.left, a.top + a.height/2 - base.top] : [a.left - base.left + 8, a.bottom - base.top];
+    const p3 = fwd ? [b.left - base.left, b.top + b.height/2 - base.top] : [b.left - base.left + 8, b.top - base.top];
+    const dx = Math.max(40, Math.abs(p3[0]-p0[0]) * .45);
+    const p1 = fwd ? [p0[0]+dx, p0[1]] : [p0[0]-30, p0[1]+30], p2 = fwd ? [p3[0]-dx, p3[1]] : [p3[0]-30, p3[1]-30];
+    const age = (now - l.born)/1000, fresh = Math.max(0, 1 - age/2.5);
+    x.strokeStyle = l.c; x.globalAlpha = .28 + .5*fresh; x.lineWidth = 1.2 + 1.6*fresh;
+    x.shadowColor = l.c; x.shadowBlur = 6 + 12*fresh;
+    x.beginPath(); x.moveTo(...p0); x.bezierCurveTo(...p1, ...p2, ...p3); x.stroke();
+    if (!REDUCED) {
+      x.globalAlpha = 1; x.fillStyle = "#fff";
+      for (let k = 0; k < 2; k++) {
+        const t = ((now/1000)*(.35 + l.seed*.25) + l.seed + k*.5) % 1;
+        const [px, py] = bez(p0,p1,p2,p3,t);
+        x.shadowBlur = 10; x.beginPath(); x.arc(px, py, 1.8, 0, 7); x.fill();
+      }
+    }
+  }
+  // 扫描光束：刚有事件的那一列
+  const age = (now - S.beam.t)/1000;
+  if (S.beam.col >= 0 && age < 1.6 && !REDUCED) {
+    const col = S.cols[S.beam.col].getBoundingClientRect();
+    const bx = col.left - base.left + col.width * Math.min(1, age/1.2);
+    const g = x.createLinearGradient(bx-30, 0, bx+2, 0);
+    g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(1, COL[S.beam.col]);
+    x.globalAlpha = .55*(1 - age/1.6); x.shadowBlur = 0; x.fillStyle = g;
+    x.fillRect(bx-30, col.top - base.top, 32, col.height);
+    x.globalAlpha = .9*(1 - age/1.6); x.fillStyle = "#fff"; x.fillRect(bx, col.top - base.top, 1.5, col.height);
+  }
+  x.globalAlpha = 1; x.shadowBlur = 0;
+}
+function drawAgents(now){
+  const [x, w, h] = fit(agentsCv);
+  x.clearRect(0,0,w,h);
+  const P = (a) => [16 + a.x*(w-32), 14 + a.y*(h-34)];
+  const edges = [["read","plan"],["plan","gen"],["gen","check"],["check","fix"],["fix","gen"],["fix","guard"],["check","learn"],["learn","feed"],["feed","learn"],["guard","learn"],["learn","read"]];
+  x.lineWidth = 1; x.setLineDash([3,4]);
+  for (const [u,v] of edges) { const a = AGENTS.find(q=>q.id===u), b = AGENTS.find(q=>q.id===v); const [ax,ay] = P(a), [bx,by] = P(b);
+    x.strokeStyle = "#22304a"; x.beginPath(); x.moveTo(ax,ay); x.quadraticCurveTo((ax+bx)/2, (ay+by)/2 - 18, bx, by); x.stroke(); }
+  x.setLineDash([]);
+  S.packets = S.packets.filter((p) => now - p.born < 1100);
+  for (const p of S.packets) { const a = AGENTS.find(q=>q.id===p.from), b = AGENTS.find(q=>q.id===p.to); const [ax,ay] = P(a), [bx,by] = P(b);
+    const t = REDUCED ? 1 : (now - p.born)/1100, cx = (ax+bx)/2, cy = (ay+by)/2 - 18;
+    const px = (1-t)*(1-t)*ax + 2*(1-t)*t*cx + t*t*bx, py = (1-t)*(1-t)*ay + 2*(1-t)*t*cy + t*t*by;
+    x.strokeStyle = COL[b.col]; x.globalAlpha = .7; x.lineWidth = 1.6; x.shadowColor = COL[b.col]; x.shadowBlur = 10;
+    x.beginPath(); x.moveTo(ax,ay); x.quadraticCurveTo(cx, cy, bx, by); x.stroke();
+    x.globalAlpha = 1; x.fillStyle = "#fff"; x.beginPath(); x.arc(px, py, 3, 0, 7); x.fill(); }
+  for (const a of AGENTS) {
+    const [ax, ay] = P(a), hot = Math.max(0, 1 - (now - (S.agents[a.id] || -1e9))/2500), c = COL[a.col];
+    x.shadowColor = c; x.shadowBlur = 6 + 22*hot;
+    x.fillStyle = "#0b1220"; x.strokeStyle = c; x.lineWidth = 1.5 + hot*1.5; x.globalAlpha = .55 + .45*hot;
+    x.beginPath(); x.roundRect(ax-19, ay-13, 38, 26, 7); x.fill(); x.stroke();
+    if (hot > 0 && !REDUCED) { x.globalAlpha = hot*.5; x.beginPath(); x.arc(ax, ay, 24 + (1-hot)*16, 0, 7); x.stroke(); }
+    x.globalAlpha = 1; x.shadowBlur = 0; x.fillStyle = hot > .05 ? "#fff" : "#8796ad"; x.font = "600 12px " + css.getPropertyValue("--sans");
+    x.textAlign = "center"; x.fillText(a.zh, ax, ay + 4);
+  }
+}
+function drawChart(){
+  const [x, w, h] = fit(chartCv);
+  x.clearRect(0,0,w,h);
+  const runs = S.recent.slice(-24);
+  x.strokeStyle = "#16202f"; x.lineWidth = 1;
+  for (let i = 1; i < 4; i++) { x.beginPath(); x.moveTo(0, h*i/4); x.lineTo(w, h*i/4); x.stroke(); }
+  if (!runs.length) { x.fillStyle = "#3e4c63"; x.font = "12px " + css.getPropertyValue("--mono"); x.textAlign = "center"; x.fillText("还没有完成的任务", w/2, h/2); return; }
+  const mx = Math.max(...runs.map(r=>r.ms), 1), bw = w/24;
+  runs.forEach((r, i) => { const bh = (r.ms/mx)*(h-14); x.fillStyle = COL[5]; x.globalAlpha = .35; x.fillRect(i*bw + 2, h - bh, bw - 4, bh); });
+  x.globalAlpha = 1;
+  const pm = Math.max(3, ...runs.map(r=>r.problems||0));
+  x.strokeStyle = COL[2]; x.lineWidth = 2; x.shadowColor = COL[2]; x.shadowBlur = 8; x.beginPath();
+  runs.forEach((r, i) => { const px = i*bw + bw/2, py = h - 6 - ((r.problems||0)/pm)*(h-20); i ? x.lineTo(px,py) : x.moveTo(px,py); }); x.stroke();
+  x.shadowBlur = 0; x.fillStyle = "#8796ad"; x.font = "11px " + css.getPropertyValue("--mono"); x.textAlign = "left";
+  x.fillText(`最长 ${(mx/1000).toFixed(1)} s`, 4, 12);
+}
+let lastChart = 0;
+function frame(now){
+  drawLinks(now); drawAgents(now);
+  if (now - lastChart > 1000) { drawChart(); lastChart = now; $("clock").textContent = new Date().toLocaleString("zh-CN", {hour12:false}); }
+  requestAnimationFrame(frame);
+}
+
+// ---------------- 数据来源：实时 / 回放 ----------------
+let replayTimer = null;
+function lastRunEvents(evs){
+  const ends = evs.filter((e) => e.kind === "run.end" && e.what !== "build" && e.what !== "understand");
+  const pick = ends.length ? ends[ends.length-1].run : (evs.length ? evs[evs.length-1].run : null);
+  return pick ? evs.filter((e) => e.run === pick) : [];
+}
+function replay(evs, speed, done){
+  clearTimeout(replayTimer);
+  setMode("replay");
+  let i = 0;
+  const step = () => {
+    if (i >= evs.length) { done && done(); return; }
+    const e = Object.assign({}, evs[i], {t: Date.now()/1000});
+    handle(e);
+    const gap = i + 1 < evs.length ? (evs[i+1].t - evs[i].t)*1000/speed : 0;
+    i++;
+    replayTimer = setTimeout(step, Math.max(70, Math.min(1400, gap)));
+  };
+  step();
+}
+function setMode(m){
+  S.mode = m;
+  $("dot").className = "dot " + (m === "live" ? "on" : m === "replay" ? "replay" : "");
+  $("mode").textContent = {live:"实时", replay:"回放中（真实记录）", offline:"连不上，稍后重试", connecting:"连接中", demo:"回放（真实记录）"}[m] || m;
+}
+function resetBoard(){
+  for (const c of S.cols) c.innerHTML = "";
+  S.links = []; S.counts = [0,0,0,0,0,0]; S.feedN = 0;
+}
+function start(){
+  setupCols(); renderStages(-1); renderRings(); renderTiles();
+  requestAnimationFrame(frame);
+  addEventListener("resize", renderLog);
+  const embedded = window.__LIVE_DATA__;
+  if (embedded) {  // 发布出去的静态页：没有服务器，循环回放嵌在页面里的真实记录
+    S.stats = embedded.stats || {}; renderRings();
+    $("replayBtn").textContent = "从头回放";
+    document.querySelector(".foot span").textContent = "这是回放：" + (embedded.recorded || "真实记录") + "；数字和顺序都照记录，只把等待时间压缩了";
+    (embedded.history || []).forEach((r) => S.recent.push(r));
+    const all = embedded.events || [];
+    const loop = () => { resetBoard(); replay(all, embedded.speed || 3, () => setTimeout(loop, 4000)); };
+    $("replayBtn").onclick = loop;
+    loop(); setMode("demo");
+    return;
+  }
+  const token = (document.querySelector('meta[name="aisite-token"]') || {}).content || "";
+  fetch("/api/live/snapshot?token=" + encodeURIComponent(token)).then((r) => r.json()).then((snap) => {
+    S.stats = snap.stats || {}; renderRings();
+    for (const e of snap.events || []) handle(e, true);
+    renderLog(); renderTiles(); renderStages(-1);
+    $("replayBtn").onclick = () => { const evs = lastRunEvents(S.events.slice()); if (evs.length) { resetBoard(); replay(evs, 2, () => setMode("live")); } };
+    const es = new EventSource(`/api/live?token=${encodeURIComponent(token)}&since=${snap.pos || 0}`);
+    es.addEventListener("open", () => setMode("live"));
+    es.addEventListener("ev", (m) => { try { clearTimeout(replayTimer); if (S.mode !== "live") setMode("live"); handle(JSON.parse(m.data)); } catch (err) {} });
+    es.addEventListener("stats", (m) => { try { S.stats = JSON.parse(m.data); renderRings(); } catch (err) {} });
+    es.addEventListener("error", () => setMode("offline"));
+  }).catch(() => setMode("offline"));
+}
+start();
+})();
+</script>
+</body>
+</html>

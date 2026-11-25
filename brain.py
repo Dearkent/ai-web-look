@@ -21,6 +21,8 @@
   python3 brain.py use L001          # 记录某条经验被用上了一次
   python3 brain.py done T04 "产出读码笔记"
   python3 brain.py verify            # 跑验证门
+  python3 brain.py feed-design 地址或文件夹… [--for 行业] [--list 清单] [--refresh]   # 喂网站设计（只读版面和颜色）
+  python3 brain.py priors build|trial|show                              # 从喂的设计里提炼规律、试跑、查看
   python3 brain.py stats
 """
 import argparse
@@ -28,6 +30,7 @@ import json
 import math
 import re
 import subprocess
+import time
 import sys
 from collections import Counter
 from datetime import datetime
@@ -230,7 +233,12 @@ def cmd_verify(_):
     results = {}
     ok_all = True
     run = []
+    sys.path.insert(0, str(ROOT / "product" / "app"))
+    import events
+    gate = events.run("gate", 用例=len(cases))
+    gate.__enter__()
     for case in cases:
+        t0 = time.time()
         out, limit = run_bounded(case["cmd"], case.get("timeout", 120))
         if out is None:
             out = ""
@@ -241,6 +249,7 @@ def cmd_verify(_):
         results.setdefault(case["card"], []).append(passed)
         run.append({"id": case["id"], "card": case["card"], "desc": case["desc"],
                     "result": "通过" if passed else ("超时" if out == "" and missing else "失败")})
+        events.emit("gate.case", id=case["id"], card=case["card"], ok=passed, ms=int((time.time() - t0) * 1000))
         print(f"{'通过' if passed else '失败'}  {case['id']}  ({case['card']}) {case['desc']}")
         if missing:
             print(f"      缺少输出：{missing}")
@@ -256,6 +265,8 @@ def cmd_verify(_):
             write_card(c)
     (ROOT / "evals" / "last_run.json").write_text(json.dumps(
         {"at": now().strftime("%Y-%m-%d %H:%M"), "rows": run}, ensure_ascii=False, indent=1), encoding="utf-8")
+    gate.result = {"cards_ok": sum(map(all, results.values())), "cards": len(results)}
+    gate.__exit__(None, None, None)
     log(f"验证门：{sum(map(all, results.values()))}/{len(results)} 张卡片通过")
     sys.exit(0 if ok_all else 1)
 
@@ -407,8 +418,25 @@ def cmd_export(a):
     print("导出：" + "，".join(f"{k} {len(v)} 行" for k, v in tables.items()) + f"（验证门结果时间 {last['at']}）")
 
 
+def _learn_cli(mod, argv):
+    sys.path.insert(0, str(ROOT / "product" / "learn"))
+    sys.path.insert(0, str(ROOT / "product" / "app"))
+    import importlib
+    m = importlib.import_module(mod)
+    if mod == "corpus":
+        sys.exit(m.main(argv))
+    cmd = argv[0] if argv else "show"
+    if cmd == "build":
+        m.build()
+    elif cmd == "trial":
+        print(m.trial(run_browser="--no-browser" not in argv))
+    print("\n".join(m.show()))
+
+
 def main():
-    p = argparse.ArgumentParser(description="学习大脑 v0")
+    if len(sys.argv) > 1 and sys.argv[1] in ("feed-design", "priors"):  # 喂网站设计 / 设计先验：参数原样交给 product/learn
+        return _learn_cli("corpus" if sys.argv[1] == "feed-design" else "priors", sys.argv[2:])
+    p = argparse.ArgumentParser(description="学习大脑 v0（另有：feed-design 喂网站设计、priors build|trial|show 设计先验）")
     s = p.add_subparsers(dest="cmd", required=True)
     s.add_parser("next")
     r = s.add_parser("recall"); r.add_argument("query"); r.add_argument("-k", type=int, default=3)

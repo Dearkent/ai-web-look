@@ -1,0 +1,1120 @@
+{
+ "all": {
+  "agreement": 0.84,
+  "dark_share": 0.11,
+  "family": {
+   "block": 0.15,
+   "dark": 0.09,
+   "editorial": 0.04,
+   "glass": 0.02,
+   "minimal": 0.6,
+   "soft": 0.09,
+   "tech": 0.02
+  },
+  "hero": {
+   "buttons": 1.0,
+   "image_share": 0.34,
+   "words": 14
+  },
+  "n": 82,
+  "n_layouts": 52,
+  "nav_links": 4,
+  "order": [
+   "content",
+   "features",
+   "catalog",
+   "contact"
+  ],
+  "presence": {
+   "blog": 0.21,
+   "catalog": 0.48,
+   "contact": 0.44,
+   "content": 0.85,
+   "cta": 0.25,
+   "faq": 0.04,
+   "features": 0.46,
+   "pricing": 0.17,
+   "stats": 0.02,
+   "team": 0.1,
+   "testimonials": 0.27
+  },
+  "shape": {
+   "radius": 4.0
+  },
+  "sources": [
+   "0201120bf738",
+   "0326069dc55a",
+   "049bd40534cf",
+   "07d98511b041",
+   "086000def69a",
+   "0c7d4c3937e6",
+   "0fcc67649226",
+   "112b9dd478be",
+   "12133698d377",
+   "1704bcd27fef",
+   "1af931c5fec5",
+   "1ce497951b0e",
+   "1d145c667c1c",
+   "20529db0114e",
+   "20c647b79486",
+   "2455427bbf21",
+   "24606dd3d1b3",
+   "27a8255bb96f",
+   "2977bf000704",
+   "2a359c6c9f6f",
+   "2cc8ff9bde43",
+   "3227ad32104b",
+   "32af81d17b3a",
+   "3c32a4ffc179",
+   "40855b335af7",
+   "4096b06465f1",
+   "43dd8d700563",
+   "4586ddae4c96",
+   "46d0354f244e",
+   "4d8bffe5e3b4",
+   "5814ce3796ad",
+   "5ad561e853e8",
+   "5c37ab817a6d",
+   "61448150b7c9",
+   "68add7885e29",
+   "6d196c88b1e4",
+   "6e7d55ec07c6",
+   "6ed354ce831d",
+   "7d63c5b1e812",
+   "820ba412575d",
+   "8257086ee4d2",
+   "829d714c20a0",
+   "888849058c03",
+   "901ba979989c",
+   "90447c3f1e01",
+   "93ed872b86e5",
+   "95f34cba8bc1",
+   "971a69ccb212",
+   "97e3f7cecc59",
+   "982328ae9d34",
+   "988b1361bf35",
+   "9c5c418444f2",
+   "9d21d80320c5",
+   "9f559787eefc",
+   "a796e46ead8a",
+   "add1428428db",
+   "af1ecc0fb5ae",
+   "bda3bb01290f",
+   "be339943c5c4",
+   "c5e8eaa995c7",
+   "c6125da3b91b",
+   "c6f4dfd461d8",
+   "c75a532242b6",
+   "cb8aa36ea468",
+   "cfea815a3622",
+   "d0764487c43e",
+   "d2cfdcf41b57",
+   "d62c4b02a1e9",
+   "d9a485d15cb3",
+   "e172bceb8f63",
+   "e7aec8e14dc7",
+   "e8b337108fdf",
+   "ea0de4f1faf7",
+   "ea328fc5da25",
+   "edd796ee99df",
+   "eee02587ab67",
+   "f072dda01525",
+   "f2cae2fdb935",
+   "f6be605fd8fe",
+   "f90532c79022",
+   "fc77edba7b61",
+   "fce0ce969d0b"
+  ],
+  "space": {
+   "container": 1050,
+   "section_pad": 48.0
+  },
+  "type": {
+   "base": 16.0,
+   "h1": 50.0,
+   "line_height": 1.5,
+   "ratio": 3.29,
+   "serif_heading_share": 0.07
+  },
+  "where": {
+   "blog": 1.0,
+   "catalog": 0.4,
+   "contact": 1.0,
+   "content": 0.0,
+   "cta": 0.75,
+   "faq": 0.86,
+   "features": 0.21,
+   "pricing": 0.67,
+   "stats": 0.29,
+   "team": 0.6,
+   "testimonials": 0.69
+  }
+ },
+ "built_at": "2026-11-25 22:30",
+ "industries": {
+  "B2B Service": {
+   "agreement": 1.0,
+   "dark_share": 0.0,
+   "family": {
+    "block": 0.25,
+    "minimal": 0.75
+   },
+   "fingerprint": "b5c2e1bfd4b8",
+   "hero": {
+    "buttons": 2,
+    "image_share": 0.25,
+    "words": 31
+   },
+   "n": 4,
+   "n_layouts": 3,
+   "nav_links": 5.0,
+   "order": [
+    "content",
+    "features",
+    "stats",
+    "pricing",
+    "cta",
+    "testimonials",
+    "blog",
+    "contact",
+    "team"
+   ],
+   "presence": {
+    "blog": 0.33,
+    "contact": 0.67,
+    "content": 0.33,
+    "cta": 0.33,
+    "features": 1.0,
+    "pricing": 0.33,
+    "stats": 0.33,
+    "team": 0.33,
+    "testimonials": 0.67
+   },
+   "shape": {
+    "radius": 0.0
+   },
+   "sources": [
+    "8257086ee4d2",
+    "982328ae9d34",
+    "d0764487c43e",
+    "ea328fc5da25"
+   ],
+   "space": {
+    "container": 1050,
+    "section_pad": 48.0
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 16.0,
+    "h1": 52.0,
+    "line_height": 1.5,
+    "ratio": 3.25,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "blog": 0.86,
+    "contact": 1.0,
+    "content": 0.0,
+    "cta": 0.57,
+    "features": 0.0,
+    "pricing": 0.33,
+    "stats": 0.29,
+    "team": 1.0,
+    "testimonials": 0.69
+   },
+   "why": "只有 4 个，至少要 5 个"
+  },
+  "Bakery/Cafe": {
+   "agreement": 0.9,
+   "dark_share": 0.29,
+   "family": {
+    "block": 0.07,
+    "dark": 0.14,
+    "minimal": 0.29,
+    "soft": 0.36,
+    "tech": 0.14
+   },
+   "fingerprint": "7b33aeecc0c2",
+   "hero": {
+    "buttons": 0,
+    "image_share": 0.71,
+    "words": 11.5
+   },
+   "n": 14,
+   "n_layouts": 12,
+   "nav_links": 5.0,
+   "order": [
+    "content",
+    "catalog",
+    "contact"
+   ],
+   "presence": {
+    "blog": 0.17,
+    "catalog": 0.75,
+    "contact": 0.5,
+    "content": 1.0,
+    "cta": 0.08,
+    "features": 0.08,
+    "pricing": 0.08,
+    "testimonials": 0.25
+   },
+   "shape": {
+    "radius": 13.0
+   },
+   "sources": [
+    "0326069dc55a",
+    "049bd40534cf",
+    "1af931c5fec5",
+    "27a8255bb96f",
+    "2cc8ff9bde43",
+    "40855b335af7",
+    "46d0354f244e",
+    "4d8bffe5e3b4",
+    "6ed354ce831d",
+    "829d714c20a0",
+    "93ed872b86e5",
+    "95f34cba8bc1",
+    "e172bceb8f63",
+    "f90532c79022"
+   ],
+   "space": {
+    "container": 1280,
+    "section_pad": 32
+   },
+   "status": "采纳",
+   "trial": {
+    "at": "2026-11-25 22:31",
+    "candidate": {
+     "errors": 0,
+     "note": "首页区块按 14 个同行网站的常见顺序排",
+     "problems": 0
+    },
+    "off": {
+     "errors": 0,
+     "note": "",
+     "problems": 0
+    },
+    "style": "vibrant-and-block-based"
+   },
+   "type": {
+    "base": 16.0,
+    "h1": 50.5,
+    "line_height": 1.5,
+    "ratio": 3.03,
+    "serif_heading_share": 0.14
+   },
+   "where": {
+    "blog": 1.0,
+    "catalog": 0.4,
+    "contact": 0.8,
+    "content": 0.0,
+    "cta": 1.0,
+    "features": 0.67,
+    "pricing": 0.67,
+    "testimonials": 0.6
+   },
+   "why": "试跑通过：图纸 0 错误，浏览器问题不比不用时多"
+  },
+  "Conference / Symposium Landing Page": {
+   "agreement": null,
+   "dark_share": 0.0,
+   "family": {
+    "minimal": 1.0
+   },
+   "fingerprint": "6abffdf51f9a",
+   "hero": {
+    "buttons": 1,
+    "image_share": 0.0,
+    "words": 11
+   },
+   "n": 1,
+   "n_layouts": 1,
+   "nav_links": 0,
+   "order": [
+    "contact",
+    "cta",
+    "blog"
+   ],
+   "presence": {
+    "blog": 1.0,
+    "contact": 1.0,
+    "cta": 1.0
+   },
+   "shape": {
+    "radius": 0.0
+   },
+   "sources": [
+    "0c7d4c3937e6"
+   ],
+   "space": {
+    "container": null,
+    "section_pad": 90
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 15.0,
+    "h1": 88.0,
+    "line_height": null,
+    "ratio": 5.87,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "blog": 1.0,
+    "contact": 0.0,
+    "cta": 0.5
+   },
+   "why": "只有 1 个，至少要 5 个"
+  },
+  "Construction/Architecture": {
+   "agreement": null,
+   "dark_share": 0.0,
+   "family": {
+    "block": 1.0
+   },
+   "fingerprint": "331f6233c3e4",
+   "hero": {
+    "buttons": 5,
+    "image_share": 0.0,
+    "words": 46
+   },
+   "n": 1,
+   "n_layouts": 1,
+   "nav_links": 0,
+   "order": [
+    "cta",
+    "features"
+   ],
+   "presence": {
+    "cta": 1.0,
+    "features": 1.0
+   },
+   "shape": {
+    "radius": 0.0
+   },
+   "sources": [
+    "4096b06465f1"
+   ],
+   "space": {
+    "container": null,
+    "section_pad": 70
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 15.0,
+    "h1": 60.0,
+    "line_height": 1.73,
+    "ratio": 4.0,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "cta": 0.0,
+    "features": 1.0
+   },
+   "why": "只有 1 个，至少要 5 个"
+  },
+  "Creative Agency": {
+   "agreement": 0.67,
+   "dark_share": 0.2,
+   "family": {
+    "dark": 0.2,
+    "editorial": 0.4,
+    "minimal": 0.4
+   },
+   "fingerprint": "33685bd7ee0f",
+   "hero": {
+    "buttons": 1.0,
+    "image_share": 0.0,
+    "words": 22.0
+   },
+   "n": 5,
+   "n_layouts": 2,
+   "nav_links": 5,
+   "order": [
+    "features",
+    "content",
+    "catalog",
+    "team",
+    "cta",
+    "contact"
+   ],
+   "presence": {
+    "catalog": 1.0,
+    "contact": 1.0,
+    "content": 1.0,
+    "cta": 0.5,
+    "features": 1.0,
+    "team": 0.5
+   },
+   "shape": {
+    "radius": 1.5
+   },
+   "sources": [
+    "20529db0114e",
+    "3c32a4ffc179",
+    "af1ecc0fb5ae",
+    "c6f4dfd461d8",
+    "e8b337108fdf"
+   ],
+   "space": {
+    "container": 1050,
+    "section_pad": 50
+   },
+   "status": "采纳",
+   "trial": {
+    "at": "2026-11-25 22:31",
+    "candidate": {
+     "errors": 0,
+     "note": "首页区块按 5 个同行网站的常见顺序排",
+     "problems": 0
+    },
+    "off": {
+     "errors": 0,
+     "note": "",
+     "problems": 0
+    },
+    "style": "brutalism"
+   },
+   "type": {
+    "base": 15.0,
+    "h1": 56.0,
+    "line_height": 1.5,
+    "ratio": 3.5,
+    "serif_heading_share": 0.4
+   },
+   "where": {
+    "catalog": 0.35,
+    "contact": 0.9,
+    "content": 0.2,
+    "cta": 0.75,
+    "features": 0.12,
+    "team": 0.6
+   },
+   "why": "试跑通过：图纸 0 错误，浏览器问题不比不用时多"
+  },
+  "Dental Practice": {
+   "agreement": 1.0,
+   "dark_share": 0.0,
+   "family": {
+    "block": 0.33,
+    "minimal": 0.67
+   },
+   "fingerprint": "b520ac6ba755",
+   "hero": {
+    "buttons": 2,
+    "image_share": 0.0,
+    "words": 29
+   },
+   "n": 3,
+   "n_layouts": 2,
+   "nav_links": 0,
+   "order": [
+    "features",
+    "content",
+    "team",
+    "testimonials",
+    "blog",
+    "cta"
+   ],
+   "presence": {
+    "blog": 1.0,
+    "content": 0.5,
+    "cta": 0.5,
+    "features": 1.0,
+    "team": 0.5,
+    "testimonials": 0.5
+   },
+   "shape": {
+    "radius": 4.0
+   },
+   "sources": [
+    "5c37ab817a6d",
+    "be339943c5c4",
+    "e7aec8e14dc7"
+   ],
+   "space": {
+    "container": 1015.0,
+    "section_pad": 48
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 16.0,
+    "h1": 63.0,
+    "line_height": 1.29,
+    "ratio": 4.5,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "blog": 0.75,
+    "content": 0.25,
+    "cta": 1.0,
+    "features": 0.0,
+    "team": 0.25,
+    "testimonials": 0.5
+   },
+   "why": "只有 3 个，至少要 5 个"
+  },
+  "E-commerce": {
+   "agreement": 1.0,
+   "dark_share": 0.0,
+   "family": {
+    "block": 0.25,
+    "minimal": 0.75
+   },
+   "fingerprint": "4a02c39ca712",
+   "hero": {
+    "buttons": 1,
+    "image_share": 0.0,
+    "words": 11
+   },
+   "n": 4,
+   "n_layouts": 2,
+   "nav_links": 3.5,
+   "order": [
+    "catalog",
+    "content",
+    "pricing"
+   ],
+   "presence": {
+    "catalog": 0.5,
+    "content": 1.0,
+    "pricing": 1.0
+   },
+   "shape": {
+    "radius": 0.0
+   },
+   "sources": [
+    "07d98511b041",
+    "5814ce3796ad",
+    "901ba979989c",
+    "ea0de4f1faf7"
+   ],
+   "space": {
+    "container": 1110.0,
+    "section_pad": 59.0
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 16.0,
+    "h1": 43.0,
+    "line_height": 1.5,
+    "ratio": 2.79,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "catalog": 0.0,
+    "content": 0.17,
+    "pricing": 0.83
+   },
+   "why": "只有 4 个，至少要 5 个"
+  },
+  "Legal Services": {
+   "agreement": null,
+   "dark_share": 0.0,
+   "family": {
+    "minimal": 1.0
+   },
+   "fingerprint": "c90d077de63b",
+   "hero": {
+    "buttons": 1,
+    "image_share": 1.0,
+    "words": 12
+   },
+   "n": 1,
+   "n_layouts": 1,
+   "nav_links": 8,
+   "order": [
+    "content",
+    "faq",
+    "contact"
+   ],
+   "presence": {
+    "contact": 1.0,
+    "content": 1.0,
+    "faq": 1.0
+   },
+   "shape": {
+    "radius": 0.0
+   },
+   "sources": [
+    "1ce497951b0e"
+   ],
+   "space": {
+    "container": 960,
+    "section_pad": 48
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 16.0,
+    "h1": 40.0,
+    "line_height": 1.5,
+    "ratio": 2.5,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "contact": 1.0,
+    "content": 0.0,
+    "faq": 0.86
+   },
+   "why": "只有 1 个，至少要 5 个"
+  },
+  "Magazine/Blog": {
+   "agreement": null,
+   "dark_share": 0.0,
+   "family": {
+    "block": 0.25,
+    "minimal": 0.75
+   },
+   "fingerprint": "78588acaa3cd",
+   "hero": {
+    "buttons": 0.0,
+    "image_share": 0.0,
+    "words": 11.0
+   },
+   "n": 4,
+   "n_layouts": 0,
+   "nav_links": 5.5,
+   "order": [],
+   "presence": {},
+   "shape": {
+    "radius": 2.0
+   },
+   "sources": [
+    "112b9dd478be",
+    "20c647b79486",
+    "add1428428db",
+    "d9a485d15cb3"
+   ],
+   "space": {
+    "container": 1050.0,
+    "section_pad": 32.0
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 16.0,
+    "h1": 44.0,
+    "line_height": 1.5,
+    "ratio": 2.75,
+    "serif_heading_share": 0.0
+   },
+   "where": {},
+   "why": "只有 4 个，至少要 5 个"
+  },
+  "Medical Clinic": {
+   "agreement": 0.0,
+   "dark_share": 0.0,
+   "family": {
+    "block": 0.25,
+    "glass": 0.25,
+    "minimal": 0.5
+   },
+   "fingerprint": "9cf8488b06c0",
+   "hero": {
+    "buttons": 1.5,
+    "image_share": 0.25,
+    "words": 27.0
+   },
+   "n": 4,
+   "n_layouts": 2,
+   "nav_links": 0.0,
+   "order": [
+    "features",
+    "content",
+    "pricing",
+    "team",
+    "contact"
+   ],
+   "presence": {
+    "contact": 0.5,
+    "content": 1.0,
+    "features": 1.0,
+    "pricing": 0.5,
+    "team": 0.5
+   },
+   "shape": {
+    "radius": 4.5
+   },
+   "sources": [
+    "43dd8d700563",
+    "97e3f7cecc59",
+    "9f559787eefc",
+    "a796e46ead8a"
+   ],
+   "space": {
+    "container": 1010.0,
+    "section_pad": 46.0
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 14.5,
+    "h1": 52.0,
+    "line_height": 1.7,
+    "ratio": 3.71,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "contact": 0.89,
+    "content": 0.5,
+    "features": 0.11,
+    "pricing": 0.67,
+    "team": 0.78
+   },
+   "why": "只有 4 个，至少要 5 个"
+  },
+  "Online Course/E-learning": {
+   "agreement": null,
+   "dark_share": 0.0,
+   "family": {
+    "minimal": 1.0
+   },
+   "fingerprint": "55e47ea44132",
+   "hero": {
+    "buttons": 2,
+    "image_share": 0.0,
+    "words": 10
+   },
+   "n": 1,
+   "n_layouts": 1,
+   "nav_links": 0,
+   "order": [
+    "content",
+    "blog"
+   ],
+   "presence": {
+    "blog": 1.0,
+    "content": 1.0
+   },
+   "shape": {
+    "radius": 0.0
+   },
+   "sources": [
+    "988b1361bf35"
+   ],
+   "space": {
+    "container": null,
+    "section_pad": 65
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 14.0,
+    "h1": 40.0,
+    "line_height": null,
+    "ratio": 2.86,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "blog": 1.0,
+    "content": 0.0
+   },
+   "why": "只有 1 个，至少要 5 个"
+  },
+  "Open Source Project Landing": {
+   "agreement": null,
+   "dark_share": 0.0,
+   "family": {
+    "glass": 1.0
+   },
+   "fingerprint": "14e73d099a8f",
+   "hero": {
+    "buttons": 5,
+    "image_share": 1.0,
+    "words": 113
+   },
+   "n": 1,
+   "n_layouts": 1,
+   "nav_links": 36,
+   "order": [
+    "content"
+   ],
+   "presence": {
+    "content": 1.0
+   },
+   "shape": {
+    "radius": 6.0
+   },
+   "sources": [
+    "3227ad32104b"
+   ],
+   "space": {
+    "container": null,
+    "section_pad": 31
+   },
+   "status": "样本不够",
+   "type": {
+    "base": 16.0,
+    "h1": 47.2,
+    "line_height": 1.6,
+    "ratio": 2.95,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "content": 0.0
+   },
+   "why": "只有 1 个，至少要 5 个"
+  },
+  "Portfolio/Personal": {
+   "agreement": 0.73,
+   "dark_share": 0.0,
+   "family": {
+    "block": 0.33,
+    "editorial": 0.11,
+    "minimal": 0.56
+   },
+   "fingerprint": "a6e41c81a515",
+   "hero": {
+    "buttons": 1.0,
+    "image_share": 0.56,
+    "words": 12.5
+   },
+   "n": 9,
+   "n_layouts": 6,
+   "nav_links": 4,
+   "order": [
+    "content",
+    "catalog",
+    "features",
+    "contact"
+   ],
+   "presence": {
+    "blog": 0.17,
+    "catalog": 0.83,
+    "contact": 0.5,
+    "content": 1.0,
+    "features": 0.5,
+    "testimonials": 0.17
+   },
+   "shape": {
+    "radius": 4.0
+   },
+   "sources": [
+    "0201120bf738",
+    "12133698d377",
+    "1704bcd27fef",
+    "2977bf000704",
+    "68add7885e29",
+    "c6125da3b91b",
+    "c75a532242b6",
+    "eee02587ab67",
+    "fce0ce969d0b"
+   ],
+   "space": {
+    "container": 1050.0,
+    "section_pad": 32
+   },
+   "status": "采纳",
+   "trial": {
+    "at": "2026-11-25 22:31",
+    "candidate": {
+     "errors": 0,
+     "note": "首页区块按 9 个同行网站的常见顺序排",
+     "problems": 0
+    },
+    "off": {
+     "errors": 0,
+     "note": "",
+     "problems": 0
+    },
+    "style": "motion-driven"
+   },
+   "type": {
+    "base": 15.5,
+    "h1": 64.0,
+    "line_height": 1.5,
+    "ratio": 4.0,
+    "serif_heading_share": 0.11
+   },
+   "where": {
+    "blog": 1.0,
+    "catalog": 0.5,
+    "contact": 1.0,
+    "content": 0.0,
+    "features": 0.5,
+    "testimonials": 0.75
+   },
+   "why": "试跑通过：图纸 0 错误，浏览器问题不比不用时多"
+  },
+  "Restaurant/Food Service": {
+   "agreement": 0.86,
+   "dark_share": 0.31,
+   "family": {
+    "block": 0.15,
+    "dark": 0.31,
+    "minimal": 0.46,
+    "soft": 0.08
+   },
+   "fingerprint": "8f373633a15e",
+   "hero": {
+    "buttons": 1,
+    "image_share": 0.38,
+    "words": 22
+   },
+   "n": 13,
+   "n_layouts": 8,
+   "nav_links": 3.0,
+   "order": [
+    "content",
+    "features",
+    "catalog",
+    "cta",
+    "testimonials",
+    "contact",
+    "blog"
+   ],
+   "presence": {
+    "blog": 0.38,
+    "catalog": 0.62,
+    "contact": 0.5,
+    "content": 0.88,
+    "cta": 0.38,
+    "features": 0.62,
+    "pricing": 0.25,
+    "testimonials": 0.5
+   },
+   "shape": {
+    "radius": 11.0
+   },
+   "sources": [
+    "0fcc67649226",
+    "1d145c667c1c",
+    "2455427bbf21",
+    "24606dd3d1b3",
+    "4586ddae4c96",
+    "7d63c5b1e812",
+    "888849058c03",
+    "90447c3f1e01",
+    "9d21d80320c5",
+    "c5e8eaa995c7",
+    "cfea815a3622",
+    "f072dda01525",
+    "f2cae2fdb935"
+   ],
+   "space": {
+    "container": 1010.0,
+    "section_pad": 60
+   },
+   "status": "采纳",
+   "trial": {
+    "at": "2026-11-25 22:31",
+    "candidate": {
+     "errors": 0,
+     "note": "首页区块按 13 个同行网站的常见顺序排（和原来一致）",
+     "problems": 0
+    },
+    "off": {
+     "errors": 0,
+     "note": "",
+     "problems": 0
+    },
+    "style": "vibrant-and-block-based"
+   },
+   "type": {
+    "base": 16,
+    "h1": 52.8,
+    "line_height": 1.55,
+    "ratio": 3.52,
+    "serif_heading_share": 0.08
+   },
+   "where": {
+    "blog": 0.91,
+    "catalog": 0.4,
+    "contact": 0.88,
+    "content": 0.0,
+    "cta": 0.86,
+    "features": 0.18,
+    "pricing": 0.37,
+    "testimonials": 0.86
+   },
+   "why": "试跑通过：图纸 0 错误，浏览器问题不比不用时多"
+  },
+  "SaaS (General)": {
+   "agreement": 0.92,
+   "dark_share": 0.0,
+   "family": {
+    "minimal": 0.91,
+    "soft": 0.09
+   },
+   "fingerprint": "812c105042f7",
+   "hero": {
+    "buttons": 1.0,
+    "image_share": 0.36,
+    "words": 12
+   },
+   "n": 11,
+   "n_layouts": 7,
+   "nav_links": 0,
+   "order": [
+    "content",
+    "features",
+    "cta",
+    "testimonials"
+   ],
+   "presence": {
+    "catalog": 0.29,
+    "contact": 0.14,
+    "content": 0.71,
+    "cta": 0.43,
+    "faq": 0.14,
+    "features": 0.57,
+    "pricing": 0.29,
+    "team": 0.14,
+    "testimonials": 0.43
+   },
+   "shape": {
+    "radius": 0.0
+   },
+   "sources": [
+    "2a359c6c9f6f",
+    "61448150b7c9",
+    "6d196c88b1e4",
+    "6e7d55ec07c6",
+    "971a69ccb212",
+    "9c5c418444f2",
+    "bda3bb01290f",
+    "cb8aa36ea468",
+    "d2cfdcf41b57",
+    "edd796ee99df",
+    "fc77edba7b61"
+   ],
+   "space": {
+    "container": 1037.0,
+    "section_pad": 60.0
+   },
+   "status": "采纳",
+   "trial": {
+    "at": "2026-11-25 22:31",
+    "candidate": {
+     "errors": 0,
+     "note": "首页区块按 11 个同行网站的常见顺序排（和原来一致）",
+     "problems": 0
+    },
+    "off": {
+     "errors": 0,
+     "note": "",
+     "problems": 0
+    },
+    "style": "glassmorphism"
+   },
+   "type": {
+    "base": 16.0,
+    "h1": 48.0,
+    "line_height": 1.5,
+    "ratio": 3.0,
+    "serif_heading_share": 0.0
+   },
+   "where": {
+    "catalog": 0.33,
+    "contact": 1.0,
+    "content": 0.0,
+    "cta": 0.75,
+    "faq": 0.86,
+    "features": 0.12,
+    "pricing": 0.69,
+    "team": 0.43,
+    "testimonials": 1.0
+   },
+   "why": "试跑通过：图纸 0 错误，浏览器问题不比不用时多"
+  }
+ },
+ "min_agree": 0.6,
+ "min_n": 5,
+ "n": 82
+}

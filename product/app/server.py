@@ -40,6 +40,8 @@ import generate as gen_site  # noqa: E402
 import photos as photo_lib  # noqa: E402
 from plan import plan as _plan  # noqa: E402
 import edit  # noqa: E402
+import events  # noqa: E402
+import live  # noqa: E402
 import feed  # noqa: E402
 import learned  # noqa: E402
 import prefs  # noqa: E402
@@ -106,7 +108,10 @@ class App:
         sid = secrets.token_hex(6)
         os.makedirs(os.path.join(self.work, sid))
         s = {"sid": sid, "text": text, "model_calls": 0}
-        b, rep = llm_understand.understand_with_model(text, self._conn("understand", s), self._budget(s))
+        with events.run("understand"), events.stage("understand", 字数=len(text)) as st:  # 只记字数，不记原话
+            b, rep = llm_understand.understand_with_model(text, self._conn("understand", s), self._budget(s))
+            st.out(行业=b.get("product_type", {}).get("value", ""), questions=len(b.get("open_questions", []) or []),
+                   by=str((rep or {}).get("how", "rules")) if isinstance(rep, dict) else "rules")
         b["id"] = "site-" + sid
         s.update(brief=b, options=self._options(b), understood_by=rep)
         self._save(s)
@@ -130,7 +135,7 @@ class App:
     def preview(self, body):
         s = self._load(body.get("session"))
         out = []
-        with LOCK:
+        with LOCK, events.run("preview", 行业=s["brief"]["product_type"]["value"], 风格数=len(s["options"])):
             for o in s["options"]:
                 name, d = self._slot(s, o["id"])
                 pre = [x["fix"] for x in autofix.prevent(s["brief"], o["id"])]  # 预览也用上以前的教训
@@ -159,7 +164,7 @@ class App:
     def _build(self, s, brief, style, extras=None):
         """生成一个版本（带自我纠错），返回 (给界面的结果, 构建结果)。extras：对话修改里用户自己写的文字、字号圆角间距。"""
         extras = extras or {}
-        with LOCK:
+        with LOCK, events.run("site", 行业=brief["product_type"]["value"], 风格=style):
             name, d = self._slot(s, style)
             overlay = json.loads(json.dumps(self._copy(s, brief, style) or {}))
             for sec, fields in (extras.get("copy") or {}).items():  # 用户亲手写的文字最优先
@@ -167,9 +172,11 @@ class App:
             pics = {"dir": os.path.join(self.work, s["sid"], "photos"), "map": extras.get("images") or {}}
             r = autofix.run(brief, style, os.path.join(d, "rounds"), run_browser=True,  # 检查出问题会自己修，有刹车
                             copy_overlay=overlay or None, tweaks=extras.get("tweaks") or None, photos=pics if pics["map"] else None)
-            for part in ("project", "site"):  # 最终版本放到固定位置，静态路由只认这一个
-                shutil.move(r[part], os.path.join(d, part))
-                r[part] = os.path.join(d, part)
+            with events.stage("deliver") as st:
+                for part in ("project", "site"):  # 最终版本放到固定位置，静态路由只认这一个
+                    shutil.move(r[part], os.path.join(d, part))
+                    r[part] = os.path.join(d, part)
+                st.out(problems=len(r["blueprint_errors"] + r["browser_problems"]), version=s["rev"])
         rep = r["selffix"]
         if any(x["scope"] == "narrow" for x in rep["learned"]):
             self._generalize_later()
@@ -578,6 +585,8 @@ EXPORT_README = """这是 AI 建站工作台生成的静态网站。
 def make_handler(app: App, token: str = "", port_ref: list | None = None):
     page = open(os.path.join(HERE, "index.html"), encoding="utf-8").read()
     page = page.replace("</head>", f'<meta name="aisite-token" content="{token}">\n</head>', 1)
+    live_page = open(os.path.join(HERE, "live.html"), encoding="utf-8").read()
+    live_page = live_page.replace("</head>", f'<meta name="aisite-token" content="{token}">\n</head>', 1)
 
     class H(http.server.BaseHTTPRequestHandler):
         def log_message(self, *a):
@@ -632,6 +641,29 @@ def make_handler(app: App, token: str = "", port_ref: list | None = None):
                 return
             if path == "/":
                 return self._send(200, page.encode("utf-8"), "text/html; charset=utf-8")
+            if path == "/live":
+                return self._send(200, live_page.encode("utf-8"), "text/html; charset=utf-8")
+            if path in ("/api/live", "/api/live/snapshot"):
+                from urllib.parse import parse_qs
+                q = parse_qs(u.query)
+                if not self._token_ok(q):
+                    return self._send(403, {"error": "缺少令牌"})
+                if path == "/api/live/snapshot":
+                    return self._send(200, live.snapshot())
+                try:
+                    since = max(0, int((q.get("since") or ["0"])[0]))
+                except ValueError:
+                    since = 0
+                self.send_response(200)
+                self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+                self.send_header("Cache-Control", "no-cache")
+                self.end_headers()
+                try:
+                    live.stream(lambda b: (self.wfile.write(b), self.wfile.flush()), since,
+                                max_seconds=float(os.environ.get("AISITE_LIVE_SECONDS", "1800")))
+                except (BrokenPipeError, ConnectionResetError, OSError):
+                    pass
+                return
             if path == "/api/knowledge":
                 return self._send(200, app.knowledge())
             if path == "/api/models":
@@ -678,6 +710,7 @@ def serve(port=0, work="/tmp/aisite-work", choices=None, knowledge=None):
     app = App(work, choices, knowledge)
     app.token = secrets.token_urlsafe(24)  # 每次启动换一个
     srv = http.server.ThreadingHTTPServer(("127.0.0.1", port), make_handler(app, app.token))
+    srv.daemon_threads = True  # 实况页面的长连接不挡住关机
     return srv, app
 
 

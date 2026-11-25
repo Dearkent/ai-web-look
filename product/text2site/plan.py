@@ -16,6 +16,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "tools"))
+sys.path.insert(0, os.path.join(HERE, "..", "learn"))
 import kb  # noqa: E402
 import styles  # noqa: E402
 
@@ -216,6 +217,13 @@ def plan(brief: dict, style_id: str | None = None) -> dict:
         secs.append(_sec("faq", "faq", {"heading": {"kind": "text", "max_chars": 12}, "items": {"kind": "list", "count": 5}}, feature=fid("faq")))
     if not any(s["type"] == "cta" for s in secs) and hero_acts:
         secs.append(_sec("cta", "cta", {"heading": {"kind": "text"}}, [dict(hero_acts[0], id="cta-go")]))
+    try:  # 喂进来的同行网站教的区块顺序（只有试跑通过、采纳了的才用；见 learn/priors.py）
+        import priors as _priors
+        secs, _note = _priors.reorder(ptype, secs, allow_candidate=_priors.candidate_override() == ptype)
+        if _note:
+            notes["design_prior"] = _note
+    except Exception as e:  # 先验坏了不能让建站失败：照原顺序，记一笔
+        notes["design_prior_error"] = f"{type(e).__name__}"
     home_feats = [fid("faq")] if any(s.get("feature") == fid("faq") for s in secs) and fid("faq") else []
     pages.insert(0, {"id": "home", "title": "首页", "path": "/", "parent": None, "kind": "home", "pattern": pattern,
                      "serves_goals": [g["id"] for g in goals], "implements_features": home_feats,
