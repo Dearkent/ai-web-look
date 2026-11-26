@@ -152,10 +152,27 @@ try:
                 st.out(problems=2, kinds=["溢出"])
         pg.wait_for_function(f"document.querySelectorAll('.card').length > {n0}", timeout=8000)
         bad = pg.locator(".card.bad").count()
-        reduced = br.new_page(reduced_motion="reduce")
-        reduced.goto(base + "/live")
-        reduced.wait_for_timeout(800)
         check("页面：连上实时、新事件画成卡片（有问题的标红）、没有脚本错误", bad >= 1 and not errs, (bad, errs[:3]))
+        # 不闪：几种窗口尺寸下，事件不断涌入时各块尺寸不变、主区有高度、卡片不会刚出现就被删、没有横向溢出
+        def stable(page):
+            for i in range(6):
+                with events.run("build", 行业="Bakery/Cafe"):
+                    with events.stage("browser") as st:
+                        st.out(problems=i % 2, kinds=["很长很长的问题类型名字" * 3] if i % 2 else [])
+            return page.evaluate("""() => new Promise(res => { const ids=['agents','chart','log','main','rings','tiles','stages']; const hist={}; let n=0;
+              const t=setInterval(() => { ids.forEach(id => { const q=document.getElementById(id).getBoundingClientRect(); (hist[id]=hist[id]||new Set()).add(Math.round(q.width)+'x'+Math.round(q.height)); });
+                if (++n>=40) { clearInterval(t); res({changing:Object.keys(hist).filter(k=>hist[k].size>1), main:document.getElementById('main').getBoundingClientRect().height,
+                  cards:document.querySelectorAll('.card').length, ox:document.documentElement.scrollWidth>innerWidth}); } }, 50); })""")
+        bad_vp = []
+        for w, h, d in ((1512, 982, 2), (1280, 720, 2), (720, 900, 2), (390, 844, 3)):
+            q = br.new_page(viewport={"width": w, "height": h}, device_scale_factor=d)
+            q.goto(base + "/live")
+            q.wait_for_function("document.getElementById('mode').textContent === '实时'", timeout=8000)
+            r = stable(q)
+            if r["changing"] or r["main"] < 300 or r["cards"] < 2 or r["ox"]:
+                bad_vp.append(((w, h), r))
+            q.close()
+        check("不闪：四种窗口尺寸下尺寸不跳、主区有高度、卡片不被立刻删、不横向溢出", not bad_vp, bad_vp)
         br.close()
 except ImportError:
     check("页面：本机没有 Playwright，跳过浏览器检查", True)

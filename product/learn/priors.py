@@ -134,6 +134,11 @@ def build() -> dict:
             by.setdefault(s["industry"], []).append(s)
     out = {"built_at": time.strftime("%Y-%m-%d %H:%M"), "n": len(specs), "min_n": MIN_N, "min_agree": MIN_AGREE,
            "all": summarize(specs) if specs else {}, "industries": {}}
+    heads = [x for x in specs if x["source"].get("kind") == "browser"]
+    rest = [x for x in specs if x["source"].get("kind") != "browser"]
+    keep = ("n", "family", "dark_share", "type", "space", "shape", "hero")
+    out["tiers"] = {name: {k: v for k, v in summarize(group).items() if k in keep}
+                    for name, group in (("头部网站", heads), ("开源模板", rest)) if group}
     with events.stage("distill", 标本=len(specs), 行业=len(by)) as st:
         for ind, ss in sorted(by.items()):
             sm = summarize(ss)
@@ -245,6 +250,9 @@ def candidate_override() -> str:
 def show() -> list[str]:
     d = load()
     lines = [f"语料库 {d.get('n', 0)} 个网站；样本至少 {d.get('min_n', MIN_N)} 个、顺序一致度至少 {d.get('min_agree', MIN_AGREE)} 才提炼"]
+    for name, t in d.get("tiers", {}).items():
+        lines.append(f"  {name} {t['n']} 个：正文 {t['type']['base']}px，首屏标题 {t['type']['h1']}px，衬线标题占 {t['type']['serif_heading_share']}，"
+                     f"圆角 {t['shape']['radius']}px，深色底占 {t['dark_share']}")
     for ind, p in sorted(d.get("industries", {}).items(), key=lambda kv: -kv[1]["n"]):
         lines.append(f"{ind}：{p['n']} 个，{p['status']}（{p['why']}）；顺序 {' > '.join(['hero'] + p['order'])}；"
                      f"一致度 {p['agreement']}；正文 {p['type']['base']}px，首屏标题 {p['type']['h1']}px；留白 {p['space']['section_pad']}px")

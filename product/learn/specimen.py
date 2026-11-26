@@ -108,8 +108,8 @@ SECTION_RULES = [  # 按顺序匹配：(类型, 词)。词在 id/class 或区块
     ("testimonials", ["testimonial", "review", "what-people", "what-our", "client-say", "customers-say", "评价", "口碑"]),
     ("pricing", ["pricing", "price", "plans", "价格", "套餐"]),
     ("faq", ["faq", "question", "常见问题", "问答"]),
+    ("logos", ["logo", "partner", "brand", "trusted", "sponsor", "teams already", "already work", "companies use", "customers", "合作伙伴"]),
     ("team", ["team", "staff", "our-people", "团队", "医生", "律师团队"]),
-    ("logos", ["logo", "partner", "brand", "trusted", "sponsor", "合作伙伴"]),
     ("stats", ["stat", "counter", "number", "fact", "metric", "数据"]),
     ("steps", ["step", "process", "how-it-works", "how it works", "timeline", "workflow", "流程", "步骤"]),
     ("gallery", ["portfolio", "gallery", "showcase", "our-work", "works", "projects", "作品", "案例"]),
@@ -464,6 +464,123 @@ def guess_industry(text: str) -> tuple[str | None, str]:
 FAMILIES = ["block", "soft", "minimal", "glass", "dark", "editorial", "tech"]
 
 
+def family_of(dark, grads, glow, blur, hard, thick, head_cat, radius) -> str:
+    """风格家族：和 feed.parse_html 同一套判断，加上“科技感”（深底 + 渐变/发光/毛玻璃）。静态读和浏览器读共用。"""
+    if dark and (grads >= 2 or glow or blur):
+        return "tech"
+    if dark:
+        return "dark"
+    if blur and grads >= 1:
+        return "glass"
+    if (hard >= 1 and hard + thick >= 2) or thick >= 4:
+        return "block"
+    if head_cat == "serif":
+        return "editorial"
+    if radius is not None and radius >= 12:
+        return "soft"
+    return "minimal"
+
+
+def _font_cat(ff: str) -> str:
+    v = (ff or "").lower()
+    if re.search(r"mono|courier|code", v):
+        return "mono"
+    if re.search(r"(?<!sans-)serif|georgia|times|garamond|playfair|merriweather|lora|tiempos|canela|freight|caslon|baskerville|didot|bodoni|songti|宋", v.replace("sans-serif", "")):
+        return "serif"
+    return "sans"
+
+
+def _font_name(ff: str) -> str:
+    return re.sub(r"[^A-Za-z0-9 \-]", "", (ff or "").split(",")[0]).strip()[:40]
+
+
+def from_dom(d: dict, source: dict, industry: str | None = None) -> dict | None:
+    """浏览器读页面（dom_probe.js）得到的“算好的样式” → 标本，和静态读的格式一样。
+    页面上的文字（hint、区块标题）只用来猜行业和分区块，不进结果。"""
+    if not isinstance(d, dict) or d.get("v") != 1 or not isinstance(d.get("blocks"), list):
+        return None
+    num = lambda x: x if isinstance(x, (int, float)) and not isinstance(x, bool) else None  # noqa: E731
+    colors = {}
+    for item in d.get("colors", [])[:20]:
+        if isinstance(item, list) and len(item) == 2 and isinstance(item[0], str):
+            h = hex6(item[0])
+            if h and num(item[1]) is not None and h not in ("#0000EE", "#551A8B", "#0000FF"):  # 浏览器默认链接色不是设计
+                colors[h] = item[1]
+    bg = hex6(d.get("bg") or "") if d.get("bg") else None
+    bg_known = bg is not None
+    fg0 = hex6(d.get("fg") or "")
+    if not bg and colors:  # body 透明：和正文色对比够（≥3）的颜色里，面积最大的就是底色
+        ok = [c for c in colors if not fg0 or contrast(c, fg0) >= 3]
+        bg = max(ok or colors, key=colors.get)
+    bg = bg or "#FFFFFF"
+    fg = hex6(d.get("fg") or "") or ("#FFFFFF" if lum(bg) < .2 else "#212529")
+    dark = lum(bg) < 0.18
+    vivid = sorted((c for c in colors if 0.03 < lum(c) < 0.8 and hls(c)[2] > 0.3 and 0.2 < hls(c)[1] < 0.85), key=lambda c: -colors[c])
+    accent = vivid[0] if vivid else None
+    blocks = []
+    for b in d["blocks"][:24]:
+        if not isinstance(b, dict):
+            continue
+        bb = {k: (num(b.get(k)) or 0) for k in ("h1", "btn", "img", "form", "quote", "details", "price", "words", "li", "cards")}
+        bb.update(tag=str(b.get("tag", "div"))[:12], key=str(b.get("key", ""))[:120], h=str(b.get("h", ""))[:60])
+        if not (bb["words"] or bb["img"] or bb["h"] or bb["form"]):  # 没字、没图、没标题的空壳区块（建站平台常见）不算
+            continue
+        if bb["tag"] == "header" and (not bb["h1"] or re.search(r"drawer|modal|cart|popup|dialog", bb["key"])):  # 导航条、抽屉、弹窗的头部不是内容区块
+            continue
+        blocks.append(bb)
+    seq, raw, first = [], [], True
+    for b in blocks:
+        t = classify(b, first)
+        if t == "header":
+            continue
+        if t != "footer":
+            first = False
+        if t == "hero" and "hero" in raw:
+            t = "content"
+        raw.append(t)
+        if t != "footer" and (not seq or seq[-1] != t or t == "content"):
+            seq.append(t)
+    if d.get("ho") and "hero" not in seq:  # 首屏大标题不在任何区块里（直接放在 body/main 下）
+        seq.insert(0, "hero")
+    hero = next((b for b in blocks if classify(b, b is blocks[0]) == "hero"), None)
+    rad = [x for x in d.get("rad", []) if num(x) is not None][:400]
+    pads = [x for x in d.get("pad", []) if num(x) is not None][:200]
+    mws = [x for x in d.get("mw", []) if num(x) is not None][:200]
+    base = num(d.get("fs")) or 16
+    h1 = num(d.get("h1"))
+    if h1 and h1 < base * 1.2:
+        h1 = None
+    head_cat = _font_cat(d.get("hf", ""))
+    radius = statistics.median(rad) if rad else None
+    g = {k: int(num(d.get(k)) or 0) for k in ("gr", "glow", "blur", "hard", "thick", "sh")}
+    fam = family_of(dark, g["gr"], g["glow"], g["blur"], g["hard"], g["thick"], head_cat, radius)
+    ind, why = (industry, "喂的时候标注") if industry else guess_industry(str(d.get("hint", ""))[:300] + " " + " ".join(source.get("hints", [])))
+    lh = num(d.get("lh"))
+    fonts = sorted({f for f in (_font_name(d.get("ff", "")), _font_name(d.get("hf", ""))) if f and f.lower() not in ("inherit", "serif", "sans-serif")})
+    sid = hashlib.sha1(("dom|" + str(source.get("url", "")) + json_dumps(d.get("blocks", [])[:3])).encode("utf-8", "replace")).hexdigest()[:12]
+    return {
+        "id": sid, "source": {k: v for k, v in source.items() if k in ("kind", "repo", "path", "url", "license", "name")},
+        "industry": ind, "industry_why": why, "family": fam,
+        "color": {"bg": bg, "bg_known": bg_known, "fg": fg, "dark": dark, "accent": accent, "palette": vivid[:5], "n_colors": len(colors),
+                  "accent_hue": round(hls(accent)[0] * 360) if accent else None, "accent_sat": round(hls(accent)[2], 2) if accent else None,
+                  "text_contrast": round(contrast(bg, fg), 1)},
+        "type": {"base": round(base, 1), "h1": round(h1, 1) if h1 else None, "ratio": round(h1 / base, 2) if h1 else None,
+                 "line_height": lh if lh and 1 <= lh <= 2.4 else None, "heading_cat": head_cat, "fonts": fonts[:4], "n_sizes": None},
+        "space": {"section_pad": round(statistics.median(pads)) if pads else None, "container": round(statistics.median(mws)) if mws else None},
+        "shape": {"radius": round(radius, 1) if radius is not None else None, "shadows": g["sh"], "hard_shadows": g["hard"],
+                  "thick_borders": g["thick"], "gradients": g["gr"], "blur": g["blur"], "glow": g["glow"]},
+        "structure": {"sections": seq[:16], "n_sections": len([t for t in raw if t != "footer"]), "has_footer": "footer" in raw,
+                      "nav_links": int(num(d.get("nav")) or 0), "hero_words": hero["words"] if hero else None,
+                      "hero_buttons": hero["btn"] if hero else None, "hero_image": bool(hero and hero["img"]), "pages": 1},
+        "how": "browser",
+    }
+
+
+def json_dumps(x) -> str:
+    import json
+    return json.dumps(x, sort_keys=True, ensure_ascii=False)
+
+
 def extract(bundle: dict, source: dict, industry: str | None = None) -> dict | None:
     """一个网站 → 一条标本（只含数字和类别）。读不出东西返回 None。"""
     if not bundle or not bundle.get("pages"):
@@ -661,21 +778,7 @@ def extract(bundle: dict, source: dict, industry: str | None = None) -> dict | N
     if h1 and h1 < base * 1.2:  # 读到的“最大标题”比正文还小，说明没读准，不报
         h1 = None
 
-    # 风格家族：和 feed.parse_html 同一套判断，加上“科技感”（深底 + 渐变/发光/毛玻璃）
-    if dark and (grads >= 2 or glow or blur):
-        fam = "tech"
-    elif dark:
-        fam = "dark"
-    elif blur and grads >= 1:
-        fam = "glass"
-    elif (hard >= 1 and hard + thick >= 2) or thick >= 4:
-        fam = "block"
-    elif head_cat == "serif":
-        fam = "editorial"
-    elif radius is not None and radius >= 12:
-        fam = "soft"
-    else:
-        fam = "minimal"
+    fam = family_of(dark, grads, glow, blur, hard, thick, head_cat, radius)
 
     sid = hashlib.sha1(("|".join(sorted(bundle["pages"][:1])) + "|".join(bundle.get("css", [])[:2])).encode("utf-8", "replace")).hexdigest()[:12]
     spec = {

@@ -259,6 +259,33 @@ def feed_one(item: str, industry: str | None = None, license_: str | None = None
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def feed_dom(d: dict, industry: str | None = None, tier: str = "头部") -> dict:
+    """喂一个浏览器读出来的页面（dom_probe.js 的结果）。网址只认 http(s)；只存数字和类别。"""
+    url = str((d or {}).get("url", ""))[:200]
+    if not re.match(r"https?://[\w.-]+", url):
+        events.emit("feed.skip", 来源=url[-60:], why="网址不对")
+        return {"ok": False, "why": "网址不对"}
+    host = urllib.parse.urlparse(url).netloc
+    src = {"kind": "browser", "url": url, "name": tier, "hints": [host.split(".")[-2] if host.count(".") else host]}
+    with events.stage("feed", 来源=host) as st:
+        try:
+            spec = specimen.from_dom(d, src, industry)
+        except Exception as e:  # 自己的代码出错：记下来，不打断整批
+            spec = None
+            st.out(error=type(e).__name__)
+        if not spec:
+            events.emit("feed.skip", 来源=host, why="读不出版面")
+            return {"ok": False, "why": "读不出版面"}
+        if len(spec["structure"]["sections"]) < 2 and spec["color"]["n_colors"] < 2:
+            events.emit("feed.skip", 来源=host, why="页面几乎是空的（可能被拦截或要登录）")
+            return {"ok": False, "why": "页面几乎是空的"}
+        ok, why = add(spec)
+        st.out(收下=ok, 行业=spec["industry"] or "", 家族=spec["family"], 区块=len(spec["structure"]["sections"]))
+    events.emit("feed.specimen" if ok else "feed.skip", 来源=host, why=why, 行业=spec["industry"] or "", 家族=spec["family"],
+                sections=spec["structure"]["sections"][:8], accent=spec["color"]["accent"] or "")
+    return {"ok": ok, "why": why, "spec": spec}
+
+
 def read_list(p: str) -> list[tuple[str, str | None, str | None]]:
     out = []
     for line in open(p, encoding="utf-8"):
@@ -314,10 +341,25 @@ def main(argv):
     ap.add_argument("--list", help="来源清单文件")
     ap.add_argument("--remove", help="按来源（或标本编号）撤回")
     ap.add_argument("--refresh", action="store_true", help="提取器改进后，把所有来源重读一遍")
+    ap.add_argument("--dom", help="浏览器读页面的结果（每行一个 JSON：{\"industry\":…, \"probe\":dom_probe.js 的结果}）")
     a = ap.parse_args(argv)
     if a.refresh:
         r = refresh()
         print(f"重读：更新 {r['redone']} 个，保留旧记录 {r['kept']} 个，语料库现有 {len(load())} 个")
+        return 0
+    if a.dom:
+        got = skipped = 0
+        with events.run("feed", 数量=sum(1 for _ in open(a.dom, encoding="utf-8")), 来源="浏览器读头部网站"):
+            for line in open(a.dom, encoding="utf-8"):
+                if not line.strip():
+                    continue
+                row = json.loads(line)
+                probe = row["probe"] if isinstance(row.get("probe"), dict) else json.loads(row["probe"])
+                r = feed_dom(probe, row.get("industry"))
+                print(("收下  " if r["ok"] else "跳过  ") + probe.get("url", "?") + ("" if r["ok"] else "：" + r["why"]))
+                got += r["ok"]
+                skipped += not r["ok"]
+        print(f"浏览器喂设计：收下 {got} 个，跳过 {skipped} 个，语料库现有 {len(load())} 个")
         return 0
     if a.remove:
         print(f"撤回了 {remove(a.remove)} 条")

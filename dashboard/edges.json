@@ -110,6 +110,11 @@
   "kind": "产出"
  },
  {
+  "source": "T69",
+  "target": "P040",
+  "kind": "产出"
+ },
+ {
   "source": "T03",
   "target": "L001",
   "kind": "用上"
@@ -422,6 +427,11 @@
  {
   "source": "D31",
   "target": "P034",
+  "kind": "教训"
+ },
+ {
+  "source": "D33",
+  "target": "P039",
   "kind": "教训"
  },
  {

