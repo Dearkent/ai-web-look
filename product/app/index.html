@@ -312,7 +312,7 @@ section,.panel{scroll-margin-top:68px}
     <p class="muted small"><a id="mqkeyurl" target="_blank" rel="noopener noreferrer">去这家申请密钥</a>　先用你填的密钥真打一次，通了才保存，并把“理解需求、写文案、修复”都交给它；不通什么都不改。</p>
     <p id="mqstatus" role="status" aria-live="polite" class="small"></p>
     <details class="small"><summary>不想在网页里填？用 .env 文件</summary>
-      <p class="muted">把工作台文件夹里的 <code>env.example</code> 复制一份改名为 <code>.env</code>（或放到 <code>~/.aisite/.env</code>），填一行密钥和一行 <code>AISITE_MODEL=服务商:模型名</code>，例如 <code>AISITE_KEY_ANTHROPIC=…</code> 和 <code>AISITE_MODEL=anthropic:claude-sonnet-5-5</code>，然后重新启动工作台。.env 不会进 git、不会被导出。</p>
+      <p class="muted">把工作台文件夹里的 <code>env.example</code> 复制一份改名为 <code>aisite.env</code>（或 <code>.env</code>），填一行密钥和一行 <code>AISITE_MODEL=服务商:模型名</code>，例如 <code>AISITE_KEY_ANTHROPIC=…</code> 和 <code>AISITE_MODEL=anthropic:claude-sonnet-5-5</code>，然后重新启动工作台。这个文件不会进 git、不会被导出。</p>
     </details>
   </section>
   <div class="two">

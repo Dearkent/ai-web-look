@@ -3,7 +3,7 @@
 * 存在 ~/.aisite/models.json（可用环境变量 AISITE_MODELS 指到别处），文件权限 600，只有你能读。
   它不在 brain 文件夹里，所以打包、导出都不会把密钥带出去。
 * 密钥也可以用环境变量给：AISITE_KEY_<服务商ID大写>（例如 AISITE_KEY_DEEPSEEK）；Anthropic 兼容旧的 SITE_BUILDER_API_KEY。
-* 也可以写在 .env 文件里（仓库根目录的 .env，或 ~/.aisite/.env；模板见仓库根目录 env.example）：
+* 也可以写在 .env 文件里（仓库根目录的 .env 或 aisite.env，或 ~/.aisite/.env；模板见仓库根目录 env.example）：
   只认 AISITE_ 开头的变量和 SITE_BUILDER_API_KEY；已经在环境里的不覆盖。.env 不进 git。
   AISITE_MODEL=服务商:模型（例如 anthropic:claude-sonnet-5-5）= 没在界面里分配过的用途都用它。
 * 对外（界面）只给“有没有密钥、末四位”，任何接口都不返回完整密钥。
@@ -25,7 +25,8 @@ ENV_OK = re.compile(r"^(AISITE_[A-Z0-9_]{1,60}|SITE_BUILDER_API_KEY)$")
 
 def env_files() -> list[str]:
     root = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
-    return [os.path.join(root, ".env"), os.path.expanduser("~/.aisite/.env")]
+    # aisite.env 和 .env 一样，只是不以点开头——Mac 的访达默认隐藏点开头的文件，用户找不到
+    return [os.path.join(root, ".env"), os.path.join(root, "aisite.env"), os.path.expanduser("~/.aisite/.env")]
 
 
 def load_env(files: list[str] | None = None) -> list[str]:

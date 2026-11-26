@@ -18,3 +18,4 @@ product/learn/corpus/*.bak
 knowledge/fix_memory.json
 runs/choices.jsonl
 runs/events-tests.jsonl*
+aisite.env

@@ -168,7 +168,9 @@ expect("仓库里的 env.example 模板存在、没有填任何真密钥；.env 
        os.path.exists(os.path.join(HERE, "..", "..", "env.example"))
        and not any(l.split("=", 1)[1].strip() for l in open(os.path.join(HERE, "..", "..", "env.example"), encoding="utf-8")
                    if l.startswith("AISITE_KEY_") and "=" in l)
-       and ".env*" in open(os.path.join(HERE, "..", "..", ".gitignore"), encoding="utf-8").read())
+       and ".env*" in open(os.path.join(HERE, "..", "..", ".gitignore"), encoding="utf-8").read()
+       and "aisite.env" in open(os.path.join(HERE, "..", "..", ".gitignore"), encoding="utf-8").read()
+       and any(f.endswith("aisite.env") for f in config.env_files()))
 
 print(f"\n模型接入：{len(ok)}/{len(ok) + len(bad)} 通过")
 sys.exit(1 if bad else 0)
