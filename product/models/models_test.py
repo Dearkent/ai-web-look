@@ -157,6 +157,25 @@ os.environ["AISITE_BASE_KIMICODE"] = "https://api.kimi.ai/coding"
 expect(".env 里 AISITE_BASE_<服务商> 可以改接口地址（海外账号）", config.resolved("kimicode")["base_url"] == "https://api.kimi.ai/coding")
 os.environ.pop("AISITE_BASE_KIMICODE")
 
+# 其它项目里的 Kimi Code 写法（KIMI_API_KEY / KIMI_BASE_URL / KIMI_MODEL / KIMI_PROTOCOL）原样能用
+kd = tempfile.mkdtemp(prefix="kimi-")
+kf = os.path.join(kd, ".env")
+open(kf, "w", encoding="utf-8").write("KIMI_API_KEY=sk-kimi-test-000011112222\nKIMI_BASE_URL=https://api.kimi.ai/coding\nKIMI_MODEL=k3.1-pro\nKIMI_PROTOCOL=anthropic\nKIMI_OTHER=忽略\n")
+d0 = config.load()
+d0["roles"] = {}
+d0["providers"].pop("kimicode", None)
+config.save(d0)
+gotk = config.load_env([kf])
+fr = config.for_role("understand")
+expect("Kimi Code 别名：KIMI_API_KEY/BASE_URL/MODEL/PROTOCOL 读进来（其它 KIMI_ 变量不碰），理解需求用 kimicode / k3.1-pro / 海外地址 / Anthropic 协议",
+       set(gotk) == {"KIMI_API_KEY", "KIMI_BASE_URL", "KIMI_MODEL", "KIMI_PROTOCOL"} and "KIMI_OTHER" not in os.environ
+       and fr and fr["id"] == "kimicode" and fr["model"] == "k3.1-pro" and fr["base_url"] == "https://api.kimi.ai/coding"
+       and fr["protocol"] == "anthropic" and fr["key"] == "sk-kimi-test-000011112222", fr and {k: fr[k] for k in ("id", "model", "base_url")})
+os.environ["KIMI_PROTOCOL"] = "openai"
+expect("Kimi Code 别名：KIMI_PROTOCOL 不是 anthropic 时不自动套用（避免用错协议）", config.for_role("understand") is None)
+for k in ("KIMI_API_KEY", "KIMI_BASE_URL", "KIMI_MODEL", "KIMI_PROTOCOL"):
+    os.environ.pop(k, None)
+
 # .env：只认 AISITE_ 开头的变量和 SITE_BUILDER_API_KEY；不覆盖已有环境变量；AISITE_MODEL 给没分配的用途兜底
 envd = tempfile.mkdtemp(prefix="env-")
 ef = os.path.join(envd, ".env")

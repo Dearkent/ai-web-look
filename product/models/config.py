@@ -20,7 +20,9 @@ from providers import BY_ID, ROLES
 MODEL_RE = re.compile(r"^[\w.:/@+-]{1,120}$")
 
 
-ENV_OK = re.compile(r"^(AISITE_[A-Z0-9_]{1,60}|SITE_BUILDER_API_KEY)$")
+ENV_OK = re.compile(r"^(AISITE_[A-Z0-9_]{1,60}|SITE_BUILDER_API_KEY|KIMI_API_KEY|KIMI_BASE_URL|KIMI_MODEL|KIMI_PROTOCOL)$")
+# 其它项目里常见的 Kimi Code 写法也认：KIMI_API_KEY / KIMI_BASE_URL / KIMI_MODEL（KIMI_PROTOCOL 只接受 anthropic）
+KIMI_ALIAS = {"key": "KIMI_API_KEY", "base": "KIMI_BASE_URL", "model": "KIMI_MODEL"}
 
 
 def env_files() -> list[str]:
@@ -51,6 +53,8 @@ def load_env(files: list[str] | None = None) -> list[str]:
 
 def env_default_role() -> dict | None:
     v = os.environ.get("AISITE_MODEL", "")
+    if not v and os.environ.get(KIMI_ALIAS["model"]) and os.environ.get("KIMI_PROTOCOL", "anthropic").lower() == "anthropic":
+        v = "kimicode:" + os.environ[KIMI_ALIAS["model"]]
     if ":" not in v:
         return None
     pid, model = v.split(":", 1)
@@ -107,6 +111,8 @@ def key_for(pid: str, d: dict | None = None) -> str:
     k = (d["providers"].get(pid) or {}).get("key") or os.environ.get(f"AISITE_KEY_{pid.upper()}", "")
     if not k and pid == "anthropic":
         k = os.environ.get("SITE_BUILDER_API_KEY", "")
+    if not k and pid == "kimicode":
+        k = os.environ.get(KIMI_ALIAS["key"], "")
     return k.strip()
 
 
@@ -116,7 +122,8 @@ def resolved(pid: str, d: dict | None = None) -> dict:
     if pid not in BY_ID:
         raise ValueError("没有这个服务商")
     pre, mine = BY_ID[pid], d["providers"].get(pid) or {}
-    base = mine.get("base_url") or os.environ.get(f"AISITE_BASE_{pid.upper()}") or pre["base_url"]
+    base = (mine.get("base_url") or os.environ.get(f"AISITE_BASE_{pid.upper()}")
+            or (os.environ.get(KIMI_ALIAS["base"]) if pid == "kimicode" else None) or pre["base_url"])
     if not base:
         raise ValueError("自定义服务商需要先填接口地址")
     return {"id": pid, "name": pre["name"], "protocol": mine.get("protocol") or pre["protocol"], "base_url": check_base_url(base),

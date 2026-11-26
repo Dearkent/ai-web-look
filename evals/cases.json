@@ -484,10 +484,10 @@
  {
   "id": "E51",
   "card": "P028",
-  "desc": "模型接入：两种协议的请求格式；密钥错/没填/限流/服务端错/超时/跳转/非JSON/超大/空回复都有明确处理且重试有限；错误里抹掉密钥；密钥文件 600、对外只露末四位；地址检查；按用途配置；.env 只认 AISITE_ 变量、不覆盖已有、AISITE_MODEL 兜底、模板无真密钥；Kimi Code（Anthropic 协议、kimi-for-coding、如实的用户代理、海外地址）",
+  "desc": "模型接入：两种协议的请求格式；密钥错/没填/限流/服务端错/超时/跳转/非JSON/超大/空回复都有明确处理且重试有限；错误里抹掉密钥；密钥文件 600、对外只露末四位；地址检查；按用途配置；.env 只认 AISITE_ 变量、不覆盖已有、AISITE_MODEL 兜底、模板无真密钥；Kimi Code（Anthropic 协议、kimi-for-coding、如实的用户代理、海外地址）；认 KIMI_API_KEY/BASE_URL/MODEL/PROTOCOL 别名",
   "cmd": "python3 -I product/models/models_test.py | tail -1",
   "expect": [
-   "模型接入：42/42 通过"
+   "模型接入：44/44 通过"
   ],
   "timeout": 120
  },

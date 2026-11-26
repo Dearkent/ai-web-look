@@ -404,5 +404,12 @@
   "who": "我",
   "kind": "汇报",
   "text": "加了 Kimi Code 服务商（Anthropic 协议、api.kimi.com/coding、kimi-for-coding、海外地址自动切换、如实的用户代理）；你电脑上的 aisite.env 已把变量名改成 AISITE_KEY_KIMICODE（值未读未动），模型设为 kimicode:kimi-for-coding。"
+ },
+ {
+  "seq": 59,
+  "at": "2026-11-26 12:58",
+  "who": "用户",
+  "kind": "汇报",
+  "text": "Kimi Code 用的是 Anthropic 兼容协议，不是 Moonshot 那套 OpenAI 协议。配置：KIMI_API_KEY / KIMI_BASE_URL=https://api.kimi.ai/coding / KIMI_MODEL=k3.1-pro / KIMI_PROTOCOL=anthropic。之前试 api.moonshot.cn/v1/chat/completions 直接 401，换成 api.kimi.ai/coding 的 /v1/messages 才通。"
  }
 ]
