@@ -411,5 +411,19 @@
   "who": "用户",
   "kind": "汇报",
   "text": "Kimi Code 用的是 Anthropic 兼容协议，不是 Moonshot 那套 OpenAI 协议。配置：KIMI_API_KEY / KIMI_BASE_URL=https://api.kimi.ai/coding / KIMI_MODEL=k3.1-pro / KIMI_PROTOCOL=anthropic。之前试 api.moonshot.cn/v1/chat/completions 直接 401，换成 api.kimi.ai/coding 的 /v1/messages 才通。"
+ },
+ {
+  "seq": 60,
+  "at": "2026-11-26 21:56",
+  "who": "用户",
+  "kind": "汇报",
+  "text": "工作台没能启动：FileNotFoundError /home/claude/repos3/…/styles.csv。没成功打开，做一个快捷方式。"
+ },
+ {
+  "seq": 61,
+  "at": "2026-11-26 21:56",
+  "who": "我",
+  "kind": "汇报",
+  "text": "原因是设计知识表路径写死在我的开发机上（D34）。已把 5 张表连同 MIT 许可证放进仓库，用 Python 3.9、拿掉开发机目录后走完整流程验证；你电脑上的文件已同步。验证门 62/62。"
  }
 ]
