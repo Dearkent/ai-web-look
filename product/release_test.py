@@ -78,6 +78,16 @@ def main(pkg: str, base_py: str):
     names = zipfile.ZipFile(pkg).namelist()
     before = {os.path.relpath(os.path.join(dp, f), brain) for dp, _, fs in os.walk(brain) for f in fs if "__pycache__" not in dp}
     expect("包里没有密钥文件、没有缓存", not any(n.endswith("models.json") or "__pycache__" in n for n in names))
+    kb_need = [f"brain/product/kb/uiux/{f}" for f in ("styles.csv", "colors.csv", "typography.csv", "products.csv", "landing.csv", "LICENSE")]
+    expect("包里带着设计知识表和它的许可证（不依赖开发机上的路径，D34）", all(n in names for n in kb_need), [n for n in kb_need if n not in names])
+    dev_paths = []
+    for dp, _, fs in os.walk(brain):
+        for f in fs:
+            if f.endswith(".py") and not f.endswith("_test.py") and "notes" not in dp:
+                t = open(os.path.join(dp, f), encoding="utf-8", errors="replace").read()
+                if "/home/claude" in t or "/Users/" in t:
+                    dev_paths.append(os.path.relpath(os.path.join(dp, f), brain))
+    expect("程序代码里没有写死开发机路径（/home/claude、/Users/…）", not dev_paths, dev_paths)
     ver = subprocess.run([py, "-c", "import sys;print(sys.version.split()[0])"], capture_output=True, text=True).stdout.strip()
     r = subprocess.run([py, "-I", os.path.join(brain, "product/app/start.py"), "--check"], capture_output=True, text=True, env=env, timeout=60)
     expect(f"干净的 Python {ver}：自检报出缺 jsonschema、Pillow，给出带引号、能直接复制的安装命令",

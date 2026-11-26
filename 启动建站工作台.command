@@ -30,6 +30,6 @@ echo "用完关掉这个窗口就会停止工作台。"
 code=$?
 if [ $code -ne 0 ]; then
   echo ""
-  echo "工作台没能启动（代码 $code）。把上面的文字截图发给 Claude 就能排查。"
+  echo "工作台没能启动（代码 ${code}）。把上面的文字截图发给 Claude 就能排查。"
   read -r -p "按回车关闭窗口" _
 fi

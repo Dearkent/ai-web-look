@@ -23,7 +23,8 @@ import kb  # noqa: E402
 import lexicon as L  # noqa: E402
 import learned  # noqa: E402
 
-KB_DIR = os.environ.get("UIUX_DATA", "/home/claude/repos3/nextlevelbuilder_ui-ux-pro-max-skill/.claude/skills/ui-ux-pro-max/data")
+# 设计知识表随仓库一起发（product/kb/uiux，MIT，来源见同目录“来源.md”）；不再依赖开发机上的某个路径
+KB_DIR = os.environ.get("UIUX_DATA") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "kb", "uiux")
 
 DEFAULT_GOALS = {  # 用户没说目标时，按行业给默认
     "Bakery/Cafe": ["inform", "booking"], "Restaurant/Food Service": ["inform", "booking"],
