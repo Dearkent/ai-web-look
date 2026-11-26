@@ -3,6 +3,9 @@
 * 存在 ~/.aisite/models.json（可用环境变量 AISITE_MODELS 指到别处），文件权限 600，只有你能读。
   它不在 brain 文件夹里，所以打包、导出都不会把密钥带出去。
 * 密钥也可以用环境变量给：AISITE_KEY_<服务商ID大写>（例如 AISITE_KEY_DEEPSEEK）；Anthropic 兼容旧的 SITE_BUILDER_API_KEY。
+* 也可以写在 .env 文件里（仓库根目录的 .env，或 ~/.aisite/.env；模板见仓库根目录 env.example）：
+  只认 AISITE_ 开头的变量和 SITE_BUILDER_API_KEY；已经在环境里的不覆盖。.env 不进 git。
+  AISITE_MODEL=服务商:模型（例如 anthropic:claude-sonnet-5-5）= 没在界面里分配过的用途都用它。
 * 对外（界面）只给“有没有密钥、末四位”，任何接口都不返回完整密钥。
 """
 from __future__ import annotations
@@ -15,6 +18,45 @@ from urllib.parse import urlparse
 from providers import BY_ID, ROLES
 
 MODEL_RE = re.compile(r"^[\w.:/@+-]{1,120}$")
+
+
+ENV_OK = re.compile(r"^(AISITE_[A-Z0-9_]{1,60}|SITE_BUILDER_API_KEY)$")
+
+
+def env_files() -> list[str]:
+    root = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+    return [os.path.join(root, ".env"), os.path.expanduser("~/.aisite/.env")]
+
+
+def load_env(files: list[str] | None = None) -> list[str]:
+    """读 .env：每行 名字=值（# 开头是注释，值可以带引号）。返回读进来的变量名（不返回值）。"""
+    got = []
+    for f in files or env_files():
+        try:
+            lines = open(f, encoding="utf-8").read().splitlines()
+        except OSError:
+            continue
+        for line in lines:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            k, v = line.split("=", 1)
+            k, v = k.strip().removeprefix("export ").strip(), v.strip().strip('"').strip("'")
+            if ENV_OK.match(k) and v and k not in os.environ:
+                os.environ[k] = v
+                got.append(k)
+    return got
+
+
+def env_default_role() -> dict | None:
+    v = os.environ.get("AISITE_MODEL", "")
+    if ":" not in v:
+        return None
+    pid, model = v.split(":", 1)
+    pid, model = pid.strip(), model.strip()
+    if pid in BY_ID and MODEL_RE.match(model):
+        return {"provider": pid, "model": model}
+    return None
 
 
 def path() -> str:
@@ -85,7 +127,9 @@ def for_role(role: str, d: dict | None = None) -> dict | None:
     d = d or load()
     r = d["roles"].get(role)
     if not r or not r.get("provider") or not r.get("model"):
-        return None
+        r = env_default_role()  # 界面里没分配过：看 .env / 环境变量里的 AISITE_MODEL
+        if not r:
+            return None
     c = resolved(r["provider"], d)
     c["model"] = r["model"]
     c["role"] = role
@@ -107,8 +151,9 @@ def public_view() -> dict:
         provs.append({**{x: pre[x] for x in ("id", "name", "protocol", "key_url", "example_model", "needs_key")},
                       "note": pre.get("note", ""), "base_url": mine.get("base_url") or pre["base_url"],
                       "has_key": bool(k), "key_hint": mask(k), "key_source": src})
-    return {"providers": provs, "roles": {r: {"label": ROLES[r], **(d["roles"].get(r) or {})} for r in ROLES},
-            "limits": d["limits"], "file": path()}
+    env_role = env_default_role()
+    return {"providers": provs, "roles": {r: {"label": ROLES[r], **(d["roles"].get(r) or ({**env_role, "from_env": True} if env_role else {}))} for r in ROLES},
+            "limits": d["limits"], "file": path(), "env_files": env_files()}
 
 
 def set_provider(pid: str, key: str | None = None, base_url: str | None = None, clear_key: bool = False):

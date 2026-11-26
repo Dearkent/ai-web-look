@@ -25,6 +25,12 @@ h2{font-size:17px;margin:0 0 12px;font-weight:650}h3{font-size:15px;margin:0 0 8
 .tabs button:focus-visible{outline:2px solid #7FA8E8;outline-offset:-4px}
 .engine{margin-left:auto;font-size:13px;color:#C9D0CB;white-space:nowrap}
 .engine b{color:#fff;font-weight:600}
+button.engine{background:none;border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:5px 10px;cursor:pointer;font:inherit;font-size:13px}
+button.engine:hover,button.engine:focus-visible{border-color:#7FA8E8;color:#fff}
+.quick{margin-bottom:18px}.quick .grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr) minmax(0,1.1fr) auto;gap:10px;align-items:end}
+.quick label{display:block;font-size:13px;margin-bottom:4px}.quick input,.quick select{width:100%}
+.quick .ok{color:#1F7A4D}.quick .bad{color:#B42318}
+@media (max-width:760px){.quick .grid{grid-template-columns:1fr}}
 
 main{max-width:1440px;margin:0 auto;padding:24px 24px 96px}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px}
@@ -174,7 +180,7 @@ section,.panel{scroll-margin-top:68px}
     <button role="tab" id="tab-btn-models" aria-controls="tab-models" aria-selected="false" tabindex="-1">模型</button>
   </nav>
   <a class="live-link" href="/live" target="_blank" rel="noopener">看它干活（实况）</a>
-  <div class="engine" id="engine">理解与文案：<b>规则版</b></div>
+  <button class="engine" id="engine" type="button" title="点这里接入真模型">理解与文案：<b>规则版</b></button>
 </header>
 <main>
 
@@ -294,9 +300,24 @@ section,.panel{scroll-margin-top:68px}
 
 <section id="tab-models" role="tabpanel" aria-labelledby="tab-btn-models" hidden>
   <p class="lead">不设置也能用（规则版）。设置后，“理解需求”和“写文案”先请模型做，再由规则校验，不合格或出错时自动退回规则版。密钥只存在你电脑的 <code id="mfile"></code>，只有你能读，页面上只显示末四位。</p>
+  <section class="panel quick" aria-labelledby="h-mq">
+    <h2 id="h-mq">一键接入真模型</h2>
+    <p class="muted small" id="mqnow">现在：规则版（还没接模型）</p>
+    <div class="grid">
+      <div><label for="mqprov">服务商</label><select id="mqprov"></select></div>
+      <div><label for="mqkey">API 密钥</label><input id="mqkey" type="password" autocomplete="off" spellcheck="false" placeholder="粘贴密钥"></div>
+      <div><label for="mqmodel">模型名</label><input id="mqmodel" type="text" list="mqlist" spellcheck="false"><datalist id="mqlist"></datalist></div>
+      <div><button id="mqgo" type="button">接入并测试</button></div>
+    </div>
+    <p class="muted small"><a id="mqkeyurl" target="_blank" rel="noopener noreferrer">去这家申请密钥</a>　先用你填的密钥真打一次，通了才保存，并把“理解需求、写文案、修复”都交给它；不通什么都不改。</p>
+    <p id="mqstatus" role="status" aria-live="polite" class="small"></p>
+    <details class="small"><summary>不想在网页里填？用 .env 文件</summary>
+      <p class="muted">把工作台文件夹里的 <code>env.example</code> 复制一份改名为 <code>.env</code>（或放到 <code>~/.aisite/.env</code>），填一行密钥和一行 <code>AISITE_MODEL=服务商:模型名</code>，例如 <code>AISITE_KEY_ANTHROPIC=…</code> 和 <code>AISITE_MODEL=anthropic:claude-sonnet-5-5</code>，然后重新启动工作台。.env 不会进 git、不会被导出。</p>
+    </details>
+  </section>
   <div class="two">
     <section class="panel" aria-labelledby="h-m1">
-      <h2 id="h-m1">填服务商的密钥</h2>
+      <h2 id="h-m1">高级：单独设置某一家</h2>
       <div class="form-row"><label for="mprov">服务商</label><select id="mprov"></select></div>
       <p class="muted small"><a id="mkeyurl" target="_blank" rel="noopener noreferrer">去这家申请密钥</a> <span id="mnote"></span></p>
       <div class="form-row"><label for="mkey">API 密钥</label><input id="mkey" type="password" autocomplete="off" spellcheck="false"></div>
@@ -599,6 +620,11 @@ section,.panel{scroll-margin-top:68px}
         var td0 = el('td', role.label), td1 = el('td'), td2 = el('td'); td1.append(s1); td2.append(i1); tr.append(td0, td1, td2); t.append(tr);
       });
       $('mmax').value = m.limits.max_calls_per_session; $('mtimeout').value = m.limits.timeout;
+      var qs = $('mqprov'), qkeep = qs.value || 'anthropic'; qs.replaceChildren();
+      m.providers.forEach(function (p) { var o = el('option', p.name + (p.has_key ? ' ✓' : '')); o.value = p.id; qs.append(o); });
+      qs.value = qkeep; showQuick();
+      var u = m.roles.understand || {}, up = m.providers.filter(function (p) { return p.id === u.provider; })[0];
+      $('mqnow').textContent = u.provider ? '现在：' + (up ? up.name : u.provider) + ' / ' + u.model + (up && up.key_hint ? '（密钥 ' + up.key_hint + '，' + (up.key_source || '') + '）' : '') + (u.from_env ? '，来自 .env' : '') : '现在：规则版（还没接模型）';
       var used = ['understand', 'copy'].map(function (r) { return m.roles[r] && m.roles[r].provider ? m.roles[r] : null; }).filter(Boolean);
       var eng = $('engine'); eng.replaceChildren('理解与文案：');
       eng.append(el('b', used.length ? used.map(function (r) { return (m.providers.filter(function (p) { return p.id === r.provider; })[0] || {}).name + ' / ' + r.model; })
@@ -612,6 +638,28 @@ section,.panel{scroll-margin-top:68px}
     $('mstatus').textContent = '处理中……';
     return api(path, body).then(done).catch(function (e) { $('mstatus').textContent = e.message; });
   }
+  function showQuick() {
+    var p = M.providers.filter(function (x) { return x.id === $('mqprov').value; })[0]; if (!p) return;
+    $('mqkeyurl').href = p.key_url || '#'; $('mqkeyurl').hidden = !p.key_url;
+    $('mqkey').value = ''; $('mqkey').disabled = !p.needs_key;
+    $('mqkey').placeholder = !p.needs_key ? '这个服务不需要密钥' : (p.has_key ? '已有 ' + p.key_hint + '；要换就粘贴新的' : '粘贴密钥');
+    var used = M.roles.understand && M.roles.understand.provider === p.id ? M.roles.understand.model : '';
+    $('mqmodel').value = used || p.example_model || ''; $('mqmodel').placeholder = p.example_model ? '' : '点“接入并测试”会列出可选的模型';
+  }
+  $('mqprov').addEventListener('change', showQuick);
+  $('mqgo').addEventListener('click', function () {
+    var st = $('mqstatus'); st.className = 'small'; st.textContent = '正在真打一次测试……'; $('mqgo').disabled = true;
+    api('/api/models/quick', {provider: $('mqprov').value, key: $('mqkey').value, model: $('mqmodel').value.trim()}).then(function (r) {
+      if (r.need_model) {
+        var dl = $('mqlist'); dl.replaceChildren(); (r.models || []).forEach(function (x) { var o = el('option'); o.value = x; dl.append(o); });
+        st.className = 'small bad'; st.textContent = r.error + '（共 ' + (r.models || []).length + ' 个）'; $('mqmodel').focus(); return;
+      }
+      if (!r.ok) { st.className = 'small bad'; st.textContent = '没接上，什么都没改：' + r.error; return; }
+      st.className = 'small ok'; st.textContent = '已接入：' + r.model + '，测试 ' + r.seconds + ' 秒回复“' + r.reply + '”。理解需求、写文案、修复都用它，出错时自动退回规则版。';
+      $('mqkey').value = ''; return loadModels();
+    }).catch(function (e) { st.className = 'small bad'; st.textContent = e.message; }).then(function () { $('mqgo').disabled = false; });
+  });
+  $('engine').addEventListener('click', function () { showTab('models'); setTimeout(function () { var k = $('mqkey'); (k.disabled ? $('mqmodel') : k).focus(); }, 0); });
   $('mprov').addEventListener('change', showProv);
   $('msave').addEventListener('click', function () {
     mcall('/api/models/save', {provider: $('mprov').value, key: $('mkey').value, base_url: $('mbase').value},

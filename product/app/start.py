@@ -101,6 +101,14 @@ def main(argv=None):
         return 0
     from server import serve
     port = free_port(ns.port)
+    try:  # .env 里的模型密钥（只认 AISITE_ 开头的变量）；只报变量名，不打印值
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models"))
+        import config as _mc
+        got = _mc.load_env()
+        if got:
+            print("从 .env 读到：" + "、".join(got))
+    except Exception as e:  # noqa: BLE001
+        print(f"读 .env 出错（{type(e).__name__}），跳过")
     srv, app = serve(port, ns.work)
     url = f"http://127.0.0.1:{srv.server_address[1]}/"
     print(f"\n工作台已启动：{url}\n实况（看它干活）：{url}live\n（只在本机可访问；关掉这个窗口或按 Ctrl+C 停止）")

@@ -411,6 +411,42 @@ class App:
         except model_client.ModelError as e:
             return {"ok": False, "error": str(e), "kind": e.kind}
 
+    def models_quick(self, body):
+        """一键接入：先用填的密钥真打一次（不先保存），通了才保存密钥并把所有用途都交给它；不通就什么都不改。"""
+        pid = str(body.get("provider", ""))
+        if pid not in model_config.BY_ID:
+            raise ValueError("先选服务商")
+        key = str(body.get("key") or "").strip()
+        model = str(body.get("model") or "").strip() or model_config.BY_ID[pid].get("example_model", "")
+        conn = model_config.resolved(pid)
+        if key:
+            if len(key) > 400 or any(c.isspace() for c in key):
+                raise ValueError("密钥格式不对（不能有空格或换行，检查是不是复制多了）")
+            conn["key"] = key
+        if body.get("base_url"):
+            conn["base_url"] = model_config.check_base_url(str(body["base_url"]))
+        if model_config.BY_ID[pid].get("needs_key") and not conn.get("key"):
+            raise ValueError("先粘贴密钥")
+        if not model:  # 这家没有默认模型名：列出来让人选
+            try:
+                return {"ok": False, "need_model": True, "models": model_client.list_models(conn)[:80],
+                        "error": "这家要选一个模型名：从下拉里选一个再点一次"}
+            except model_client.ModelError as e:
+                return {"ok": False, "error": str(e), "kind": e.kind}
+        if not model_config.MODEL_RE.match(model):
+            raise ValueError("模型名不对（只能有字母、数字和 . : / @ + - _）")
+        conn.update(model=model, role="test")
+        try:
+            r = model_client.chat(conn, "你是连通性测试。", "只回复两个字：好的", max_tokens=20, timeout=30)
+        except model_client.ModelError as e:
+            return {"ok": False, "error": str(e), "kind": e.kind}
+        with LOCK:
+            model_config.set_provider(pid, key=key or None, base_url=body.get("base_url") or None)
+            for role in model_config.ROLES:
+                model_config.set_role(role, pid, model)
+        return {"ok": True, "seconds": r["seconds"], "reply": r["text"].strip()[:40], "provider": pid, "model": model,
+                "roles": list(model_config.ROLES)}
+
     def models_list(self, body):
         conn = model_config.resolved(str(body.get("provider", "")))
         try:
@@ -693,7 +729,7 @@ def make_handler(app: App, token: str = "", port_ref: list | None = None):
                 route = {"/api/start": app.start, "/api/answer": app.answer, "/api/preview": app.preview,
                          "/api/choose": app.choose, "/api/feed": app.feed, "/api/undo": app.undo,
                          "/api/edit": app.edit, "/api/models/save": app.models_save, "/api/models/test": app.models_test,
-                         "/api/models/list": app.models_list, "/api/images": app.images, "/api/image/upload": app.image_upload,
+                         "/api/models/list": app.models_list, "/api/models/quick": app.models_quick, "/api/images": app.images, "/api/image/upload": app.image_upload,
                          "/api/image/alt": app.image_alt, "/api/image/reset": app.image_reset}.get(urlparse(self.path).path)
                 if not route:
                     return self._send(404, {"error": "没有这个接口"})
@@ -716,6 +752,7 @@ def serve(port=0, work="/tmp/aisite-work", choices=None, knowledge=None):
 
 if __name__ == "__main__":
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8765
+    model_config.load_env()
     srv, _ = serve(port, sys.argv[2] if len(sys.argv) > 2 else "/tmp/aisite-work")
     print(f"工作台已启动：http://127.0.0.1:{srv.server_address[1]}/ （只在本机可访问，Ctrl+C 停止）")
     try:

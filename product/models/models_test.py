@@ -138,5 +138,37 @@ expect("填写模板：只填 Gemini 的密钥和用途 → 走 OpenAI 兼容协
        and "AIzaTESTKEY1234567890" not in json.dumps(config.public_view()))
 os.environ["AISITE_MODELS"] = _old
 
+# .env：只认 AISITE_ 开头的变量和 SITE_BUILDER_API_KEY；不覆盖已有环境变量；AISITE_MODEL 给没分配的用途兜底
+envd = tempfile.mkdtemp(prefix="env-")
+ef = os.path.join(envd, ".env")
+open(ef, "w", encoding="utf-8").write("# 注释\nexport AISITE_KEY_DEEPSEEK=\"sk-env-1234567890\"\nPATH=/evil\nAISITE_MODEL=deepseek:deepseek-chat\n"
+                                      "LD_PRELOAD=/tmp/x.so\nAISITE_KEY_OPENAI=\n = 无名\n")
+old_path = os.environ.get("PATH")
+os.environ["AISITE_KEY_QWEN"] = "sk-already-here-9999"
+open(ef, "a", encoding="utf-8").write("AISITE_KEY_QWEN=sk-from-file-0000\n")
+got = config.load_env([ef, os.path.join(envd, "不存在.env")])
+expect(".env：读到 AISITE_ 开头的变量（去掉 export 和引号），PATH、LD_PRELOAD、空值都不碰，已有的不覆盖",
+       set(got) == {"AISITE_KEY_DEEPSEEK", "AISITE_MODEL"} and os.environ["AISITE_KEY_DEEPSEEK"] == "sk-env-1234567890"
+       and os.environ.get("PATH") == old_path and "LD_PRELOAD" not in os.environ and os.environ["AISITE_KEY_QWEN"] == "sk-already-here-9999", got)
+d0 = config.load()
+d0["roles"] = {}
+d0["providers"].pop("deepseek", None)
+config.save(d0)
+fr = config.for_role("copy")
+pv = config.public_view()
+expect(".env：AISITE_MODEL 给没分配的用途兜底，密钥来自环境变量；界面只看到末四位并标明来自 .env",
+       fr and fr["id"] == "deepseek" and fr["model"] == "deepseek-chat" and fr["key"] == "sk-env-1234567890"
+       and pv["roles"]["copy"].get("from_env") and "sk-env-1234567890" not in json.dumps(pv, ensure_ascii=False)
+       and next(p for p in pv["providers"] if p["id"] == "deepseek")["key_source"] == "环境变量", (fr and {k: fr[k] for k in ("id", "model")}, pv["roles"]["copy"]))
+config.set_role("copy", "anthropic", "claude-sonnet-5-5")
+expect(".env：界面里单独分配过的用途以界面为准", config.for_role("copy")["id"] == "anthropic")
+for k in ("AISITE_KEY_DEEPSEEK", "AISITE_MODEL", "AISITE_KEY_QWEN"):
+    os.environ.pop(k, None)
+expect("仓库里的 env.example 模板存在、没有填任何真密钥；.env 被 git 忽略",
+       os.path.exists(os.path.join(HERE, "..", "..", "env.example"))
+       and not any(l.split("=", 1)[1].strip() for l in open(os.path.join(HERE, "..", "..", "env.example"), encoding="utf-8")
+                   if l.startswith("AISITE_KEY_") and "=" in l)
+       and ".env*" in open(os.path.join(HERE, "..", "..", ".gitignore"), encoding="utf-8").read())
+
 print(f"\n模型接入：{len(ok)}/{len(ok) + len(bad)} 通过")
 sys.exit(1 if bad else 0)

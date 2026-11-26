@@ -410,6 +410,44 @@ try:
         post("/api/models/save", {"roles": {"understand": {}, "copy": {}}})
         code, vr = post("/api/start", {"text": "帮我做个花店的网站"})
         expect("模型设置：用途改回“不用模型”就走规则版", vr["understood_by"]["how"] == "rules")
+        # 一键接入：先真打一次，通了才保存、把所有用途交给它；不通什么都不改
+        post("/api/models/save", {"provider": "custom", "clear_key": True})
+        code, qa = post("/api/models/quick", {"provider": "custom", "key": FKEY, "model": "auth"})
+        mq = get("/api/models", body=True)
+        expect("一键接入：密钥不对 → 说明原因，密钥不保存、用途不变", not qa["ok"] and "密钥不对" in qa["error"]
+               and not next(p for p in mq["providers"] if p["id"] == "custom")["has_key"] and not any(r.get("provider") for r in mq["roles"].values()), (qa, mq["roles"]))
+        code, qn = post("/api/models/quick", {"provider": "custom", "key": FKEY, "model": ""})
+        expect("一键接入：这家没有默认模型名 → 列出可选模型让人选，不保存", qn.get("need_model") and "ok" in qn["models"]
+               and not next(p for p in get("/api/models", body=True)["providers"] if p["id"] == "custom")["has_key"], qn)
+        c_bad, qb = post("/api/models/quick", {"provider": "custom", "key": "sk-abc def", "model": "ok"})
+        expect("一键接入：密钥里有空格（复制多了）被拒", c_bad == 400 and "空格" in qb["error"], qb)
+        code, qo = post("/api/models/quick", {"provider": "custom", "key": FKEY, "model": "ok"})
+        mq2 = get("/api/models", body=True)
+        expect("一键接入：通了 → 保存密钥（只显示末四位），理解、文案、修复三个用途都用它",
+               qo["ok"] and qo["reply"] and all(mq2["roles"][r].get("provider") == "custom" and mq2["roles"][r].get("model") == "ok" for r in ("understand", "copy", "fix"))
+               and FKEY not in json.dumps(mq2) and FKEY not in json.dumps(qo), (qo, mq2["roles"]))
+        code, vq = post("/api/start", {"text": "帮我做个网站，介绍我们的陶艺工作室，叫 Clayworks，可以约体验课"})
+        expect("一键接入后建站直接用上模型", vq["understood_by"]["how"] == "model", vq["understood_by"])
+        with sync_playwright() as pw:
+            bq = pw.chromium.launch(executable_path="/usr/bin/google-chrome", headless=True, args=["--no-sandbox"])
+            pq = bq.new_page(viewport={"width": 1366, "height": 900})
+            qerr = []
+            pq.on("pageerror", lambda e: qerr.append(str(e)))
+            pq.goto(base + "/")
+            pq.wait_for_function("document.getElementById('engine').textContent.indexOf('ok') >= 0", timeout=8000)
+            pq.click("#engine")
+            vis = pq.is_visible("#tab-models") and pq.is_visible("#mqgo") and pq.evaluate("document.activeElement && document.activeElement.id") in ("mqkey", "mqmodel")
+            now = pq.inner_text("#mqnow")
+            pq.select_option("#mqprov", "custom")
+            pq.fill("#mqkey", FKEY)
+            pq.fill("#mqmodel", "auth")
+            pq.click("#mqgo")
+            pq.wait_for_function("document.getElementById('mqstatus').textContent.indexOf('没接上') >= 0", timeout=15000)
+            bad_msg = pq.inner_text("#mqstatus")
+            bq.close()
+        expect("一键接入页面：顶栏标签显示当前模型，点它跳到模型页签、光标进密钥框；失败提示“什么都没改”；无脚本错误",
+               vis and "ok" in now and "什么都没改" in bad_msg and not qerr, (vis, now, bad_msg, qerr))
+        post("/api/models/save", {"roles": {"understand": {}, "copy": {}, "fix": {}}})
     finally:
         fake.close()
 
