@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """工作台端到端测试：真实 Chrome 点完整流程；选择回流学习；安全检查。
 用法：timeout 400 python3 -I -u app_test.py"""
-import json, os, re, shutil, sys, tempfile, threading, urllib.error, urllib.parse, urllib.request
+import json, os, re, shutil, sys, tempfile, threading, time, urllib.error, urllib.parse, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 os.environ["AISITE_MODELS"] = os.path.join(tempfile.mkdtemp(prefix="app-models-"), "models.json")  # 不碰真实的模型设置
@@ -343,7 +343,11 @@ try:
         c3, r3 = post("/api/image/upload", {}, raw=b"{" + b" " * (22 * 1024 * 1024) + b"}")
     except urllib.error.URLError:
         c3, r3 = 413, {"error": "照片太大，最大 15MB（连接被服务器断开）"}
-    c4, r4 = post("/api/image/upload", {"session": ve["session"], "key": hero_key, "data": "不是base64!!"})
+    try:  # 上一步服务器主动断开了超大请求，紧接着的这一个偶尔会撞上残留的断线（BrokenPipe），重试一次
+        c4, r4 = post("/api/image/upload", {"session": ve["session"], "key": hero_key, "data": "不是base64!!"})
+    except urllib.error.URLError:
+        time.sleep(0.5)
+        c4, r4 = post("/api/image/upload", {"session": ve["session"], "key": hero_key, "data": "不是base64!!"})
     expect("图片接口：位置不在清单里、没令牌、超过大小、内容不是 base64 都拒绝",
            c1 == 400 and "位置" in r1["error"] and c2 == 403 and c3 == 413 and "15MB" in r3["error"] and c4 == 400, (c1, r1, c2, c3, r3, c4, r4))
     c5, r5 = post("/api/image/upload", {"session": ve["session"], "key": hero_key, "data": b64, "alt": "店里的绿植角"})
@@ -373,7 +377,7 @@ try:
     fake = Fake(responder)
     try:
         m0 = get("/api/models", body=True)
-        expect("模型设置：列出 11 家服务商（含 Gemini）和 3 个用途，默认都不用模型", len(m0["providers"]) == 11 and any(p["id"] == "gemini" for p in m0["providers"]) and set(m0["roles"]) == {"understand", "copy", "fix"}
+        expect("模型设置：列出 12 家服务商（含 Gemini、Kimi Code）和 3 个用途，默认都不用模型", len(m0["providers"]) == 12 and any(p["id"] == "gemini" for p in m0["providers"]) and any(p["id"] == "kimicode" for p in m0["providers"]) and set(m0["roles"]) == {"understand", "copy", "fix"}
                and not any(r.get("provider") for r in m0["roles"].values()))
         code, m1 = post("/api/models/save", {"provider": "custom", "key": FKEY, "base_url": fake.openai_url})
         cu = next(p for p in m1["providers"] if p["id"] == "custom")
@@ -426,6 +430,21 @@ try:
         expect("一键接入：通了 → 保存密钥（只显示末四位），理解、文案、修复三个用途都用它",
                qo["ok"] and qo["reply"] and all(mq2["roles"][r].get("provider") == "custom" and mq2["roles"][r].get("model") == "ok" for r in ("understand", "copy", "fix"))
                and FKEY not in json.dumps(mq2) and FKEY not in json.dumps(qo), (qo, mq2["roles"]))
+        # 同一家有两个地址（Kimi Code 国内/海外）：第一个地址不认这把密钥 → 自动换另一个，通了就记住能用的地址
+        import server as _srvmod
+        kc = _srvmod.model_config.BY_ID["kimicode"]
+        saved = (kc["base_url"], kc["alt_base_urls"])
+        kc["base_url"], kc["alt_base_urls"] = fake.deny_url, [fake.anthropic_url]
+        try:
+            code, qk = post("/api/models/quick", {"provider": "kimicode", "key": FKEY, "model": "ok"})
+            kp = next(p for p in get("/api/models", body=True)["providers"] if p["id"] == "kimicode")
+            denied = [r for r in fake.requests if r["proto"] == "deny"]
+            expect("一键接入 Kimi Code：第一个地址说密钥不对 → 自动换另一个地址，通了就记住能用的地址",
+                   qk["ok"] and kp["base_url"] == fake.anthropic_url and denied and denied[-1]["path"] == "/deny/v1/messages", (qk, kp["base_url"], len(denied)))
+        finally:
+            kc["base_url"], kc["alt_base_urls"] = saved
+            post("/api/models/save", {"provider": "kimicode", "clear_key": True, "base_url": ""})
+        post("/api/models/quick", {"provider": "custom", "key": FKEY, "model": "ok"})
         code, vq = post("/api/start", {"text": "帮我做个网站，介绍我们的陶艺工作室，叫 Clayworks，可以约体验课"})
         expect("一键接入后建站直接用上模型", vq["understood_by"]["how"] == "model", vq["understood_by"])
         with sync_playwright() as pw:

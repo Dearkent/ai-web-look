@@ -116,7 +116,7 @@ def resolved(pid: str, d: dict | None = None) -> dict:
     if pid not in BY_ID:
         raise ValueError("没有这个服务商")
     pre, mine = BY_ID[pid], d["providers"].get(pid) or {}
-    base = mine.get("base_url") or pre["base_url"]
+    base = mine.get("base_url") or os.environ.get(f"AISITE_BASE_{pid.upper()}") or pre["base_url"]
     if not base:
         raise ValueError("自定义服务商需要先填接口地址")
     return {"id": pid, "name": pre["name"], "protocol": mine.get("protocol") or pre["protocol"], "base_url": check_base_url(base),

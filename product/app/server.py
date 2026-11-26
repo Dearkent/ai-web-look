@@ -436,12 +436,22 @@ class App:
         if not model_config.MODEL_RE.match(model):
             raise ValueError("模型名不对（只能有字母、数字和 . : / @ + - _）")
         conn.update(model=model, role="test")
-        try:
-            r = model_client.chat(conn, "你是连通性测试。", "只回复两个字：好的", max_tokens=20, timeout=30)
-        except model_client.ModelError as e:
-            return {"ok": False, "error": str(e), "kind": e.kind}
+        bases = [conn["base_url"]] + ([] if body.get("base_url") else [b for b in model_config.BY_ID[pid].get("alt_base_urls", []) if b != conn["base_url"]])
+        r, used, last = None, None, None
+        for b in bases:  # 同一家有国内/海外两个地址（如 Kimi Code）：密钥不对时换另一个地址再试一次
+            conn["base_url"] = model_config.check_base_url(b)
+            try:
+                r, used = model_client.chat(conn, "你是连通性测试。", "只回复两个字：好的", max_tokens=20, timeout=30), b
+                break
+            except model_client.ModelError as e:
+                last = e
+                if e.kind != "auth":
+                    break
+        if r is None:
+            return {"ok": False, "error": str(last), "kind": last.kind, "tried": len(bases)}
         with LOCK:
-            model_config.set_provider(pid, key=key or None, base_url=body.get("base_url") or None)
+            model_config.set_provider(pid, key=key or None,
+                                      base_url=body.get("base_url") or (used if used != model_config.BY_ID[pid]["base_url"] else None))
             for role in model_config.ROLES:
                 model_config.set_role(role, pid, model)
         return {"ok": True, "seconds": r["seconds"], "reply": r["text"].strip()[:40], "provider": pid, "model": model,

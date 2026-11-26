@@ -31,6 +31,10 @@
    "_说明": "Kimi（月之暗面）：密钥在这里申请 https://platform.moonshot.cn/console/api-keys",
    "key": ""
   },
+  "kimicode": {
+   "_说明": "Kimi Code（编程会员）：会员控制台创建密钥，见 https://www.kimi.com/code/docs/ ；模型填 kimi-for-coding；海外账号把 base_url 改成 https://api.kimi.ai/coding",
+   "key": ""
+  },
   "zhipu": {
    "_说明": "智谱 GLM：密钥在这里申请 https://bigmodel.cn/usercenter/proj-mgmt/apikeys",
    "key": ""

@@ -390,5 +390,19 @@
   "who": "我",
   "kind": "汇报",
   "text": "工作台“模型”页签加了一键接入（真打一次、通了才保存、三个用途都交给它），顶栏标签点一下就到；也支持 .env（模板 env.example）。验证门 62/62。等你填上自己的密钥。"
+ },
+ {
+  "seq": 57,
+  "at": "2026-11-26 12:18",
+  "who": "用户",
+  "kind": "汇报",
+  "text": "已经填入，但这个不是简单的 kimi 的 api，而是 kimicode 的 api，需要调用时适配一下。"
+ },
+ {
+  "seq": 58,
+  "at": "2026-11-26 12:18",
+  "who": "我",
+  "kind": "汇报",
+  "text": "加了 Kimi Code 服务商（Anthropic 协议、api.kimi.com/coding、kimi-for-coding、海外地址自动切换、如实的用户代理）；你电脑上的 aisite.env 已把变量名改成 AISITE_KEY_KIMICODE（值未读未动），模型设为 kimicode:kimi-for-coding。"
  }
 ]

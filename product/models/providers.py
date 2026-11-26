@@ -11,6 +11,10 @@ from __future__ import annotations
 PRESETS = [
     {"id": "anthropic", "name": "Anthropic（Claude）", "protocol": "anthropic", "base_url": "https://api.anthropic.com",
      "key_url": "https://console.anthropic.com/", "example_model": "claude-sonnet-5-5", "needs_key": True},
+    {"id": "kimicode", "name": "Kimi Code（编程会员）", "protocol": "anthropic", "base_url": "https://api.kimi.com/coding",
+     "alt_base_urls": ["https://api.kimi.ai/coding"],  # 国内账号用 kimi.com，海外账号用 kimi.ai；一键接入时密钥不对会自动试另一个
+     "key_url": "https://www.kimi.com/code/docs/", "example_model": "kimi-for-coding", "needs_key": True,
+     "note": "Kimi Code 会员的密钥（和 Kimi 开放平台的密钥不通用）。官方说明会员权益是为编程场景设计的，做成产品给别人用请换开放平台。"},
     {"id": "openai", "name": "OpenAI", "protocol": "openai", "base_url": "https://api.openai.com/v1",
      "key_url": "https://platform.openai.com/api-keys", "example_model": "", "needs_key": True},
     {"id": "gemini", "name": "Google Gemini", "protocol": "openai", "base_url": "https://generativelanguage.googleapis.com/v1beta/openai",

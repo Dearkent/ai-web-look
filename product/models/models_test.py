@@ -138,6 +138,25 @@ expect("填写模板：只填 Gemini 的密钥和用途 → 走 OpenAI 兼容协
        and "AIzaTESTKEY1234567890" not in json.dumps(config.public_view()))
 os.environ["AISITE_MODELS"] = _old
 
+# Kimi Code（编程会员）：Anthropic 兼容协议，地址 https://api.kimi.com/coding（+ /v1/messages），模型 kimi-for-coding；海外账号另一个地址
+kc = providers.BY_ID["kimicode"]
+expect("Kimi Code：Anthropic 协议、国内地址、海外备用地址、默认模型 kimi-for-coding；和 Kimi 开放平台是两家",
+       kc["protocol"] == "anthropic" and kc["base_url"] == "https://api.kimi.com/coding" and kc["alt_base_urls"] == ["https://api.kimi.ai/coding"]
+       and kc["example_model"] == "kimi-for-coding" and providers.BY_ID["moonshot"]["base_url"] != kc["base_url"])
+fk = Fake(lambda proto, body: "好的")
+try:
+    c = {**fk.conn("anthropic"), "model": "kimi-for-coding"}
+    client.chat(c, "系统", "你好")
+    q = fk.requests[-1]
+    expect("Kimi Code 调用：路径 /v1/messages、模型 kimi-for-coding、x-api-key 头；用户代理如实写工作台自己的名字",
+           q["path"] == "/anth/v1/messages" and q["body"]["model"] == "kimi-for-coding" and q["auth_header_present"]
+           and q["ua"].startswith("AISiteWorkbench/") and "claude" not in q["ua"].lower(), q)
+finally:
+    fk.close()
+os.environ["AISITE_BASE_KIMICODE"] = "https://api.kimi.ai/coding"
+expect(".env 里 AISITE_BASE_<服务商> 可以改接口地址（海外账号）", config.resolved("kimicode")["base_url"] == "https://api.kimi.ai/coding")
+os.environ.pop("AISITE_BASE_KIMICODE")
+
 # .env：只认 AISITE_ 开头的变量和 SITE_BUILDER_API_KEY；不覆盖已有环境变量；AISITE_MODEL 给没分配的用途兜底
 envd = tempfile.mkdtemp(prefix="env-")
 ef = os.path.join(envd, ".env")

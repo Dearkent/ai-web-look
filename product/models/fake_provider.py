@@ -55,10 +55,13 @@ class Fake:
             def do_POST(self):
                 n = int(self.headers.get("Content-Length") or 0)
                 body = json.loads(self.rfile.read(n) or b"{}")
+                if self.path.startswith("/deny/"):  # 模拟“这个地址不认这把密钥”（如国内/海外账号用错了地址）
+                    fake.requests.append({"proto": "deny", "path": self.path, "body": body, "ua": self.headers.get("user-agent", "")})
+                    return self._send(401, {"error": {"message": "invalid api key"}})
                 proto = "anthropic" if self.path == "/anth/v1/messages" else "openai" if self.path == "/oai/chat/completions" else None
                 if not proto:
                     return self._send(404, {"error": {"message": "no such path"}})
-                fake.requests.append({"proto": proto, "path": self.path, "body": body,
+                fake.requests.append({"proto": proto, "path": self.path, "body": body, "ua": self.headers.get("user-agent", ""),
                                       "auth_header_present": bool(self.headers.get("x-api-key") or self.headers.get("authorization"))})
                 if not self._auth(proto):
                     return self._send(401, {"error": {"message": "invalid api key " + str(self.headers.get("authorization"))}})
@@ -89,6 +92,7 @@ class Fake:
         port = self.srv.server_address[1]
         self.anthropic_url = f"http://127.0.0.1:{port}/anth"
         self.openai_url = f"http://127.0.0.1:{port}/oai"
+        self.deny_url = f"http://127.0.0.1:{port}/deny"
 
     def conn(self, proto="openai", model="ok", key=KEY):
         return {"id": "fake-" + proto, "name": "假服务", "protocol": proto, "needs_key": True, "key": key, "model": model,

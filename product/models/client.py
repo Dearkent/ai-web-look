@@ -52,7 +52,8 @@ def _request(conn: dict, method: str, path: str, body: dict | None, timeout: flo
     if conn.get("needs_key", True) and not key:
         raise ModelError("no_key", conn.get("name", ""))
     url = conn["base_url"].rstrip("/") + path
-    headers = {"content-type": "application/json", "accept": "application/json"}
+    headers = {"content-type": "application/json", "accept": "application/json",
+               "user-agent": "AISiteWorkbench/1.7 (+https://github.com/Dearkent/ai-web-look)"}  # 如实写明是谁在调用，不冒充别的客户端
     if conn["protocol"] == "anthropic":
         headers.update({"x-api-key": key, "anthropic-version": "2023-06-01"})
     elif key:
