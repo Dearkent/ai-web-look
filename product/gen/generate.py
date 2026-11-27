@@ -89,6 +89,7 @@ section{padding:40px 20px}
 .grid .card h3,.grid .card h2{margin:0 0 4px;font-size:17px}.grid .card p{margin:0}
 .v-grid-2 .grid{grid-template-columns:repeat(2,1fr)}.v-grid-3 .grid,.v-carousel .grid,.v-bento .grid{grid-template-columns:repeat(3,1fr)}
 .v-grid-4 .grid{grid-template-columns:repeat(4,1fr)}
+@media (min-width:768px){section .grid.items.n2{grid-template-columns:repeat(2,minmax(0,1fr));max-width:820px}section .grid.items.n1{grid-template-columns:minmax(0,1fr);max-width:560px}}
 .has-media.v-split-left>.wrap,.has-media.v-split-right>.wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
 .v-split-left>.wrap>.media{order:-1}
 /* 参考评审（evals/facts/ui_refs.tsv）学来的通用手法，都是自己重写的 */
@@ -313,10 +314,11 @@ def render_slot(name, slot, val=None, sectype="", labels=None, key="", media=Non
                 for it in items) + "</div>"
         thumb = (lambda i: picture(f"{key}/{i}", media, sizes="(max-width: 767px) 100vw, 33vw", cls="thumb", art_size=(600, 450))) \
             if slot.get("item_image") else (lambda i: "")
-        cells = "".join(f'<li class="card">{thumb(i)}<h3>{E(str(it.get("title", "")))}</h3>'
+        cells = "".join(f'<li class="card">{thumb(i)}' + (f'<h3>{E(str(it.get("title", "")))}</h3>' if it.get("title") else "")
                         + (f'<p class="muted">{E(str(it.get("body", "")))}</p>' if it.get("body") else "") + "</li>"
                         for i, it in enumerate(items))
-        return f'<ul class="grid items">{cells}</ul>'
+        n = len(items)  # 只有 1–2 条时按条数分列，不在三列里空出一列（第二十二轮）
+        return f'<ul class="grid items{" n" + str(n) if n in (1, 2) else ""}">{cells}</ul>'
     if kind == "form_fields":
         lab = labels or {}
         return "".join(f'<label for="f-{E(f)}">{E(lab.get(f, f))}</label><input id="f-{E(f)}" name="{E(f)}">'
@@ -347,8 +349,28 @@ def _only_placeholders(content) -> bool:
     return all("（待填" in t for t in texts)
 
 
+def _retarget_hidden(doc: str, hidden: list, page_id: str, has_contact: bool) -> str:
+    """区块因为没内容被藏起来以后，指向它的链接（按钮、导航）改指联系区块，没有就指页面顶部，不留死链（第二十二轮）。"""
+    for h in hidden:
+        if h.get("page") != "home":
+            continue
+        sid = re.escape(h["section"])
+        here_home = page_id == "home"
+        to = ("#contact" if here_home and has_contact else "#top" if here_home else "")
+        doc = re.sub(r'href="([^"#]*)#' + sid + '"', lambda m: f'href="{m.group(1)}{to if here_home else ""}"' if (here_home or m.group(1)) else 'href="./"', doc)
+    if '#top"' in doc and 'id="top"' not in doc:
+        doc = doc.replace("<body", '<body id="top"', 1)
+    return doc
+
+
 def render_section(s, pages, content=None, here=None, page_id="", media=None):
     content = content or {}
+    no_real_gallery = (s["type"] == "gallery" and page_id == "home" and media is not None
+                       and not any(k.startswith(f'{page_id}/{s["id"]}/') for k in media.get("images", {}))
+                       and not any((it.get("title") or it.get("body")) for it in (content.get("items") or []) if isinstance(it, dict)))
+    if no_real_gallery:  # 首页的作品/产品预览：没有照片也没有名称，就只剩几张示意图，不放（第二十二轮）
+        media.setdefault("hidden", []).append({"page": page_id, "section": s["id"], "label": "作品/产品照片"})
+        return ""
     if s["type"] in HIDE_IF_EMPTY and _only_placeholders(content) and page_id not in ("privacy", "about") and not page_id.endswith("-done"):
         if media is not None:
             media.setdefault("hidden", []).append({"page": page_id, "section": s["id"], "label": SEC_LABEL.get(s["type"], s["type"])})
@@ -570,6 +592,7 @@ def generate(project, out):
                + '</body></html>\n')
         f = os.path.join(out, out_file(p["path"]))
         os.makedirs(os.path.dirname(f), exist_ok=True)
+        doc = _retarget_hidden(doc, media.get("hidden", []), p["id"], "contact" in [x["id"] for x in wire["sections"]] and 'id="contact"' in sections)
         open(f, "w", encoding="utf-8").write(doc)
         written.append(out_file(p["path"]))
     hidden = media.get("hidden", [])

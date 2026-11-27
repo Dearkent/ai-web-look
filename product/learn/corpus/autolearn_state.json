@@ -1,0 +1,285 @@
+{
+ "pages": {
+  "architecture firm website html": 1,
+  "conference website template": 1,
+  "construction company website template": 99,
+  "consulting website template": 1,
+  "elearning landing page html": 99,
+  "online course website template": 99,
+  "open source project landing page": 2
+ },
+ "runs": [
+  {
+   "at": "2026-11-27 13:43",
+   "got": 8,
+   "skipped": 18,
+   "stopped": "连续失败 6 次，先停下（可能断网或被限流）",
+   "trial": {}
+  },
+  {
+   "at": "2026-11-27 13:46",
+   "got": 10,
+   "skipped": 12,
+   "stopped": "连续失败 6 次，先停下（可能断网或被限流）",
+   "trial": {
+    "B2B Service": "采纳",
+    "Construction/Architecture": "采纳",
+    "Open Source Project Landing": "采纳"
+   }
+  }
+ ],
+ "seen": {
+  "https://github.com/DigitaleGesellschaft/jekyll-theme-conference": {
+   "from": "GitHub 搜索：conference website template",
+   "ind": "Conference / Symposium Landing Page",
+   "lic": "MIT",
+   "ok": false,
+   "t": 1795758169.1525798,
+   "tries": 1,
+   "why": "读不出版面和颜色"
+  },
+  "https://github.com/JeffleIncarnate/Architecture-Template": {
+   "from": "GitHub 搜索：architecture firm website html",
+   "ind": "Construction/Architecture",
+   "lic": "MIT",
+   "ok": true,
+   "t": 1795758349.7373104,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/Mo7amedSMahdi/Multipurpose-Landing-Page": {
+   "from": "GitHub 搜索：consulting website template",
+   "ind": "B2B Service",
+   "lic": null,
+   "ok": true,
+   "t": 1795758344.799497,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/NhaPhatHanh/github": {
+   "from": "GitHub 搜索：open source project landing page",
+   "ind": "Open Source Project Landing",
+   "lic": null,
+   "ok": false,
+   "t": 1795758192.310689,
+   "tries": 1,
+   "why": "里面没找到网页"
+  },
+  "https://github.com/Orion56/Construction-Company-Site-Template": {
+   "from": "GitHub 搜索：construction company website template",
+   "ind": "Construction/Architecture",
+   "lic": null,
+   "ok": true,
+   "t": 1795758163.202431,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/Sfedfcv/redesigned-pancake": {
+   "from": "GitHub 搜索：online course website template",
+   "ind": "Online Course/E-learning",
+   "lic": null,
+   "ok": false,
+   "t": 1795758164.5453012,
+   "tries": 1,
+   "why": "里面没找到网页"
+  },
+  "https://github.com/Shubham-cyber-prog/BR-Architect": {
+   "from": "GitHub 搜索：architecture firm website html",
+   "ind": "Construction/Architecture",
+   "lic": null,
+   "ok": true,
+   "t": 1795758328.8896356,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/anshumansinha3301/Finance-Base": {
+   "from": "GitHub 搜索：consulting website template",
+   "ind": "B2B Service",
+   "lic": "Apache-2.0",
+   "ok": false,
+   "t": 1795758336.8252945,
+   "tries": 1,
+   "why": "里面没找到网页"
+  },
+  "https://github.com/bocaletto-luca/WebTemplate": {
+   "from": "GitHub 搜索：open source project landing page",
+   "ind": "Open Source Project Landing",
+   "lic": "GPL-3.0",
+   "ok": true,
+   "t": 1795758347.4936657,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/calavera/openlandings": {
+   "from": "GitHub 搜索：open source project landing page",
+   "ind": "Open Source Project Landing",
+   "lic": "Apache-2.0",
+   "ok": true,
+   "t": 1795758333.3256843,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/chikitang/A": {
+   "from": "GitHub 搜索：open source project landing page",
+   "ind": "Open Source Project Landing",
+   "lic": null,
+   "ok": false,
+   "t": 1795758182.8783112,
+   "tries": 1,
+   "why": "里面没找到网页"
+  },
+  "https://github.com/gophergala2016/openlandings": {
+   "from": "GitHub 搜索：open source project landing page",
+   "ind": "Open Source Project Landing",
+   "lic": "Apache-2.0",
+   "ok": true,
+   "t": 1795758339.6927047,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/gridtemplate/Benzin-Business-Consulting-HTML5-Template": {
+   "from": "GitHub 搜索：consulting website template",
+   "ind": "B2B Service",
+   "lic": "MIT",
+   "ok": false,
+   "t": 1795758351.8680313,
+   "tries": 1,
+   "why": "里面没找到网页"
+  },
+  "https://github.com/hiteshsuthar01/OK-": {
+   "from": "GitHub 搜索：online course website template",
+   "ind": "Online Course/E-learning",
+   "lic": null,
+   "ok": false,
+   "t": 1795758172.4535515,
+   "tries": 1,
+   "why": "里面没找到网页"
+  },
+  "https://github.com/ipsum13/React-Saas-Landing-Page": {
+   "from": "GitHub 搜索：open source project landing page",
+   "ind": "Open Source Project Landing",
+   "lic": null,
+   "ok": true,
+   "t": 1795758326.6840355,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/istewakhassantewak/G3-Architects": {
+   "from": "GitHub 搜索：architecture firm website html",
+   "ind": "Construction/Architecture",
+   "lic": null,
+   "ok": true,
+   "t": 1795758335.0847187,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/jaityron/new-pac-wiki": {
+   "from": "GitHub 搜索：open source project landing page",
+   "ind": "Open Source Project Landing",
+   "lic": null,
+   "ok": false,
+   "t": 1795758173.9694855,
+   "tries": 1,
+   "why": "里面没找到网页"
+  },
+  "https://github.com/jihanurrahman33/g3-architects-website": {
+   "from": "GitHub 搜索：architecture firm website html",
+   "ind": "Construction/Architecture",
+   "lic": null,
+   "ok": true,
+   "t": 1795758343.0638149,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/markdino/Construction-website-1": {
+   "from": "GitHub 搜索：construction company website template",
+   "ind": "Construction/Architecture",
+   "lic": "MIT",
+   "ok": false,
+   "t": 1795758171.1141148,
+   "tries": 1,
+   "why": "里面没找到网页"
+  },
+  "https://github.com/marurevi/Capstone-1": {
+   "from": "GitHub 搜索：conference website template",
+   "ind": "Conference / Symposium Landing Page",
+   "lic": null,
+   "ok": true,
+   "t": 1795758185.7764,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/mikepierce/conference-website-template": {
+   "from": "GitHub 搜索：conference website template",
+   "ind": "Conference / Symposium Landing Page",
+   "lic": "GPL-3.0",
+   "ok": true,
+   "t": 1795758161.2969038,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/radwan503/Coaching--Education": {
+   "from": "GitHub 搜索：online course website template",
+   "ind": "Online Course/E-learning",
+   "lic": null,
+   "ok": true,
+   "t": 1795758181.3393087,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/radwan503/Learninglms--Education": {
+   "from": "GitHub 搜索：online course website template",
+   "ind": "Online Course/E-learning",
+   "lic": null,
+   "ok": true,
+   "t": 1795758189.6361704,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/rcesunil9/WALLET-CORPORATE-SHIPPING-AND-RECEPTION-SYSTEM": {
+   "from": "GitHub 搜索：consulting website template",
+   "ind": "B2B Service",
+   "lic": null,
+   "ok": true,
+   "t": 1795758330.4819186,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/steveWDamesJr/html-css-js-capstone": {
+   "from": "GitHub 搜索：conference website template",
+   "ind": "Conference / Symposium Landing Page",
+   "lic": null,
+   "ok": true,
+   "t": 1795758177.2034853,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/thomas-basham/construction-website": {
+   "from": "GitHub 搜索：construction company website template",
+   "ind": "Construction/Architecture",
+   "lic": null,
+   "ok": false,
+   "t": 1795758179.53244,
+   "tries": 1,
+   "why": "里面没找到网页"
+  },
+  "https://github.com/uCryNet/Construction-Company-Website-Template": {
+   "from": "GitHub 搜索：construction company website template",
+   "ind": "Construction/Architecture",
+   "lic": null,
+   "ok": true,
+   "t": 1795758187.4243968,
+   "tries": 1,
+   "why": "收下"
+  },
+  "https://github.com/uideck/play-bootstrap": {
+   "from": "GitHub 搜索：open source project landing page",
+   "ind": "Open Source Project Landing",
+   "lic": "MIT",
+   "ok": true,
+   "t": 1795758166.4844449,
+   "tries": 1,
+   "why": "收下"
+  }
+ }
+}

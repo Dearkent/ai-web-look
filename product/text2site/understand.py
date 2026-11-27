@@ -132,6 +132,25 @@ def style_candidates(text: str, ptype: str):
     return wanted, avoided, kb_styles, list(dict.fromkeys(kb_landing)), unresolved
 
 
+# 用户亲口说的服务/项目：“专做企业合规和劳动纠纷”“可以预约洗牙和种植牙”“主营婚纱摄影、证件照”
+SERVICE_LEAD = r"(?:专做|专门做|主做|主营|主打|擅长|专注于?|提供|承接|代理|负责|预约|可以约|能约)"
+SERVICE_STOP = {"网站", "官网", "一个", "咨询", "服务", "预约", "在线", "线上", "介绍", "展示", "宣传", "页面", "主页", "首页", "东西",
+                "生意", "推广", "销售", "我们", "客人", "顾客", "客户", "朋友", "体验", "活动", "报名", "下单", "购买", "联系"}
+
+
+def extract_services(text: str) -> list[str]:
+    """只取用户明说的服务名（2–10 个字），最多 6 个；拿不准就不取——宁缺毋滥，不替用户编。"""
+    out = []
+    for m in re.finditer(SERVICE_LEAD + r"([^，。；！？,.;!?\n]{2,40})", text):
+        chunk = re.split(r"(?:的网站|网站|官网|，|。|的话|可以|能够|方便|让|给|帮)", m.group(1))[0]
+        for part in re.split(r"[和、及与跟/,，]|以及|还有|或者|或", chunk):
+            w = re.sub(r"^(?:在线|线上|上门|专业的?|各种|一些|我们的|你们的)", "", part.strip())
+            w = re.sub(r"(?:服务|业务|项目|等等|等)$", "", w).strip()
+            if 2 <= len(w) <= 10 and w not in SERVICE_STOP and not re.search(r"[a-zA-Z]{12,}|\d{3,}|网站|页面|一个", w) and w not in out:
+                out.append(w)
+    return out[:6]
+
+
 def understand(text: str, brief_id: str | None = None, force_type: str | None = None) -> dict:
     """force_type：模型理解出的行业（已校验在词表里）。规则把握不高时由它决定行业，其余仍按规则推。"""
     raw = text.strip()
@@ -145,6 +164,10 @@ def understand(text: str, brief_id: str | None = None, force_type: str | None = 
     ghits = _first_hits(t, L.GOALS)
     if ptype == "Portfolio/Personal":  # 作品集里的“作品”是展示，不是卖
         ghits = [h for h in ghits if h[1] != "sell"]
+    # 用户明说了具体动作（预约、买、报名……）时，它比泛泛的“介绍一下”更该当主目标：首屏按钮要指向它（第二十二轮）
+    act = next((h for h in ghits if h[1] in ("booking", "sell", "signup", "leads")), None)  # 下载类（开源页）仍以介绍为主
+    if ghits and ghits[0][1] == "inform" and act:
+        ghits = [act] + [h for h in ghits if h is not act]
     goals = []
     for i, (_, g, w) in enumerate(ghits[:4]):
         goals.append({"id": f"G{i + 1}", "kind": g, "priority": "P0" if i == 0 else "P1",
@@ -226,6 +249,9 @@ def understand(text: str, brief_id: str | None = None, force_type: str | None = 
         "constraints": {"hosting_region": region},
         "open_questions": questions,
     }
+    svcs = extract_services(raw)
+    if svcs:
+        brief["services"] = [{"name": x, "source": "user"} for x in svcs]
     if brief["style_preference"]["confidence"] == "low" and not brief["style_preference"]["kb_trace"]["unresolved"]:
         brief["style_preference"]["kb_trace"].pop("unresolved")
     _apply_learned(brief, t, pwords, wanted)

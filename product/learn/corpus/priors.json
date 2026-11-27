@@ -1,23 +1,23 @@
 {
  "all": {
-  "agreement": 0.8,
-  "dark_share": 0.11,
+  "agreement": 0.78,
+  "dark_share": 0.09,
   "family": {
-   "block": 0.13,
-   "dark": 0.08,
-   "editorial": 0.06,
-   "glass": 0.04,
-   "minimal": 0.57,
+   "block": 0.14,
+   "dark": 0.06,
+   "editorial": 0.08,
+   "glass": 0.05,
+   "minimal": 0.55,
    "soft": 0.09,
    "tech": 0.03
   },
   "hero": {
    "buttons": 1,
-   "image_share": 0.39,
+   "image_share": 0.42,
    "words": 14.0
   },
-  "n": 93,
-  "n_layouts": 60,
+  "n": 111,
+  "n_layouts": 71,
   "nav_links": 4,
   "order": [
    "content",
@@ -26,17 +26,17 @@
    "contact"
   ],
   "presence": {
-   "blog": 0.22,
-   "catalog": 0.43,
-   "contact": 0.4,
-   "content": 0.87,
-   "cta": 0.27,
-   "faq": 0.05,
-   "features": 0.42,
-   "logos": 0.03,
-   "pricing": 0.18,
-   "stats": 0.02,
-   "team": 0.12,
+   "blog": 0.23,
+   "catalog": 0.39,
+   "contact": 0.44,
+   "content": 0.86,
+   "cta": 0.24,
+   "faq": 0.06,
+   "features": 0.44,
+   "logos": 0.1,
+   "pricing": 0.17,
+   "stats": 0.04,
+   "team": 0.15,
    "testimonials": 0.27
   },
   "shape": {
@@ -50,10 +50,12 @@
    "07d98511b041",
    "086000def69a",
    "0c7d4c3937e6",
+   "0d2a9bd8029c",
    "0ddccf1593e6",
    "0fcc67649226",
    "112b9dd478be",
    "12133698d377",
+   "1633327822e3",
    "1704bcd27fef",
    "1af931c5fec5",
    "1ce497951b0e",
@@ -70,10 +72,12 @@
    "3227ad32104b",
    "32af81d17b3a",
    "346d3530546a",
+   "35200bd01c38",
    "3c32a4ffc179",
    "40855b335af7",
    "4096b06465f1",
    "43dd8d700563",
+   "44d007ad6593",
    "4586ddae4c96",
    "46d0354f244e",
    "4d8bffe5e3b4",
@@ -82,34 +86,45 @@
    "5c37ab817a6d",
    "61448150b7c9",
    "65f17fe0b7fb",
+   "66fa03df5575",
    "68add7885e29",
    "6d196c88b1e4",
    "6e7d55ec07c6",
    "6ed354ce831d",
+   "73fb638bc352",
    "7464bc673715",
+   "798e07de980b",
    "7d63c5b1e812",
+   "7df3af123e0a",
    "820ba412575d",
    "8257086ee4d2",
    "829d714c20a0",
+   "87da3fe0d26e",
    "888849058c03",
    "901ba979989c",
    "90447c3f1e01",
+   "90b6efcb572d",
    "93ed872b86e5",
    "95f34cba8bc1",
    "971a69ccb212",
    "97e3f7cecc59",
    "982328ae9d34",
    "988b1361bf35",
+   "9b7f87e78bd0",
    "9c5c418444f2",
    "9d21d80320c5",
    "9f559787eefc",
+   "a20518465010",
    "a612355f2835",
+   "a6f593e78d30",
    "a796e46ead8a",
    "abad6fee23ba",
    "add1428428db",
    "af1ecc0fb5ae",
+   "bbd6b1ec4bd2",
    "bda3bb01290f",
    "be339943c5c4",
+   "c30f4c79c4c7",
    "c5e8eaa995c7",
    "c6125da3b91b",
    "c6f4dfd461d8",
@@ -120,11 +135,13 @@
    "d2cfdcf41b57",
    "d62c4b02a1e9",
    "d9a485d15cb3",
+   "daf1cd2030b9",
    "df6d6fb0aa3a",
    "e172bceb8f63",
    "e32e1ce76733",
    "e7aec8e14dc7",
    "e8b337108fdf",
+   "e8eb1a14caf0",
    "ea0de4f1faf7",
    "ea328fc5da25",
    "edd796ee99df",
@@ -133,6 +150,7 @@
    "f2cae2fdb935",
    "f6be605fd8fe",
    "f90532c79022",
+   "f96b97f3b7da",
    "fc22e4001a0a",
    "fc77edba7b61",
    "fce0ce969d0b"
@@ -143,70 +161,69 @@
   },
   "type": {
    "base": 16.0,
-   "h1": 52.0,
+   "h1": 56.0,
    "line_height": 1.5,
-   "ratio": 3.46,
-   "serif_heading_share": 0.1
+   "ratio": 3.43,
+   "serif_heading_share": 0.12
   },
   "where": {
-   "blog": 1.0,
-   "catalog": 0.38,
+   "blog": 0.95,
+   "catalog": 0.35,
    "contact": 1.0,
    "content": 0.0,
-   "cta": 0.78,
-   "faq": 0.86,
+   "cta": 0.8,
+   "faq": 0.8,
    "features": 0.2,
-   "logos": 0.73,
-   "pricing": 0.67,
-   "stats": 0.29,
-   "team": 0.6,
+   "logos": 1.0,
+   "pricing": 0.63,
+   "stats": 0.4,
+   "team": 0.5,
    "testimonials": 0.67
   }
  },
- "built_at": "2026-11-26 08:56",
+ "built_at": "2026-11-27 13:45",
  "industries": {
   "B2B Service": {
-   "agreement": 1.0,
+   "agreement": 0.8,
    "dark_share": 0.0,
    "family": {
-    "block": 0.25,
-    "minimal": 0.75
+    "block": 0.17,
+    "minimal": 0.83
    },
-   "fingerprint": "b5c2e1bfd4b8",
+   "fingerprint": "e1d395a78557",
    "hero": {
     "buttons": 2,
-    "image_share": 0.25,
-    "words": 31
+    "image_share": 0.5,
+    "words": 13
    },
-   "n": 4,
-   "n_layouts": 3,
+   "n": 6,
+   "n_layouts": 4,
    "nav_links": 5.0,
    "order": [
     "content",
     "features",
-    "stats",
-    "pricing",
-    "cta",
     "testimonials",
+    "team",
     "blog",
-    "contact",
-    "team"
+    "contact"
    ],
    "presence": {
-    "blog": 0.33,
-    "contact": 0.67,
-    "content": 0.33,
-    "cta": 0.33,
-    "features": 1.0,
-    "pricing": 0.33,
-    "stats": 0.33,
-    "team": 0.33,
-    "testimonials": 0.67
+    "blog": 0.5,
+    "contact": 0.75,
+    "content": 0.5,
+    "cta": 0.25,
+    "features": 0.75,
+    "pricing": 0.25,
+    "stats": 0.25,
+    "team": 0.5,
+    "testimonials": 0.5
    },
    "shape": {
     "radius": 0.0
    },
    "sources": [
+    "66fa03df5575",
+    "7df3af123e0a",
     "8257086ee4d2",
     "982328ae9d34",
     "d0764487c43e",
@@ -214,14 +231,28 @@
    ],
    "space": {
     "container": 1050,
-    "section_pad": 48.0
+    "section_pad": 48
    },
-   "status": "样本不够",
+   "status": "采纳",
+   "trial": {
+    "at": "2026-11-27 13:46",
+    "candidate": {
+     "errors": 0,
+     "note": "首页区块按 6 个同行网站的常见顺序排（和原来一致）",
+     "problems": 0
+    },
+    "off": {
+     "errors": 0,
+     "note": "",
+     "problems": 0
+    },
+    "style": "accessible-and-ethical"
+   },
    "type": {
     "base": 16.0,
-    "h1": 52.0,
+    "h1": 48.0,
     "line_height": 1.5,
-    "ratio": 3.25,
+    "ratio": 3.0,
     "serif_heading_share": 0.0
    },
    "where": {
@@ -232,10 +263,10 @@
     "features": 0.0,
     "pricing": 0.33,
     "stats": 0.29,
-    "team": 1.0,
+    "team": 0.71,
     "testimonials": 0.69
    },
-   "why": "只有 4 个，至少要 5 个"
+   "why": "试跑通过：图纸 0 错误，浏览器问题不比不用时多"
   },
   "Bakery/Cafe": {
    "agreement": 0.82,
@@ -337,98 +368,152 @@
    "agreement": null,
    "dark_share": 0.0,
    "family": {
-    "minimal": 1.0
+    "block": 0.25,
+    "editorial": 0.5,
+    "minimal": 0.25
    },
-   "fingerprint": "6abffdf51f9a",
+   "fingerprint": "02fa18091bdf",
    "hero": {
-    "buttons": 1,
-    "image_share": 0.0,
-    "words": 11
+    "buttons": 1.5,
+    "image_share": 0.75,
+    "words": 12.0
    },
-   "n": 1,
-   "n_layouts": 1,
-   "nav_links": 0,
+   "n": 4,
+   "n_layouts": 3,
+   "nav_links": 3.0,
    "order": [
     "contact",
+    "content",
+    "blog",
     "cta",
-    "blog"
+    "features",
+    "logos"
    ],
    "presence": {
-    "blog": 1.0,
-    "contact": 1.0,
-    "cta": 1.0
+    "blog": 0.67,
+    "contact": 0.33,
+    "content": 0.33,
+    "cta": 0.33,
+    "features": 0.33,
+    "logos": 0.67
    },
    "shape": {
-    "radius": 0.0
+    "radius": 12.5
    },
    "sources": [
-    "0c7d4c3937e6"
+    "0c7d4c3937e6",
+    "0d2a9bd8029c",
+    "87da3fe0d26e",
+    "e8eb1a14caf0"
    ],
    "space": {
     "container": null,
-    "section_pad": 90
+    "section_pad": 57.0
    },
    "status": "样本不够",
    "type": {
-    "base": 15.0,
-    "h1": 88.0,
-    "line_height": null,
-    "ratio": 5.87,
-    "serif_heading_share": 0.0
+    "base": 16.0,
+    "h1": 74.65,
+    "line_height": 1.5,
+    "ratio": 4.67,
+    "serif_heading_share": 0.5
    },
    "where": {
-    "blog": 1.0,
+    "blog": 0.5,
     "contact": 0.0,
-    "cta": 0.5
+    "content": 0.0,
+    "cta": 0.5,
+    "features": 0.67,
+    "logos": 1.0
    },
-   "why": "只有 1 个，至少要 5 个"
+   "why": "只有 4 个，至少要 5 个"
   },
   "Construction/Architecture": {
-   "agreement": null,
+   "agreement": 0.86,
    "dark_share": 0.0,
    "family": {
-    "block": 1.0
+    "block": 0.14,
+    "editorial": 0.14,
+    "glass": 0.14,
+    "minimal": 0.43,
+    "soft": 0.14
    },
-   "fingerprint": "331f6233c3e4",
+   "fingerprint": "b185b922bc2d",
    "hero": {
-    "buttons": 5,
-    "image_share": 0.0,
-    "words": 46
+    "buttons": 0.5,
+    "image_share": 0.43,
+    "words": 44.5
    },
-   "n": 1,
-   "n_layouts": 1,
-   "nav_links": 0,
+   "n": 7,
+   "n_layouts": 5,
+   "nav_links": 4,
    "order": [
-    "cta",
-    "features"
+    "content",
+    "team",
+    "features",
+    "stats",
+    "contact",
+    "logos"
    ],
    "presence": {
-    "cta": 1.0,
-    "features": 1.0
+    "catalog": 0.2,
+    "contact": 0.4,
+    "content": 0.6,
+    "cta": 0.2,
+    "features": 0.6,
+    "logos": 0.4,
+    "stats": 0.4,
+    "team": 0.4
    },
    "shape": {
-    "radius": 0.0
+    "radius": 5.0
    },
    "sources": [
-    "4096b06465f1"
+    "35200bd01c38",
+    "4096b06465f1",
+    "44d007ad6593",
+    "73fb638bc352",
+    "a20518465010",
+    "bbd6b1ec4bd2",
+    "f96b97f3b7da"
    ],
    "space": {
-    "container": null,
+    "container": 1145,
     "section_pad": 70
    },
-   "status": "样本不够",
+   "status": "采纳",
+   "trial": {
+    "at": "2026-11-27 13:46",
+    "candidate": {
+     "errors": 0,
+     "note": "首页区块按 7 个同行网站的常见顺序排",
+     "problems": 0
+    },
+    "off": {
+     "errors": 0,
+     "note": "",
+     "problems": 0
+    },
+    "style": "minimalism-and-swiss-style"
+   },
    "type": {
-    "base": 15.0,
-    "h1": 60.0,
-    "line_height": 1.73,
-    "ratio": 4.0,
-    "serif_heading_share": 0.0
+    "base": 18.0,
+    "h1": 58.0,
+    "line_height": 1.62,
+    "ratio": 3.16,
+    "serif_heading_share": 0.14
    },
    "where": {
+    "catalog": 0.2,
+    "contact": 0.7,
+    "content": 0.0,
     "cta": 0.0,
-    "features": 1.0
+    "features": 0.33,
+    "logos": 1.0,
+    "stats": 0.53,
+    "team": 0.0
    },
-   "why": "只有 1 个，至少要 5 个"
+   "why": "试跑通过：图纸 0 错误，浏览器问题不比不用时多"
   },
   "Creative Agency": {
    "agreement": 0.67,
@@ -828,95 +913,156 @@
    "why": "只有 4 个，至少要 5 个"
   },
   "Online Course/E-learning": {
-   "agreement": null,
+   "agreement": 1.0,
    "dark_share": 0.0,
    "family": {
-    "minimal": 1.0
+    "block": 0.67,
+    "minimal": 0.33
    },
-   "fingerprint": "55e47ea44132",
+   "fingerprint": "431af7deae86",
    "hero": {
-    "buttons": 2,
-    "image_share": 0.0,
-    "words": 10
+    "buttons": 1.5,
+    "image_share": 0.33,
+    "words": 17.5
    },
-   "n": 1,
-   "n_layouts": 1,
-   "nav_links": 0,
+   "n": 3,
+   "n_layouts": 3,
+   "nav_links": 13,
    "order": [
+    "catalog",
     "content",
+    "logos",
+    "features",
+    "contact",
+    "testimonials",
     "blog"
    ],
    "presence": {
-    "blog": 1.0,
-    "content": 1.0
+    "blog": 0.67,
+    "catalog": 0.33,
+    "contact": 0.67,
+    "content": 1.0,
+    "features": 0.33,
+    "logos": 0.33,
+    "testimonials": 0.33
    },
    "shape": {
-    "radius": 0.0
+    "radius": 3.2
    },
    "sources": [
-    "988b1361bf35"
+    "988b1361bf35",
+    "9b7f87e78bd0",
+    "c30f4c79c4c7"
    ],
    "space": {
-    "container": null,
-    "section_pad": 65
+    "container": 1050,
+    "section_pad": 50
    },
    "status": "样本不够",
    "type": {
     "base": 14.0,
-    "h1": 40.0,
-    "line_height": null,
-    "ratio": 2.86,
+    "h1": 63.0,
+    "line_height": 1.46,
+    "ratio": 4.5,
     "serif_heading_share": 0.0
    },
    "where": {
-    "blog": 1.0,
-    "content": 0.0
+    "blog": 0.88,
+    "catalog": 0.0,
+    "contact": 0.6,
+    "content": 0.0,
+    "features": 0.38,
+    "logos": 0.12,
+    "testimonials": 0.8
    },
-   "why": "只有 1 个，至少要 5 个"
+   "why": "只有 3 个，至少要 5 个"
   },
   "Open Source Project Landing": {
-   "agreement": null,
+   "agreement": 0.83,
    "dark_share": 0.0,
    "family": {
-    "glass": 1.0
+    "block": 0.17,
+    "glass": 0.17,
+    "minimal": 0.5,
+    "soft": 0.17
    },
-   "fingerprint": "14e73d099a8f",
+   "fingerprint": "4e1e25ac7e8e",
    "hero": {
-    "buttons": 5,
-    "image_share": 1.0,
-    "words": 113
+    "buttons": 1.0,
+    "image_share": 0.5,
+    "words": 16.0
    },
-   "n": 1,
-   "n_layouts": 1,
-   "nav_links": 36,
+   "n": 6,
+   "n_layouts": 3,
+   "nav_links": 4.5,
    "order": [
-    "content"
+    "content",
+    "features",
+    "pricing",
+    "faq",
+    "testimonials",
+    "contact",
+    "team",
+    "cta"
    ],
    "presence": {
-    "content": 1.0
+    "contact": 0.67,
+    "content": 1.0,
+    "cta": 0.33,
+    "faq": 0.33,
+    "features": 0.67,
+    "pricing": 0.33,
+    "team": 0.33,
+    "testimonials": 0.67
    },
    "shape": {
-    "radius": 6.0
+    "radius": 7.0
    },
    "sources": [
-    "3227ad32104b"
+    "1633327822e3",
+    "3227ad32104b",
+    "798e07de980b",
+    "90b6efcb572d",
+    "a6f593e78d30",
+    "daf1cd2030b9"
    ],
    "space": {
-    "container": null,
+    "container": 830.0,
     "section_pad": 31
    },
-   "status": "样本不够",
+   "status": "采纳",
+   "trial": {
+    "at": "2026-11-27 13:46",
+    "candidate": {
+     "errors": 0,
+     "note": "首页区块按 6 个同行网站的常见顺序排",
+     "problems": 0
+    },
+    "off": {
+     "errors": 0,
+     "note": "",
+     "problems": 0
+    },
+    "style": "dark-mode-oled"
+   },
    "type": {
     "base": 16.0,
-    "h1": 47.2,
-    "line_height": 1.6,
-    "ratio": 2.95,
-    "serif_heading_share": 0.0
+    "h1": 64.0,
+    "line_height": 1.55,
+    "ratio": 3.33,
+    "serif_heading_share": 0.17
    },
    "where": {
-    "content": 0.0
+    "contact": 0.7,
+    "content": 0.0,
+    "cta": 1.0,
+    "faq": 0.57,
+    "features": 0.17,
+    "pricing": 0.43,
+    "team": 0.86,
+    "testimonials": 0.66
    },
-   "why": "只有 1 个，至少要 5 个"
+   "why": "试跑通过：图纸 0 错误，浏览器问题不比不用时多"
   },
   "Portfolio/Personal": {
    "agreement": 0.73,
@@ -1190,7 +1336,7 @@
  },
  "min_agree": 0.6,
  "min_n": 5,
- "n": 93,
+ "n": 111,
  "tiers": {
   "头部网站": {
    "dark_share": 0.09,
@@ -1223,35 +1369,35 @@
    }
   },
   "开源模板": {
-   "dark_share": 0.11,
+   "dark_share": 0.09,
    "family": {
-    "block": 0.15,
-    "dark": 0.09,
-    "editorial": 0.04,
-    "glass": 0.02,
-    "minimal": 0.6,
+    "block": 0.16,
+    "dark": 0.07,
+    "editorial": 0.06,
+    "glass": 0.03,
+    "minimal": 0.57,
     "soft": 0.09,
     "tech": 0.02
    },
    "hero": {
-    "buttons": 1.0,
-    "image_share": 0.34,
+    "buttons": 1,
+    "image_share": 0.39,
     "words": 14
    },
-   "n": 82,
+   "n": 100,
    "shape": {
     "radius": 4.0
    },
    "space": {
-    "container": 1050,
+    "container": 1050.0,
     "section_pad": 48.0
    },
    "type": {
     "base": 16.0,
-    "h1": 50.0,
+    "h1": 52.0,
     "line_height": 1.5,
-    "ratio": 3.29,
-    "serif_heading_share": 0.07
+    "ratio": 3.31,
+    "serif_heading_share": 0.1
    }
   }
  }

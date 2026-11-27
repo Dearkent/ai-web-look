@@ -213,6 +213,16 @@ def plan(brief: dict, style_id: str | None = None) -> dict:
                                "items": {"kind": "list", "count": 4 if catalog_page == "menu" else 3, **({} if catalog_page == "menu" else {"item_image": True})}},
                               [{"id": "more", "label": "查看全部", "target": {"page": catalog_page}}],
                               data={"menu": "menu-item", "products": "product", "services": "service"}[catalog_page]))
+    # 第二十二轮：页面不能只剩首屏和按钮。用户说了服务名 → 首页放“我们能帮你”；有预约 → 放“怎么预约”三步。
+    # 这两块讲的是用户亲口说的服务和网站真有的功能，不编评价和数据。
+    svcs = [x["name"] for x in brief.get("services", [])]
+    if svcs and ptype not in ("Bakery/Cafe", "Restaurant/Food Service", "Brewery/Winery"):
+        secs.insert(1 if secs and secs[0]["type"] == "hero" else 0,
+                    _sec("services", "features", {"heading": {"kind": "text", "max_chars": 12}, "items": {"kind": "list", "count": len(svcs)}},
+                         motion=hover))
+    if ("booking" in feats or p0["kind"] == "signup") and not any(s["type"] == "steps" for s in secs):
+        at = next((i for i, x in enumerate(secs) if x["type"] == "cta"), len(secs))
+        secs.insert(at, _sec("how", "steps", {"heading": {"kind": "text", "max_chars": 12}, "items": {"kind": "list", "count": 3}}))
     if "faq" in feats and not any(s["type"] == "faq" for s in secs):
         secs.append(_sec("faq", "faq", {"heading": {"kind": "text", "max_chars": 12}, "items": {"kind": "list", "count": 5}}, feature=fid("faq")))
     if not any(s["type"] == "cta" for s in secs) and hero_acts:

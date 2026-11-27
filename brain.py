@@ -22,6 +22,7 @@
   python3 brain.py done T04 "产出读码笔记"
   python3 brain.py verify            # 跑验证门
   python3 brain.py feed-design 地址或文件夹… [--for 行业] [--list 清单] [--refresh]   # 喂网站设计（只读版面和颜色）
+  python3 brain.py autolearn [--dry-run] [--install-schedule]           # 自动上网找设计来学（缺口行业优先，有上限、不重复拉）
   python3 brain.py priors build|trial|show                              # 从喂的设计里提炼规律、试跑、查看
   python3 brain.py stats
 """
@@ -426,7 +427,7 @@ def _learn_cli(mod, argv):
     sys.path.insert(0, str(ROOT / "product" / "app"))
     import importlib
     m = importlib.import_module(mod)
-    if mod == "corpus":
+    if mod in ("corpus", "autolearn"):
         sys.exit(m.main(argv))
     cmd = argv[0] if argv else "show"
     if cmd == "build":
@@ -437,8 +438,8 @@ def _learn_cli(mod, argv):
 
 
 def main():
-    if len(sys.argv) > 1 and sys.argv[1] in ("feed-design", "priors"):  # 喂网站设计 / 设计先验：参数原样交给 product/learn
-        return _learn_cli("corpus" if sys.argv[1] == "feed-design" else "priors", sys.argv[2:])
+    if len(sys.argv) > 1 and sys.argv[1] in ("feed-design", "priors", "autolearn"):  # 喂网站设计 / 设计先验 / 自动上网学习：参数原样交给 product/learn
+        return _learn_cli({"feed-design": "corpus", "priors": "priors", "autolearn": "autolearn"}[sys.argv[1]], sys.argv[2:])
     p = argparse.ArgumentParser(description="学习大脑 v0（另有：feed-design 喂网站设计、priors build|trial|show 设计先验）")
     s = p.add_subparsers(dest="cmd", required=True)
     s.add_parser("next")

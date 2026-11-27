@@ -89,6 +89,9 @@ try:
             "value-props": {"heading": "在巷口喝杯好咖啡", "items": [{"title": "现点现做", "body": "每一杯都在你点单后才开始做。"},
                                                                 {"title": "坐得安稳", "body": "座位不挤，一个人或几个朋友都合适。"},
                                                                 {"title": "不用等位", "body": "在线约好时间，到了直接入座。"}]},
+            "steps": {"heading": "三步约座", "items": [{"title": "选时间", "body": "在预约页选好时间和人数。"},
+                                                    {"title": "等确认", "body": "我们看到后会联系你确认。"},
+                                                    {"title": "来坐坐", "body": "按约好的时间来，不用排队。"}]},
             "cta": {"heading": "约个座位"}}
     say(good)
     overlay, rep = llm_copy.write_with_model(brief, content, pages, conn)

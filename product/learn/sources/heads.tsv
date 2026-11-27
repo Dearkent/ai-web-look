@@ -1,0 +1,17 @@
+# 头部网站（静态读首页；靠脚本渲染、读不出版面的会被跳过）。格式：网址<TAB>行业
+# 这些是各行业公开的知名官网首页，只读版面和颜色，不留文字。要换就改这个文件。
+https://bluebottlecoffee.com/	Bakery/Cafe
+https://www.stumptowncoffee.com/	Bakery/Cafe
+https://www.mayoclinic.org/	Medical Clinic
+https://www.onemedical.com/	Medical Clinic
+https://www.clevelandclinic.org/	Medical Clinic
+https://www.allbirds.com/	E-commerce
+https://www.everlane.com/	E-commerce
+https://www.theverge.com/	Magazine/Blog
+https://www.smashingmagazine.com/	Magazine/Blog
+https://www.mckinsey.com/	B2B Service
+https://www.bain.com/	B2B Service
+https://www.coursera.org/	Online Course/E-learning
+https://www.khanacademy.org/	Online Course/E-learning
+https://www.snohetta.com/	Construction/Architecture
+https://www.big.dk/	Construction/Architecture
